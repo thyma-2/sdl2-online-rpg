@@ -1,0 +1,2 @@
+il faut la SDL pour compiler.
+pour pouvoir jouer sans la SDL il faut reussir à compiler avec la SDL en static

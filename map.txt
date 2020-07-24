@@ -1,0 +1,6 @@
+1 11 thyma 116.216820 955.926941 -1.000000 710.016357 97 10 archer thyma thyma createur region1 y [fred] [arc rien Protections_de_cuir] none 4 1
+2 11 none 952.614685 318.056335 961.479187 317.416473 63 0 archer ron thyma none region1 n [fred] [arc rien Protections_de_cuir] none 1 4
+3 11 plomi 571.368591 1101.394531 944.026672 976.320679 297 10 archer plomijuk thyma createur2 region1 y [fred] [arc rien Protections_de_cuir ballon] none 4 4
+4 800 none 291.167480 220.365372 1075.981567 366.693665 45 10 ship1 none thyma none region1 y [] [] none 4 4
+5 11 victi91 100 800 944.026672 976.320679 297 10 archer victi91 thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+6 11 unwia 58.812954 627.950500 944.026672 976.320679 20 10 archer unwia thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
