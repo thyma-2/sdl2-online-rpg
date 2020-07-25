@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=test
+Terminal=true
+Exec=/home/t/Bureau/gits/ElFamosoGit/empireExpense
+Categories=AudioVideo;Audio;Player;GTK;
+Type=Application
