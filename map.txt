@@ -1,4 +1,7 @@
-1 11 thyma 132.586578 603.686340 -1.000000 710.016357 360 10 archer thyma thyma createur region1 y [fred] [arc rien Protections_de_cuir] none 4 1
-3 11 plomi 120.501556 865.228516 609.974731 1155.932495 354 10 archer plomijuk thyma createur2 region1 y [fred] [arc rien Protections_de_cuir ballon] none 4 4
-5 11 victi91 209.055923 474.762787 944.026672 976.320679 321 10 archer victi91 thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
-6 11 unwia 104.812958 684.950500 102.308167 455.932495 20 10 archer unwia thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+1 11 thyma 929.449646 562.707520 -1.000000 710.016357 3 10 archer thyma thyma createur region1 y [fred] [arc rien Protections_de_cuir] none 4 1
+3 11 plomi 309.380280 1034.651367 609.974731 1155.932495 87 10 archer plomijuk thyma createur2 region1 y [fred] [arc rien Protections_de_cuir ballon] none 4 4
+5 11 victi91 97.000000 350.000000 944.026672 976.320679 297 10 archer victi91 thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+6 11 unwia 60.812954 661.950500 102.308167 455.932495 20 10 archer unwia thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+4 11 none 98.093124 773.576721 -1.000000 774.018250 314 0 archer ron thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+2 1 none 101.131187 456.968750 -1.000000 455.932495 80 78 archer fred thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
+6 11 unwia 58.812954 633.950500 102.308167 455.932495 20 10 archer unwia thyma createur2 region1 y [fred] [arc rien Protections_de_cuir] none 4 4
