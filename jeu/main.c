@@ -13,8 +13,6 @@ int main(void)
             1200,700,
             SDL_WINDOW_OPENGL);
     img = init_img(ecran);
-    if (img->t->fond == NULL)
-	printf ("test2\n");
     int socket = menu_connection(ecran);
     if (socket == -1)
     {
@@ -237,7 +235,7 @@ char *log_menu(int socket, SDL_Window *ecran)
         {
             SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                     &position1);
-            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran), 
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                     &position2);
             text_input(nom, 50);
             if (lettres->tab == 1)
@@ -274,7 +272,7 @@ char *log_menu(int socket, SDL_Window *ecran)
             lettres->enter = 0;
         }
         blit_text(position1, nom, ecran, 20, 255);
-        blit_text(position2, mdp, ecran, 20, 255);
+        blit_mdp(position2, mdp, ecran, 20, 255);
         SDL_UpdateWindowSurface(ecran);
     }
     free(boolean_rep);

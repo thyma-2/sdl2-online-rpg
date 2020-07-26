@@ -31,5 +31,6 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 void *cast(void *p);
 void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi);
 void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur);
+void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur);
 void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list);
 #endif /*GUI*/

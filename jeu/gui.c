@@ -5,38 +5,83 @@ void *cast(void *p)
     return p;
 }
 
+
+
+
+
+
+void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
+{
+    int pox = position.x;
+    int i = 0;
+    SDL_Surface *lettre_afficher = select_lettre('x');
+    while (text[i] != 0)
+    {
+        if (i % limite == 0 && i != 0)
+        {
+            position.y += 20;
+            position.x = pox;
+        }
+        if (text[i] == '\n')
+        {
+            position.y += 20;
+            position.x = pox;
+            i++;
+        }
+        else if (text[i] == ' ')
+        {
+            position.x += 14;
+            i++;
+        }
+        else
+        {
+            if (lettre_afficher != NULL)
+            {
+                SDL_SetColorKey(lettre_afficher, SDL_SCANCODE_Y, SDL_MapRGB(lettre_afficher->format,couleur,couleur,couleur));
+                SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
+                position.x += lettre_afficher->w;
+            }
+            i++;
+        }
+    }
+}
+
+
+
+
+
 void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
 {
     int pox = position.x;
     int i = 0;
     while (text[i] != 0)
     {
-	if (i % limite == 0 && i != 0)
-	{
-	    position.y += 20;
-	    position.x = pox;
-}
-	if (text[i] == '\n')
+        if (i % limite == 0 && i != 0)
         {
             position.y += 20;
             position.x = pox;
-	    i++;
         }
-	else if (text[i] == ' ')
- 	{
-	    position.x += 14;
-	    i++;
-	}
-	else
-	{
+        if (text[i] == '\n')
+        {
+            position.y += 20;
+            position.x = pox;
+            i++;
+        }
+        else if (text[i] == ' ')
+        {
+            position.x += 14;
+            i++;
+        }
+        else
+        {
             SDL_Surface *lettre_afficher = select_lettre(text[i]);
-	    if (lettre_afficher != NULL)
+            if (lettre_afficher != NULL)
             {
                 SDL_SetColorKey(lettre_afficher, SDL_SCANCODE_Y, SDL_MapRGB(lettre_afficher->format,couleur,couleur,couleur));
-	        SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
-	        position.x += lettre_afficher->w;
-	    }
-	    i++;
+                SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
+                position.x += lettre_afficher->w;
+            }
+            i++;
 	}
     }
 }
