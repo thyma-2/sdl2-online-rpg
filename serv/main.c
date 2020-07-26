@@ -12,6 +12,7 @@
 #include <sys/epoll.h>
 #include "req.h"
 #include "utile.h"
+#include "time.h"
 
 int open_acount(char *test)
 {
@@ -71,6 +72,9 @@ char *load_ground(size_t *size)
 
 int main(int argc, char **argv)
 {
+    clock_t time = clock();
+    float t = (float)(time / CLOCKS_PER_SEC);
+    float t2;
     if (argc != 2)
     {
         printf ("error 1 : serv need a port\n");
@@ -219,9 +223,15 @@ int main(int argc, char **argv)
                 }
             }
         }
-        for (int i = 0; i < 100; i++)
-            if (ingame_client[i] > 0)
-                send_order(ingame_client[i], list, movedObj);
+	time = clock();
+    	t2 = (float)(time / (CLOCKS_PER_SEC / 1000));
+	if (t2 - t > 5)
+	{
+	    t = t2;
+            for (int i = 0; i < 100; i++)
+                if (ingame_client[i] > 0)
+                    send_order(ingame_client[i], list, movedObj);
+	}
 	list = remove_perso(list);
         save++;
         if (save > 1000000)
