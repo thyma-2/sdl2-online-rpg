@@ -13,6 +13,8 @@ int main(void)
             1200,700,
             SDL_WINDOW_OPENGL);
     img = init_img(ecran);
+    if (img->t->fond == NULL)
+	printf ("test2\n");
     int socket = menu_connection(ecran);
     if (socket == -1)
     {

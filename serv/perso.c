@@ -185,7 +185,7 @@ void send_order(int socket, struct personnages *list, int *moveObj)
     int s = strlen(a);
     if (s > 0)
     {
-	sprintf (tmp, "%d", s);
+        sprintf (tmp, "%d", s);
         send(socket, tmp, 20, MSG_NOSIGNAL);
         send(socket, a, s, MSG_NOSIGNAL);
     }
