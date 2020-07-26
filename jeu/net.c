@@ -17,12 +17,15 @@ int try_connect(char *ip, char *port) // Connecter
 void recv_order(int socket, struct linked_list *list)
 {
     char *buffer = calloc(20, sizeof(char));
-    recv(socket, buffer, 20, MSG_DONTWAIT);
+    recv(socket, buffer, 20, 0);
+    if (buffer[0] == '0')
+    {
+	free(buffer);
+	return;
+    }
     size_t res  = 0;
     size_t nb_to_res  = atoi(buffer);
     free(buffer);
-    if (nb_to_res < 1)
-	return;
     buffer = calloc(sizeof(char), nb_to_res + 3);
     char *pos_buf = buffer;
     while (res < nb_to_res)

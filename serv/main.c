@@ -72,6 +72,7 @@ char *load_ground(size_t *size)
 
 int main(int argc, char **argv)
 {
+    int movedObj[400] = {-1};
     clock_t time = clock();
     float t = (float)(time / CLOCKS_PER_SEC);
     float t2;
@@ -207,9 +208,6 @@ int main(int argc, char **argv)
                 free(buffer);
             }
         }
-        int movedObj[400];
-        for (int i = 0; i < 400; i++)
-            movedObj[i] = -1;
         for (int i = 0; i < 100; i++)
         {
             if (ingame_client[i] > 0)
@@ -231,6 +229,8 @@ int main(int argc, char **argv)
             for (int i = 0; i < 100; i++)
                 if (ingame_client[i] > 0)
                     send_order(ingame_client[i], list, movedObj);
+ 	    for (int i = 0; i < 400; i++)
+                movedObj[i] = -1;
 	}
 	list = remove_perso(list);
         save++;
