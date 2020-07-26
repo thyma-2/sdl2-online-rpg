@@ -139,7 +139,7 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
             parcour->p->angle = (atan(x/y) * 57.3);
         parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
         parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-        if (abs(parcour->p->x - parcour->p->ordrex) <= 2 && abs(parcour->p->y - parcour->p->ordrey) <= 2)
+        if (fabs(parcour->p->x - parcour->p->ordrex) <= 2 && fabs(parcour->p->y - parcour->p->ordrey) <= 2)
             parcour->p->ordrex = -1;
 	parcour->p->a_bouger = 1;
     }
