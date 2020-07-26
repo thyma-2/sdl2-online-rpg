@@ -106,7 +106,7 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
 
 void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, int *x3, int *y3, int *x4, int *y4)
 {
-    if (strcmp(perso->skin, "archer") == 0)
+    if (strcmp(perso->skin, "archer") == 0 || strcmp(perso->skin, "civil") == 0)
     {
 	*x1 = perso->x + 8;
 	*x2 = perso->x + 16;

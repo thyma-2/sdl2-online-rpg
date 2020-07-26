@@ -42,7 +42,7 @@ void recv_order(int socket, struct linked_list *list)
         {
             free_linked_char(yalist->e_list);
             free_linked_char(yalist->i_list);
-            buffer += parse_order(yalist, buffer, 0) + 1;
+            buffer += parse_order(yalist, buffer) + 1;
             actualise_stat(yalist);
         }
         else

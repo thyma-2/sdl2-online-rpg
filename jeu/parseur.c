@@ -19,13 +19,8 @@ struct personnages *get_ptr_from_id(char *line, struct linked_list *list)
     return NULL;
 }
 
-int parse_order(struct personnages *list, char *line, char first)
+int parse_order(struct personnages *list, char *line)
 {
-    if (first == 0)
-    {
-	free_linked_char(list->e_list);
-	free_linked_char(list->i_list);
-    }
     list->e_list = NULL;
     list->i_list = NULL;
     list->a_bouger = 0;

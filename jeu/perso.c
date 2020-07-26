@@ -54,7 +54,7 @@ struct linked_list *append_perso(struct linked_list *list,  char **line)
         struct personnages *n = malloc(sizeof(struct personnages));
         list->p = n;
         list->next = NULL;
-        int a = parse_order(n, *line, 1);
+        int a = parse_order(n, *line);
         init_stat(n);
         *line = *line + a;
         return (list);
@@ -68,7 +68,7 @@ struct linked_list *append_perso(struct linked_list *list,  char **line)
         struct personnages *n = malloc(sizeof(struct personnages));
         parcour->next = to_append;
         to_append->p = n;
-        int a = parse_order(n, *line, 1);
+        int a = parse_order(n, *line);
         *line = *line + a;
         init_stat(n);
         to_append->next = NULL;
