@@ -1,2 +1,9 @@
 il faut la SDL pour compiler.
 pour pouvoir jouer sans la SDL il faut reussir à compiler avec la SDL en static
+
+PLAY:
+    make
+    ./serveur 8000
+    ./empireExpense
+    ip: 127.0.0.1
+    port: 8000
