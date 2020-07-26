@@ -40,6 +40,8 @@ void recv_order(int socket, struct linked_list *list)
         struct personnages *yalist = get_ptr_from_id(buffer, list);
         if (yalist != NULL)
         {
+            free_linked_char(yalist->e_list);
+            free_linked_char(yalist->i_list);
             buffer += parse_order(yalist, buffer, 0) + 1;
             actualise_stat(yalist);
         }
@@ -141,4 +143,5 @@ void generate_orders(struct linked_list *l, int socket)
 	send(socket, tmp, 20, MSG_NOSIGNAL);
         send(socket, order, s, MSG_NOSIGNAL);
     }
+    free(order);
 }
