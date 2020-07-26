@@ -5,7 +5,7 @@ struct img *img;
 
 int main(void)
 {
-    lettres = malloc(sizeof(struct lettres));
+    lettres = calloc(sizeof(struct lettres), 1);
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *ecran = SDL_CreateWindow("Empire Expense",
             SDL_WINDOWPOS_UNDEFINED,
