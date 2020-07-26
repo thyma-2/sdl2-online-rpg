@@ -40,7 +40,7 @@ void recv_order(int socket, struct linked_list *list)
         struct personnages *yalist = get_ptr_from_id(buffer, list);
         if (yalist != NULL)
         {
-            buffer += parse_order(yalist, buffer) + 1;
+            buffer += parse_order(yalist, buffer, 0) + 1;
             actualise_stat(yalist);
         }
         else
