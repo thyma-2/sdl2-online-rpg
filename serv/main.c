@@ -14,6 +14,7 @@
 #include "utile.h"
 #include "time.h"
 
+#include "deschiffrement.h"
 int open_acount(char *test)
 {
     if (test[0] == '\0' || test[0] == '\n')
@@ -21,6 +22,20 @@ int open_acount(char *test)
     FILE *acount = fopen("acount.txt", "r");
     char *line = NULL;
     size_t len = 0;
+    char *s = test;
+    int count  = 0;
+    while (*s != ' ')
+    {
+        count++;
+        s = s + 1;
+    }
+    s = s + 1;
+    char *tmp = calloc(count + 1, sizeof(char));
+    strncat(tmp, test,count);
+    printf("av:%s\n", test);
+    deschifrage(s, tmp);
+    free(tmp);
+    printf("ap:%s\n", test);
     while (getline(&line, &len, acount) > 0)
     {
         if (strncmp(line, test, strlen(line) - 1) == 0)

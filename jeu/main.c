@@ -5,7 +5,7 @@ struct img *img;
 
 int main(void)
 {
-    lettres = malloc(sizeof(lettres));
+    lettres = malloc(sizeof(struct lettres));
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *ecran = SDL_CreateWindow("Empire Expense",
             SDL_WINDOWPOS_UNDEFINED,
@@ -261,6 +261,7 @@ char *log_menu(int socket, SDL_Window *ecran)
         {
             tryed = 127;
             char *to_send = ecalloc(101,1);
+            chifrage(mdp,nom);
             strcat(to_send, nom);
             strcat(to_send, " ");
             strcat(to_send, mdp);
