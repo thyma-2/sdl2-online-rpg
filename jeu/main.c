@@ -54,6 +54,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     struct linked_list *selected = NULL;
     //peux être faire une sous fonction pour init la struct menu
     struct menu *menu_s = malloc(sizeof(struct menu));
+    char talk_on = 0;
     menu_s->on = 0;
     menu_s->diplo_on = 0;
     menu_s->inventaire_on = 0;
@@ -69,7 +70,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         gestion_touche();
         disp_perso_list(list, moi, ecran);
         display_selected(selected, ecran, moi);
-        if (menu_s->on == 0)
+        if (menu_s->on == 0 && talk_on == 0)
         {
             deplacement(moi, ground, max_x);
             selected = select(list, moi, selected);
@@ -79,14 +80,21 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
                 lettres->m = 0;
                 menu_s->on = 1;
             }
+	    if (lettres->t == 1)
+            {
+                lettres->t = 0;
+                talk_on = 1;
+            }
             if (lettres->Mouse_Mclick == 1)
             {
                 free_linked(selected, 0);
                 selected = NULL;
             }
         }
-        else
+        else if (menu_s->on == 1)
             menu(ecran, menu_s, moi, list);
+	else if (talk_on == 1)
+	    talk_on = talk(ecran, moi);
         gui_order(moi, ecran);
         gui_event(moi, ecran, list);
         ia(list);
@@ -95,7 +103,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         recv_order(socket, list);
         list = remove_perso(list);
         SDL_UpdateWindowSurface(ecran);
-     }
+    }
     free(menu_s);
     free(ground);
 }

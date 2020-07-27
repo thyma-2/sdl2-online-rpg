@@ -31,14 +31,14 @@ void deplacement(struct personnages *moi, char *ground, int max_x)
     if (lettres->q == 1)
     {
         moi->a_bouger = 1;
-	moi->angle -= 1;
+	moi->angle -= 2;
         if (moi->angle < 0)
             moi->angle = 359;
     }
     if (lettres->d == 1)
     {
 	moi->a_bouger = 1;
-        moi->angle += 1;
+        moi->angle += 2;
         if (moi->angle > 360)
             moi->angle = 1;
     }

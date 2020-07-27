@@ -27,6 +27,7 @@ struct menu
     struct personnages *echange;
 };
 
+char talk(SDL_Window *ecran, struct personnages *moi);
 void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list);
 void *cast(void *p);
 void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi);

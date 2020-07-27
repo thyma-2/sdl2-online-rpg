@@ -247,10 +247,6 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     char txt8[] = "Vetements";
     char txt9[] = "Stockage";
     char *e_list = malloc(200);
-    SDL_Surface *inputBox = SDL_LoadBMP("img/gui/textInput.bmp");
-    SDL_Surface *narrowInputBox = SDL_LoadBMP("img/gui/narrowTextInput.bmp");
-    SDL_Surface *selInputBox = SDL_LoadBMP("img/gui/selTextInput.bmp");
-    SDL_Surface *narrowSelInputBox = SDL_LoadBMP("img/gui/narrowSelTextInput.bmp");
     SDL_Rect position1;
     SDL_Rect position2;
     SDL_Rect position3;
@@ -333,9 +329,9 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
         for (int i = 0; i < 10; i++)
         {
             if (m->sel_echange1 == position14.y / 20)
-                SDL_BlitSurface(narrowSelInputBox, NULL, SDL_GetWindowSurface(ecran), &position14);
+                SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             else
-                SDL_BlitSurface(narrowInputBox, NULL, SDL_GetWindowSurface(ecran), &position14);
+                SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             if (t != NULL)
             {
                 blit_text(position14, t->nom, ecran, 20, 255);
@@ -348,9 +344,9 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
         for (int i = 0; i < 10; i++)
         {
             if (m->sel_echange2 == (position14.y - 220) / 20)
-                SDL_BlitSurface(narrowSelInputBox, NULL, SDL_GetWindowSurface(ecran), &position14);
+                SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             else
-                SDL_BlitSurface(narrowInputBox, NULL, SDL_GetWindowSurface(ecran), &position14);
+                SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             if (t != NULL)
             {
                 blit_text(position14, t->nom, ecran, 20, 255);
@@ -419,10 +415,10 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	if (perso->sur_plancher != NULL)
 	{
 	    if (m->sel_action == 0)
-		SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+		SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                     &position2);
 	    else
-		SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+		SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                     &position2);
      	    blit_text(position2, txt5, ecran, 20, 255);
    	    if (lettres->enter == 1 && m->sel_action == 0)
@@ -446,13 +442,13 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 		    position2.y += 50;
 		    if (m->sel_action == (position2.y - 100) / 50)
 		    {
-  		        SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+  		        SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
  	                    &position2);
 			m->echange = l->p;
 			
 		    }
 		    else
-			SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+			SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                             &position2);
 		    blit_text(position2, l->p->nom, ecran, 20, 255);
 		}
@@ -487,9 +483,9 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	for (int i = 0; i < 10; i++)
 	{
 	    if (m->sel_inventaire == (position13.y - 100) / 20)
-	        SDL_BlitSurface(narrowSelInputBox, NULL, SDL_GetWindowSurface(ecran), &position13);
+	        SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
 	    else
- 	        SDL_BlitSurface(narrowInputBox, NULL, SDL_GetWindowSurface(ecran), &position13);
+ 	        SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
 	    if (t != NULL)
 	    {
 	        blit_text(position13, t->nom, ecran, 20, 255);
@@ -537,13 +533,13 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	if (m->sel_diplo == 0)
 	{
 	    text_input(m->add_enemi, 50);
-            SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position6);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);
 	    if (lettres->enter == 1)
 	    {
@@ -555,13 +551,13 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	else if (m->sel_diplo == 1)
 	{
 	    text_input(m->rem_enemi, 50);
-	    SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
-            SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position6);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);
 	    if (lettres->enter == 1)
 	    {
@@ -571,13 +567,13 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	}
 	else if (m->sel_diplo == 2)
 	{
-	    SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                 &position6);
-            SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
-            SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);
 	    if (lettres->enter == 1)
 	    {
@@ -588,13 +584,13 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	else
 	{
 	    text_input(perso->nom_superieur, 50);
-	    SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position6);
-            SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
-            SDL_BlitSurface(inputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
-            SDL_BlitSurface(selInputBox, NULL, SDL_GetWindowSurface(ecran),
+            SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);		
 	}
 	blit_text(position2, m->add_enemi, ecran, 20, 255);
@@ -619,4 +615,17 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	}
 	blit_text(position5, e_list, ecran, 9999, 255);
     }
+}
+
+char talk(SDL_Window *ecran, struct personnages *moi)
+{
+    if (lettres->esc == 1)
+	return 0;
+    SDL_Rect position1;
+    position1.x = 50;
+    position1.y = 50;
+    text_input(moi->speak + 1, 50);
+    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran), &position1);
+    blit_text(position1, moi->speak + 1, ecran, 20, 255); 
+    return 1;
 }

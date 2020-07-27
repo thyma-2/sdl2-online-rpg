@@ -14,7 +14,7 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
 	int y3;
 	int y4;
 	coo_corner(p->p, &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
-	char obj = 0; // colision avec un objet
+	char obj; // colision avec un objet
 	char bord = 0; // colision avec le bord
 	char eau = check_eau(x1, y1, ground, max_x, p->p->eau); // collision avec l'eau
 	if (eau == 0)
@@ -27,6 +27,7 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
 	    {
 		if (pp->p->plancher == p->p->plancher)
 		{
+		    obj = 0;
 		    if (obj == 0)
 			obj = check_obj(pp->p, x1, y1);
 		    if (obj == 0)
