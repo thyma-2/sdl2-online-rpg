@@ -101,8 +101,8 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
 	    talk(ecran, speak_s, moi);
         gui_order(moi, ecran);
         gui_event(moi, ecran, list, speak_s);
-        ia(list);
-        collision(list, ground, max_x, max_y);
+	ia(list);
+	collision(list, ground, max_x, max_y);
         generate_orders(list, socket);
         recv_order(socket, list);
         list = remove_perso(list);

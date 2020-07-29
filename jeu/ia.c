@@ -70,7 +70,6 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 	    parcour->p->angle = 360;
         parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
         parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-        parcour->p->vitesse_dep -= 1;
         parcour->p->ordrey -= cos(angle / 57.3);
 	parcour->p->ordrex += sin(angle / 57.3);
 	for (struct linked_list *parcour2 = list; parcour2 != NULL; parcour2 = parcour2->next)
@@ -84,6 +83,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		parcour2->p->a_bouger = 1;;
 	    }
 	}
+	parcour->p->vitesse_dep -= 1;
     }
     if (strcmp(parcour->p->echange_player, "none") != 0)
     {
