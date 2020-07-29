@@ -32,10 +32,8 @@ int open_acount(char *test)
     s = s + 1;
     char *tmp = calloc(count + 1, sizeof(char));
     strncat(tmp, test,count);
-    printf("av:%s\n", test);
     deschifrage(s, tmp);
     free(tmp);
-    printf("ap:%s\n", test);
     while (getline(&line, &len, acount) > 0)
     {
         if (strncmp(line, test, strlen(line) - 1) == 0)

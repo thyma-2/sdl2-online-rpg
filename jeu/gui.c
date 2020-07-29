@@ -86,7 +86,7 @@ void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int
     }
 }
 
-void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list)
+void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list, struct speak *speak_s)
 {
     SDL_Rect position;
     position.x = 50;
@@ -154,7 +154,42 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 	    }
 	}
     }
-    blit_text(position, txt, ecran, 150, 255);
+    blit_text(position, txt, ecran, 90, 255);
+    for (struct linked_list *p = list; p != NULL; p = p->next)
+    {
+	if (p->p->speak[0] != 0)
+	{
+	    int s = strlen(p->p->speak);
+	    int somme = 0;
+	    for (int i = 0; p->p->speak[i] != 0; i++)
+		somme += select_lettre(p->p->speak[i])->w;
+    	    if (s > 60)
+	    {	    
+	        position.y = p->p->y + 290 - perso->y;
+		position.x = p->p->x + 600 - (somme / s) * 15 - perso->x;
+	    }
+	    else if (s > 30)
+	    {
+		position.y = p->p->y + 310 - perso->y;
+		position.x = p->p->x + 600 - (somme / s) * 15 - perso->x;
+	    }
+	    else
+	    {
+		position.y = p->p->y + 330 - perso->y;
+		position.x = p->p->x + 600 - somme / 2 - perso->x;
+	    }
+ 	    blit_text(position, p->p->speak, ecran, 30, 0);    
+	}
+	if (speak_s->timer > 0)
+	{
+	    speak_s->timer --;
+	    if (speak_s->timer == 0)
+	    {
+		perso->speak[0] = 0;
+		perso->a_bouger = 1;
+	    }
+	}
+    }
 }
 
 void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi)
@@ -617,15 +652,23 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     }
 }
 
-char talk(SDL_Window *ecran, struct personnages *moi)
+void talk(SDL_Window *ecran, struct speak *speak_s, struct personnages *moi)
 {
     if (lettres->esc == 1)
-	return 0;
+	speak_s->on = 0;
     SDL_Rect position1;
     position1.x = 50;
     position1.y = 50;
-    text_input(moi->speak + 1, 50);
+    text_input(speak_s->speak, 90);
     SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran), &position1);
-    blit_text(position1, moi->speak + 1, ecran, 20, 255); 
-    return 1;
+    blit_text(position1, speak_s->speak, ecran, 30, 255);
+    if (lettres->enter == 1)
+    {
+	moi->speak[0] = 0;
+	speak_s->timer = strlen(speak_s->speak) * 100;
+	strcat(moi->speak, speak_s->speak);
+	speak_s->speak[0] = 0;
+	lettres->enter = 0;
+	moi->a_bouger = 1;
+    }
 }

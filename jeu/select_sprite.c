@@ -381,5 +381,5 @@ SDL_Surface *select_lettre(char lettre)
 	    }
 	}
     }
-    return NULL;
+    return img->li->X;
 }

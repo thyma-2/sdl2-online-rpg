@@ -52,9 +52,12 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     int max_y = 0;
     char *ground = rec_ground(socket, &max_x, &max_y);
     struct linked_list *selected = NULL;
-    //peux être faire une sous fonction pour init la struct menu
+    //peux être faire une sous fonction pour init tout ca
     struct menu *menu_s = malloc(sizeof(struct menu));
-    char talk_on = 0;
+    struct speak *speak_s = malloc(sizeof(struct speak));
+    speak_s->on = 0;
+    speak_s->timer = 0;
+    speak_s->speak[0] = 0;
     menu_s->on = 0;
     menu_s->diplo_on = 0;
     menu_s->inventaire_on = 0;
@@ -64,13 +67,14 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     menu_s->rem_enemi[0] = 0;
     menu_s->sel_diplo = 0;
     menu_s->sel_inventaire = 0;
+    //
     while (lettres->exit != 1)
     {
         display_ground(moi, ground ,ecran);
         gestion_touche();
         disp_perso_list(list, moi, ecran);
         display_selected(selected, ecran, moi);
-        if (menu_s->on == 0 && talk_on == 0)
+        if (menu_s->on == 0 && speak_s->on == 0)
         {
             deplacement(moi, ground, max_x);
             selected = select(list, moi, selected);
@@ -83,7 +87,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
 	    if (lettres->t == 1)
             {
                 lettres->t = 0;
-                talk_on = 1;
+                speak_s->on = 1;
             }
             if (lettres->Mouse_Mclick == 1)
             {
@@ -93,10 +97,10 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         }
         else if (menu_s->on == 1)
             menu(ecran, menu_s, moi, list);
-	else if (talk_on == 1)
-	    talk_on = talk(ecran, moi);
+	else
+	    talk(ecran, speak_s, moi);
         gui_order(moi, ecran);
-        gui_event(moi, ecran, list);
+        gui_event(moi, ecran, list, speak_s);
         ia(list);
         collision(list, ground, max_x, max_y);
         generate_orders(list, socket);

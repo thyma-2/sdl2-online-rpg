@@ -132,6 +132,9 @@ void generate_orders(struct linked_list *l, int socket)
 	    tmp[0] = 0;
 	    sprintf (tmp, "%d", list->p->item2);
 	    strcat (order, tmp);
+	    strcat (order, " [");
+	    strcat (order, list->p->speak);
+	    strcat (order, "]");
 	}
     }
     int s = strlen(order);

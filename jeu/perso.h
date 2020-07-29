@@ -35,7 +35,7 @@ struct personnages
     char echange_player[50];
     int item1;
     int item2;
-    char speak[50];
+    char speak[90];
     ///////////////////////////////////////
     struct personnages *sur_plancher;
     int max_pv;

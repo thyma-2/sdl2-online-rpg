@@ -56,7 +56,7 @@ struct linked_list *append_perso(struct linked_list *list,  char **line)
         list->next = NULL;
         int a = parse_order(n, *line);
         init_stat(n);
-        *line = *line + a;
+        *line = *line + a + 1;
         return (list);
     }
     else
@@ -85,7 +85,7 @@ struct linked_list *recv_map(int socket, struct linked_list *list)
     size_t nb_to_res  = atoi(buffer);
     free(buffer);
     char *pos_buf = buffer;
-    buffer = calloc(sizeof(char), nb_to_res);
+    buffer = calloc(nb_to_res + 2, 1);
     while (res < nb_to_res)
     {
         size_t tmp = recv(socket, buffer, nb_to_res - res, 0);

@@ -8,25 +8,21 @@ void text_input(char *text, unsigned int limite)
     SDL_Event event;
     if (SDL_PollEvent(&event))
     {
-        if (event.type == SDL_TEXTINPUT)
-        {
+	if (event.type == SDL_TEXTINPUT)
+	{
             if (strlen(text) < limite)
-            {
                 strcat(text, event.text.text);
-            }
+	}
+	else if (event.type == SDL_KEYDOWN)
+	{
+             if (event.key.keysym.sym == SDLK_RETURN)
+                 lettres->enter = 1;
+             if (event.key.keysym.sym == SDLK_TAB)
+                 lettres->tab = 1;
+             if (event.key.keysym.sym == SDLK_BACKSPACE || lettres->back == 1)
+                 text[strlen(text) - 1] = 0;
         }
-        if (event.type == SDL_KEYDOWN)
-        {
-            if (event.key.keysym.sym == SDLK_RETURN)
-                lettres->enter = 1;
-            if (event.key.keysym.sym == SDLK_TAB)
-                lettres->tab = 1;
-            if (event.key.keysym.sym == SDLK_BACKSPACE)
-            {
-                text[strlen(text) - 1] = 0;
-            }
-        }
-        if (event.type == SDL_KEYUP)
+        else if (event.type == SDL_KEYUP)
         {
             if (event.key.keysym.sym == SDLK_RETURN)
                 lettres->enter = 0;
@@ -34,12 +30,8 @@ void text_input(char *text, unsigned int limite)
                 lettres->tab = 0;
         }
         if (event.type == SDL_QUIT)
-        {
             lettres->exit = 1;
-        }
     }
-
-
 }
 
 void gestion_touche(void)
