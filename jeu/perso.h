@@ -37,6 +37,7 @@ struct personnages
     int item2;
     char speak[90];
     ///////////////////////////////////////
+    int speak_timer;
     struct personnages *sur_plancher;
     int max_pv;
     int vitesse_dom;

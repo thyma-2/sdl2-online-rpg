@@ -208,4 +208,22 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
 	    }
 	}
     }
+    if (strcmp(parcour->p->echange_player, "none") != 0)
+    {
+	parcour->p->speak[0] = 0;
+	strcat(parcour->p->speak, "Votre proposition est ininteressante");
+	parcour->p->speak_timer = 1350;
+	parcour->p->echange_player[0] = 0;
+	strcat(parcour->p->echange_player, "none");
+	parcour->p->a_bouger = 1;
+    }
+    if (parcour->p->speak_timer > 0)
+    {
+	parcour->p->speak_timer --;
+	if (parcour->p->speak_timer == 0)
+	{
+	    parcour->p->speak[0] = 0;
+	    parcour->p->a_bouger = 1;
+	}
+    }
 }

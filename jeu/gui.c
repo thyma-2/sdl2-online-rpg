@@ -86,7 +86,7 @@ void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int
     }
 }
 
-void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list, struct speak *speak_s)
+void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list)
 {
     SDL_Rect position;
     position.x = 50;
@@ -180,10 +180,10 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 	    }
  	    blit_text(position, p->p->speak, ecran, 30, 0);    
 	}
-	if (speak_s->timer > 0)
+	if (perso->speak_timer > 0)
 	{
-	    speak_s->timer --;
-	    if (speak_s->timer == 0)
+	    perso->speak_timer --;
+	    if (perso->speak_timer == 0)
 	    {
 		perso->speak[0] = 0;
 		perso->a_bouger = 1;
@@ -665,7 +665,7 @@ void talk(SDL_Window *ecran, struct speak *speak_s, struct personnages *moi)
     if (lettres->enter == 1)
     {
 	moi->speak[0] = 0;
-	speak_s->timer = strlen(speak_s->speak) * 100;
+	moi->speak_timer = strlen(speak_s->speak) * 100;
 	strcat(moi->speak, speak_s->speak);
 	speak_s->speak[0] = 0;
 	lettres->enter = 0;

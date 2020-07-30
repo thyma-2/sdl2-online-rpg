@@ -56,7 +56,6 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     struct menu *menu_s = malloc(sizeof(struct menu));
     struct speak *speak_s = malloc(sizeof(struct speak));
     speak_s->on = 0;
-    speak_s->timer = 0;
     speak_s->speak[0] = 0;
     menu_s->on = 0;
     menu_s->diplo_on = 0;
@@ -100,9 +99,9 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
 	else
 	    talk(ecran, speak_s, moi);
         gui_order(moi, ecran);
-        gui_event(moi, ecran, list, speak_s);
 	ia(list);
 	collision(list, ground, max_x, max_y);
+	gui_event(moi, ecran, list);
         generate_orders(list, socket);
         recv_order(socket, list);
         list = remove_perso(list);

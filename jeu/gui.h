@@ -12,7 +12,6 @@
 struct speak
 {
     char on;
-    int timer;
     char speak[90];
 };
 
@@ -35,7 +34,7 @@ struct menu
 };
 
 void talk(SDL_Window *ecran, struct speak *speak_s, struct personnages *moi);
-void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list, struct speak *speak_s);
+void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list);
 void *cast(void *p);
 void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi);
 void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur);

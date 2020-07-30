@@ -56,4 +56,5 @@ void init_stat(struct personnages *p)
 {
     actualise_stat(p);
     p->sur_plancher = NULL;
+    p->speak_timer = 0;
 }
