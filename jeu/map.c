@@ -2,32 +2,13 @@
 
 char *rec_ground(int socket, int *x, int *y)
 {
-    char b[] = "get_ground";
-    char *map;
-    if (access( "ground.txt", F_OK ) != -1 )
-    {
-        FILE *f = fopen("ground.txt", "rb");
-        fseek(f, 0, SEEK_END);
-        size_t fsize = ftell(f);
-        fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-        map = malloc(fsize + 1);
-        fread(map, 1, fsize, f);
-        fclose(f);
-        map[fsize] = 0;
-    }
-    else
-    {
-        send(socket, b,10,0);
-        map = ecalloc(sizeof(char), 9);
-        recv(socket, map, 8, 0);
-        int nb_char = atoi(map);
-        free(map);
-        map = emalloc(nb_char);
-        recv(socket, map, nb_char, 0);
-        FILE *fp = fopen("ground.txt", "w");
-        fwrite( map, nb_char, 1, fp );
-        fclose(fp);
-    }
+    char *map = ecalloc(sizeof(char), 9);
+    recv(socket, map, 8, 0);
+    int nb_char = atoi(map);
+    free(map);
+    map = emalloc(nb_char + 1);
+    recv(socket, map, nb_char, 0);
+    map[nb_char] = 0;
     int i = 0;
     while (map[i] != '\n')
     {

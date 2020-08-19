@@ -87,6 +87,8 @@ struct skin
     SDL_Surface *ship1droitebas;
     SDL_Surface *ship1droite;
     SDL_Surface *ship1droitehaut;
+    SDL_Surface *fruit;
+    SDL_Surface *legume;
 };
 
 struct gui_sprite
@@ -97,6 +99,9 @@ struct gui_sprite
     SDL_Surface *selTextInput;
     SDL_Surface *narrowTextInput;
     SDL_Surface *narrowSelTextInput;
+    SDL_Surface *demarcation;
+    SDL_Surface *plus;
+    SDL_Surface *moins;
 };
 
 

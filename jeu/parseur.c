@@ -122,6 +122,16 @@ int parse_order(struct personnages *list, char *line)
     list->timer_dom = atoi(tmpI);
     while (line[i] != ' ')
     {
+        tmpI[j] = line[i];
+        i++;
+        j++;
+    }
+    tmpI[j] = 0;
+    j = 0;
+    i++;
+    list->faim = atoi(tmpI);
+    while (line[i] != ' ')
+    {
         list->skin[j] = line[i];
         j++;
         i++;
@@ -169,7 +179,6 @@ int parse_order(struct personnages *list, char *line)
     {
         i += 1;
         j = 0;
-        tmpN[0] = 0;
         while (line[i] != ' ' && line[i] != ']')
         {
             tmpN[j] = line[i];
@@ -184,17 +193,27 @@ int parse_order(struct personnages *list, char *line)
     while (line[i] != ']')
     {
 	i += 1;
-        j = 0;
-        tmpN[0] = 0;
-        while (line[i] != ' ' && line[i] != ']')
-        {
-            tmpN[j] = line[i];
-            i++;
-            j++;
-        }
-        tmpN[j] = 0;
-        if (tmpN[0] != 0)
-            list->i_list = append_linked_char(tmpN, list->i_list);
+	if (line[i] != ']')
+	{
+            j = 0;
+            while (line[i] != ' ')
+            {
+                tmpN[j] = line[i];
+                i++;
+                j++;
+            }
+	    tmpN[j] = 0;
+	    i++;
+	    j = 0;
+     	    while (line[i] != ' ' && line[i] != ']')
+            {
+                tmpI[j] = line[i];
+                i++;
+                j++;
+            }
+	    tmpI[j] = 0;
+                list->i_list = append_in_inventory(tmpN, list->i_list, atoi(tmpI));
+	}
     }
     i += 2;
     j = 0;

@@ -38,6 +38,7 @@ struct linked_char *append_linked_char(char *name, struct linked_char *p)
     {
         p = malloc(sizeof(struct linked_char));
         p->nom[0] = 0;
+	p->count = 1;
         strcat(p->nom, name);
         p->next = NULL;
         return p;
@@ -49,6 +50,7 @@ struct linked_char *append_linked_char(char *name, struct linked_char *p)
             parcour = parcour->next;
         struct linked_char *n = malloc(sizeof(struct linked_char));
         n->nom[0] = 0;
+	n->count = 1;
         strcat(n->nom, name);
         n->next = NULL;
         parcour->next = n;
@@ -76,15 +78,15 @@ void free_linked_char(struct linked_char *e)
     }
 }
 
-int exist_in_linked_char(struct linked_char *e, char *cmp)
+struct linked_char *exist_in_linked_char(struct linked_char *e, char *cmp)
 {
     while (e != NULL)
     {
         if (strcmp(e->nom, cmp) == 0)
-	    return 1;
+	    return e;
 	e = e->next;
     }
-    return 0;
+    return NULL;
 }
 
 void exchange_char(int a, int b, struct linked_char *l)

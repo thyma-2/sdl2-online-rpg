@@ -109,12 +109,12 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 {
     if (strcmp(perso->skin, "archer") == 0 || strcmp(perso->skin, "civil") == 0)
     {
-	*x1 = perso->x + 8;
-	*x2 = perso->x + 16;
-	*x3 = perso->x + 8;
-	*x4 = perso->x + 16;
-	*y1 = perso->y + 24;
-	*y2 = perso->y + 24;
+	*x1 = perso->x + 5;
+	*x2 = perso->x + 14;
+	*x3 = perso->x + 5;
+	*x4 = perso->x + 14;
+	*y1 = perso->y + 23;
+	*y2 = perso->y + 23;
 	*y3 = perso->y + 33;
 	*y4 = perso->y + 33;
     }

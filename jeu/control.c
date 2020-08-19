@@ -4,6 +4,13 @@ void deplacement(struct personnages *moi, char *ground, int max_x)
 {
     max_x = max_x;
     ground = ground;
+    if (moi->faim < 0)
+    {
+	moi->pv -= 1;
+	moi->a_bouger = 1;
+    }
+    else
+	moi->faim -= 1;
     if (lettres->z == 1)
     {
         moi->a_bouger = 1;

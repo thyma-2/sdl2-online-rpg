@@ -10,7 +10,7 @@ void send_background(int socket,char *map, size_t size_map)
 }
 
 
-char handle_req(int socket, struct personnages *list, int *movedObj, char *ground, size_t len_of_ground)
+char handle_req(int socket, struct personnages *list, int *movedObj)
 {
     char *buffer = calloc(20, 1);
     if (recv(socket, buffer, 20, 0) > 0)
@@ -49,8 +49,6 @@ char handle_req(int socket, struct personnages *list, int *movedObj, char *groun
 		buffer = pos_buf;
 	    }
 	}
-	else if (strncmp(buffer, "get_ground", 10) == 0)
-	    send_background(socket, ground, len_of_ground);
 	free(buffer);
 	return 0;
     }

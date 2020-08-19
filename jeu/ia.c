@@ -5,7 +5,7 @@ void append_enemi_list(struct linked_list *list, struct personnages *p)
     for (struct linked_list *l = list; l != NULL; l = l->next)
 	if (strcmp(l->p->nom, p->nom_superieur) == 0)
 	    for (struct linked_char *e = l->p->e_list; e != NULL; e = e->next)
-		if (exist_in_linked_char(p->e_list, e->nom) == 0)
+		if (exist_in_linked_char(p->e_list, e->nom) == NULL)
 	            p->e_list = append_linked_char(e->nom, p->e_list);
 }
 
@@ -96,27 +96,24 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
             strcat(parcour->p->echange_player, "none");
 	    if (obj1 != NULL && obj2 != NULL)
 	    {
-                char tmp[50];
-                tmp[0] = 0;
-                strcat(tmp, obj1->nom);
-                obj1->nom[0] = 0;
-                strcat(obj1->nom, obj2->nom);
-                obj2->nom[0] = 0;
-                strcat(obj2->nom, tmp);
+	        p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
+                parcour->p->i_list = append_in_inventory(obj2->nom, parcour->p->i_list, 1);
+                p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
+                parcour->p->i_list = remove_from_inventory(obj1->nom, parcour->p->i_list, 1);
 		p->a_bouger = 1;
                 parcour->p->a_bouger = 1;
 	    }
 	    else if (obj1 == NULL && obj2 != NULL)
 	    {
-	        parcour->p->i_list = append_linked_char(obj2->nom, parcour->p->i_list);
-                p->i_list = remove_enemi(obj2->nom, p->i_list);
+		parcour->p->i_list = append_in_inventory(obj2->nom, parcour->p->i_list, 1);
+                p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
 		p->a_bouger = 1;
                 parcour->p->a_bouger = 1;
 	    }
 	    else if (obj2 == NULL && obj1 != NULL)
 	    {
-	        p->i_list = append_linked_char(obj1->nom, p->i_list);
-                parcour->p->i_list = remove_enemi(obj1->nom, parcour->p->i_list);
+		p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
+                parcour->p->i_list = remove_from_inventory(obj1->nom, parcour->p->i_list, 1);
 	        p->a_bouger = 1;
 		parcour->p->a_bouger = 1;
 	    }
@@ -126,6 +123,13 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 
 void ia_man(struct linked_list *list, struct linked_list *parcour)
 {
+    if (parcour->p->faim < 0)
+    {
+	parcour->p->pv -= 1;
+	parcour->p->a_bouger = 1;
+    }
+    else
+	parcour->p->faim -= 1;
     append_enemi_list(list, parcour->p);
     if (parcour->p->ordrex >= 0)
     {
@@ -217,13 +221,18 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
 	strcat(parcour->p->echange_player, "none");
 	parcour->p->a_bouger = 1;
     }
-    if (parcour->p->speak_timer > 0)
+    if (parcour->p->faim == 50000)
     {
+	parcour->p->speak[0] = 0;
+        strcat(parcour->p->speak, "J'ai faim! Je n ai rien a manger !");
+        parcour->p->speak_timer = 1350;
+	parcour->p->a_bouger = 1;
+    }
+    if (parcour->p->speak_timer > 0)
 	parcour->p->speak_timer --;
-	if (parcour->p->speak_timer == 0)
-	{
-	    parcour->p->speak[0] = 0;
-	    parcour->p->a_bouger = 1;
-	}
+    else if (parcour->p->speak_timer == 0)
+    {
+        parcour->p->speak[0] = 0;
+        parcour->p->a_bouger = 1;
     }
 }

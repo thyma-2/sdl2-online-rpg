@@ -3,7 +3,7 @@
 #ifndef PARSEUR
 #define PARSEUR
 #include "perso.h"
-
+#include "inventaire.h"
 
 #include <stdlib.h>
 #include <string.h>

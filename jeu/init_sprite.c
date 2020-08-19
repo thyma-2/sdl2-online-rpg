@@ -149,6 +149,12 @@ struct skin *init_skin(SDL_Window *window)
     a = SDL_LoadBMP("img/eau/ship1/bas.bmp");
     to_return->ship1bas = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/nature/nouriture/fruit.bmp");
+    to_return->fruit = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/nature/nouriture/legume.bmp");
+    to_return->legume = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
     return to_return;
 }
 
@@ -308,7 +314,7 @@ struct lettres_img *init_lettre(SDL_Window *window)
     a = SDL_LoadBMP("img/alphabet/z.bmp");
     to_return->z = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
-    a = SDL_LoadBMP("img/alphabet/>.bmp");
+    a = SDL_LoadBMP("img/alphabet/sup.bmp");
     to_return->sup = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
     a = SDL_LoadBMP("img/alphabet/-.bmp");
@@ -454,6 +460,15 @@ struct gui_sprite *init_gui(SDL_Window *window)
     SDL_FreeSurface(a);
     a = SDL_LoadBMP("img/gui/narrowSelTextInput.bmp");
     to_return->narrowSelTextInput = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
+     a = SDL_LoadBMP("img/gui/demarcation.bmp");
+    to_return->demarcation = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/gui/plus.bmp");
+    to_return->plus = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/gui/moins.bmp");
+    to_return->moins = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
     return to_return;
 }

@@ -209,42 +209,19 @@ int main(int argc, char **argv)
 			    char tmp[20];
 			    line[0] = 0;
 			    tmp[0] = 0;
-			    int id = find_smalest_valid_id(list, 0);
-			    sprintf (tmp, "%d", id); 
+			    sprintf (tmp, "%d", find_smalest_valid_id(list, 0));
 			    strcat(line, tmp);
-			    strcat(line, " 10 ");
+			    strcat(line, " 11 ");
 			    strcat(line, arr_name[i]);
-			    strcat(line, " 10 10 -1 0 0 0 civil ");
-			    int k = 1;
-			    int j = strlen(line);
-			    while (buffer[k] != ' ')
-			    {
-				line[j] = buffer[k];
-				k++;
-				j++;
-			    }
-			    line[j] = 0;
+			    strcat(line, " 10 10 -1 0 0 0 civil ")
+			    // extraire nom et rajouter
 		            strcat(line, " none none ");
-			    j += 12;
-			    k++;
-			    while (buffer[k] != 0)
-			    {
-				line[j] = buffer[k];
-				k++;
-				j++;
-			    }
-			    line[j] = 0;
+			    // extraire zone et rajouter
 			    strcat (line, " n [] []none 0 0 []");
-			    append_perso(&line, list);
-			    append(movedObj, id, 400);
-			    boolrep[0] = 'o';
-                            send(logged_client[i], boolrep, 1,MSG_NOSIGNAL);
-			    send_map(logged_client[i], list);
-                            j = append(ingame_client, logged_client[i], 10);
-                            set_name(ingame_arr_name[j], arr_name[j]);
-                            send_background(logged_client[i], ground, len_of_ground);
-                            logged_client[i] = -1;
-                            logged_client_afk_timing[i] = 0;
+			    //append_perso
+			    //envoyer oui
+			    //dire que le perso à bouger
+			    //rajouter à la liste des clients en jeu
 			}
 		    }
                 }

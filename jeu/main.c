@@ -55,6 +55,10 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     //peux être faire une sous fonction pour init tout ca
     struct menu *menu_s = malloc(sizeof(struct menu));
     struct speak *speak_s = malloc(sizeof(struct speak));
+    struct formation *f= malloc(sizeof(struct formation));
+    f->ecart_x = 25;
+    f->ecart_y = 25;
+    f->n_par_lignes = 10;
     speak_s->on = 0;
     speak_s->speak[0] = 0;
     menu_s->on = 0;
@@ -72,12 +76,12 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         display_ground(moi, ground ,ecran);
         gestion_touche();
         disp_perso_list(list, moi, ecran);
-        display_selected(selected, ecran, moi);
+        display_selected(selected, ecran, moi, f);
         if (menu_s->on == 0 && speak_s->on == 0)
         {
             deplacement(moi, ground, max_x);
             selected = select(list, moi, selected);
-            commande(selected, moi);
+            commande(selected, moi, f);
             if (lettres->m == 1)
             {
                 lettres->m = 0;
@@ -98,13 +102,12 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
             menu(ecran, menu_s, moi, list);
 	else
 	    talk(ecran, speak_s, moi);
-        gui_order(moi, ecran);
 	ia(list);
 	collision(list, ground, max_x, max_y);
 	gui_event(moi, ecran, list);
         generate_orders(list, socket);
         recv_order(socket, list);
-        list = remove_perso(list);
+        list = death(list);
         SDL_UpdateWindowSurface(ecran);
     }
     free(menu_s);
@@ -119,22 +122,30 @@ void set_pos(SDL_Rect *pos, int x, int y)
 
 int start_menu(int socket, SDL_Window* ecran)
 {
-    //char err1[] = "Vous avez déjà un personnage.";
+    char err1[] = "Vous avez deja un personnage.";
     char err2[] = "Veuillez cree un personnage";
     char txt1[] = "Jouer";
     char txt2[] = "Creer un personnage";
+    char txt3[] = "Nom du personnage";
+    char txt4[] = "Zone";
+    char zone[50] = "";
+    char nom[50] = "";
     SDL_Rect position0; //position background
     set_pos(&position0, 0, 0);
     SDL_Rect position1;
     SDL_Rect position2;
     SDL_Rect position3;
+    SDL_Rect position4;
+    SDL_Rect position5;
     set_pos(&position3, 100, 300);
     set_pos(&position1, 100, 100);
     set_pos(&position2, 100, 200);
+    set_pos(&position4, 100, 70);
+    set_pos(&position5, 100, 170);
     char play = 0;
     char sel = 1;
     int tryed = -127;
-    char *boolrep = malloc(1);
+    char *c = malloc(101);
     char create = 0;
     while (play ==  0)
     {
@@ -165,13 +176,11 @@ int start_menu(int socket, SDL_Window* ecran)
                 }
                 if (lettres->enter == 1)
                 {
-                    boolrep[0] = 'p';
-                    send(socket, boolrep, 1, 0);
-                    while (boolrep[0] == 'p')
-                    {
-                        recv(socket, boolrep, 1, 0);
-                    }
-                    if (boolrep[0] == 'o')
+                    c[0] = 'p';
+                    send(socket, c, 1, 0);
+                    while (c[0] == 'p')
+                        recv(socket, c, 1, 0);
+                    if (c[0] == 'o')
                         return 1;
                     else
                         tryed = 127;
@@ -198,9 +207,68 @@ int start_menu(int socket, SDL_Window* ecran)
             blit_text(position2,txt2,ecran, 20, 255);
             blit_text(position1,txt1,ecran, 20, 255);
         }
+	else
+	{
+	    if (tryed > -126)
+            {
+                blit_text(position3, err1, ecran, 99, 255);
+                tryed --;
+            }
+            if (sel == 1)
+            {
+                SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
+                        &position1);
+                SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
+                        &position2);
+		if (lettres->tab == 1)
+		{
+		    lettres->tab = 0;
+		    sel = 2;
+		}
+		text_input(nom, 50);
+	    }
+	    else
+	    {
+		SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
+                        &position1);
+                SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
+                        &position2);
+		if (lettres->tab == 1)
+		{
+		    lettres->tab = 0;
+		    sel = 1;
+		}
+		text_input(zone, 50);
+	    }
+	    if (lettres->enter == 1)	
+	    {
+		c[0] = 'c';
+		c[1] = 0;
+		strcat(c, nom);
+		strcat(c, " ");
+		strcat(c, zone);
+		send(socket, c, strlen(c), 0);
+		while (c[0] == 'c')
+                    recv(socket, c, 1, 0);
+		if (c[0] == 'o')
+                    return 1;
+		else
+		    tryed = 127;
+		lettres->enter = 0;
+	    }
+	    if (lettres->esc == 1)
+	    {
+		lettres->esc = 0;
+		create = 0;
+	    }
+	    blit_text(position4,txt3,ecran, 20, 255);
+	    blit_text(position5,txt4,ecran, 20, 255);
+	    blit_text(position1,nom,ecran, 20, 255);
+            blit_text(position2,zone,ecran, 20, 255);
+	}
         SDL_UpdateWindowSurface(ecran);
     }
-    free(boolrep);
+    free(c);
     return 1;
 }
 

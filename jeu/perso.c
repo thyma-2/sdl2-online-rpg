@@ -15,6 +15,14 @@ void free_linked(struct linked_list *list, char free_content)
     }
 }
 
+char exist_in_linked(struct linked_list *list, struct personnages *to_test)
+{
+    for (struct linked_list *l = list; l != NULL; l = l->next)
+	if (l->p == to_test)
+	    return 1;
+    return 0;
+}
+
 struct linked_list *append_in_linked(struct linked_list *list,struct personnages *p)
 {
     if (list == NULL)
@@ -169,7 +177,7 @@ void buble_sort_perso(struct linked_list *list)
     }
 }
 
-struct linked_list *remove_perso(struct linked_list *list)
+struct linked_list *death(struct linked_list *list)
 {
     struct linked_list *ret = list;
     struct linked_list *prev;
@@ -182,7 +190,6 @@ struct linked_list *remove_perso(struct linked_list *list)
             free_linked_char(list->p->i_list);
             free(ret->p);
             free(ret);
-            ret = list;
         }
         while (list->next != NULL)
         {
@@ -205,6 +212,38 @@ struct linked_list *remove_perso(struct linked_list *list)
             free(list->p);
             free(list);
         }
+    }
+    return ret;
+}
+
+struct linked_list *remove_from_linked_list(struct linked_list *list, struct personnages  *to_rem)
+{
+    struct linked_list *ret = list;
+    struct linked_list *prev;
+    if (list != NULL)
+    {
+        if (list->p == to_rem)
+        {
+            list = list->next;
+	    free(ret);
+            return list;
+        }
+        while (list->next != NULL)
+        {
+            prev = list;
+            list = list->next;
+            if (list->p == to_rem)
+	    {
+                prev->next = list->next;
+		free(list);
+		return ret;
+	    }
+        }
+        if (list->p == to_rem)
+	{
+	    free(list);
+            prev->next = NULL;
+	}
     }
     return ret;
 }

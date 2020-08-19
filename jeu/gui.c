@@ -1,15 +1,5 @@
 #include "gui.h"
 
-void *cast(void *p)
-{
-    return p;
-}
-
-
-
-
-
-
 void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
 {
     int pox = position.x;
@@ -46,14 +36,11 @@ void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int 
     }
 }
 
-
-
-
-
-void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
+int blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
 {
     int pox = position.x;
     int i = 0;
+    int mpox = 0;
     while (text[i] != 0)
     {
         if (i % limite == 0 && i != 0)
@@ -80,19 +67,34 @@ void blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int
                 SDL_SetColorKey(lettre_afficher, SDL_SCANCODE_Y, SDL_MapRGB(lettre_afficher->format,couleur,couleur,couleur));
                 SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
                 position.x += lettre_afficher->w;
+		if (position.x - pox> mpox)
+	            mpox = position.x - pox;
             }
             i++;
 	}
     }
+    return mpox;
 }
 
 void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list)
 {
+    // ordres (que tu recois)
     SDL_Rect position;
+    if (perso->ordrex != -1)
+    {
+        position.x = perso->ordrex + 550 - perso->x;
+        position.y = perso->ordrey + 300 - perso->y;
+        if (perso->x > perso->ordrex + - 50 && perso->x < perso->ordrex + 50 && perso->y > perso->ordrey - 50 && perso->y < perso->ordrey + 50)
+            perso->ordrex = -1;
+        SDL_Surface *croix = SDL_LoadBMP("img/gui/croix.bmp");
+        SDL_SetColorKey(croix, SDL_SCANCODE_Y, SDL_MapRGB(croix->format, 255, 255, 255));
+        SDL_BlitSurface(croix, NULL, SDL_GetWindowSurface(ecran), &position);
+    }
     position.x = 50;
     position.y = 50;
     char txt[150];
     txt[0] = 0;
+    //proposition d'échange
     if (strcmp(perso->echange_player, "none") != 0)
     {
 	struct personnages *p = find_perso_by_name(list, perso->echange_player);
@@ -126,35 +128,33 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
                     strcat(perso->echange_player, "none");
 		    if (obj1 != NULL && obj2 != NULL)
 		    {
-    		        char tmp[50];
-		        tmp[0] = 0;
-		        strcat(tmp, obj1->nom);
-		        obj1->nom[0] = 0;
-		        strcat(obj1->nom, obj2->nom);
-		        obj2->nom[0] = 0;
-		        strcat(obj2->nom, tmp);
+			p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
+			perso->i_list = append_in_inventory(obj2->nom, perso->i_list, 1);
+			p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
+			perso->i_list = remove_from_inventory(obj1->nom, perso->i_list, 1);
 			perso->a_bouger = 1;
 			p->a_bouger = 1;
 		    }
 		    else if (obj1 == NULL && obj2 != NULL)
 		    {
-			perso->i_list = append_linked_char(obj2->nom, perso->i_list);
-		  	p->i_list = remove_enemi(obj2->nom, p->i_list);
+			perso->i_list = append_in_inventory(obj2->nom, perso->i_list, 1);
+		  	p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
 			perso->a_bouger = 1;
                         p->a_bouger = 1;
 		    }
 		    else if (obj2 == NULL && obj1 != NULL)
 		    {
-			p->i_list = append_linked_char(obj1->nom, p->i_list);
-                        perso->i_list = remove_enemi(obj1->nom, perso->i_list);
+			p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
+                        perso->i_list = remove_from_inventory(obj1->nom, perso->i_list, 1);
 			perso->a_bouger = 1;
                         p->a_bouger = 1;
 		    }
 		}
 	    }
 	}
+	blit_text(position, txt, ecran, 90, 255);
     }
-    blit_text(position, txt, ecran, 90, 255);
+    //bulle de dialogues
     for (struct linked_list *p = list; p != NULL; p = p->next)
     {
 	if (p->p->speak[0] != 0)
@@ -192,81 +192,187 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
     }
 }
 
-void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi)
+void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi, struct formation *f)
 {
-    char txt[50];
+    char txt[200] = "pv\nvitesse\nperiode d attaque\nporte\npoid\nfaim";
+    char txt2[200];
     char tmp[20];
     SDL_Rect position;
-    txt[0] = 0;
-    strcat(txt, "pV->");
     position.x = 0;
     position.y = 550;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x = 12;
+    txt2[0] = 0;
     tmp[0] = 0;
     sprintf(tmp, "%d", moi->pv);
-    strcat(txt, tmp);
-    strcat(txt, "/");
+    strcat(txt2, tmp);
+    strcat(txt2, "/");
     tmp[0] = 0;
     sprintf(tmp, "%d", moi->max_pv);
-    strcat(txt, tmp);
-    blit_text(position, txt, ecran, 20, 255);
-    txt[0] = 0;
-    strcat(txt, "vitesse->");
-    position.x = 0;
-    position.y = 570;
+    strcat(txt2, tmp);
+    strcat(txt2, "\n");
     tmp[0] = 0;
     sprintf(tmp, "%d", moi->vitesse_dep);
-    strcat(txt, tmp);
-    strcat(txt, "\n         ");
+    strcat(txt2, tmp);
+    strcat(txt2, "\n");
     tmp[0] = 0;
     sprintf(tmp, "%d", moi->vitesse_dom);
-    strcat(txt, tmp);
-    blit_text(position, txt, ecran, 20, 255);
+    strcat(txt2, tmp);
+    strcat(txt2, "\n");
+    tmp[0] = 0;
+    sprintf(tmp, "%d", moi->porte_dom);
+    strcat(txt2, tmp);
+    strcat(txt2, "\n");
+    tmp[0] = 0;
+    sprintf(tmp, "%d", moi->poid);
+    strcat(txt2, tmp);
+    strcat(txt2, "\n");
+    tmp[0] = 0;
+    sprintf(tmp, "%d", moi->faim / 1000);
+    strcat(txt2, tmp);
+    position.x += blit_text(position, txt, ecran, 200, 255) + 20;
+    position.x += blit_text(position, txt2, ecran, 200, 255) + 8;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += 12;
     int pv = 0;
+    int pvm = 0;
     int vitesse_dom = 0;
     int i = 0;
     int vitesse_dep = 99999;
-    position.y = 550;
+    int portee = 99999;
+    int poid = 0;
+    int faim = 99999;
+    txt[0] = 0;
+    txt2[0] = 0;
     for (struct linked_list *parcour = selected; parcour != NULL; parcour = parcour->next)
     {
-        position.x = 700;
-	txt[0] = 0;
-	strcat(txt, parcour->p->nom);
 	if (strcmp(parcour->p->nom_superieur, moi->nom) == 0)
 	{
+	    strcat(txt, parcour->p->nom);
+	    strcat(txt, "\n");
 	    i++;
+	    pvm += parcour->p->max_pv;
 	    pv += parcour->p->pv;
 	    vitesse_dom += parcour->p->vitesse_dom;
+	    poid += parcour->p->poid;
 	    if (parcour->p->vitesse_dep < vitesse_dep)
 	        vitesse_dep = parcour->p->vitesse_dep;
-            blit_text(position,txt,ecran, 20, 100);
+	    if (parcour->p->porte_dom < portee)
+	        portee = parcour->p->porte_dom;
+	    if (parcour->p->faim < faim)
+		faim = parcour->p->faim;
 	}
 	else
-	    blit_text(position,txt,ecran, 20, 255);
-	position.y += 20;
+	{
+	    strcat(txt2, parcour->p->nom);
+	    strcat(txt2, "\n");
+	}
     }
+    position.x += blit_text(position,txt2,ecran, 200, 255) + 8;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += 12;
+    position.x += blit_text(position,txt,ecran, 200, 255) + 8;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += 12;
     if (i > 0)
     {
-        position.x = 900;
-        position.y = 550;
         txt[0] = 0;
-        strcat(txt, "pv->");
+	txt2[0] = 0;
+        strcat(txt, "pv\nvitesse\nperiode d attaque\nportee\npoid\nfaim");
         tmp[0] = 0;
         sprintf(tmp, "%d", pv / i);
-	strcat(txt, tmp);
-        blit_text(position, txt, ecran, 20, 255);
-        position.x = 900;
-        position.y = 570;
-        txt[0] = 0;
-        strcat(txt, "vitesse->");
+	strcat(txt2, tmp);
+	strcat(txt2, "/");
+	tmp[0] = 0;
+	sprintf(tmp, "%d", pvm / i);
+	strcat(txt2, tmp);
+	strcat(txt2, "\n");
 	tmp[0] = 0;
         sprintf(tmp, "%d", vitesse_dep);
-	strcat(txt, tmp);
+	strcat(txt2, tmp);
+	strcat(txt2, "\n");
 	tmp[0] = 0;
-	strcat(txt, "\n         ");
         sprintf(tmp, "%d", vitesse_dom / i);
-	strcat(txt, tmp);
-        blit_text(position, txt, ecran, 20, 255); 
+	strcat(txt2, tmp);
+	strcat(txt2, "\n");
+	tmp[0] = 0;
+        sprintf(tmp, "%d", portee);
+        strcat(txt2, tmp);
+	strcat(txt2, "\n");
+	tmp[0] = 0;
+        sprintf(tmp, "%d", poid / i);
+        strcat(txt2, tmp);
+	strcat(txt2, "\n");
+	tmp[0] = 0;
+	sprintf(tmp, "%d", faim / 1000);
+	strcat(txt2, tmp);
+        position.x += blit_text(position, txt, ecran, 200, 255) + 20;
+	position.x += blit_text(position, txt2, ecran, 200, 255);
     }
+    position.x += 8;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    if (i > 0)
+    {
+        position.x += 12;
+	if (lettres->Mouse_Lclick == 1)
+	{
+	    if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+	    {
+                f->ecart_x += 1;
+	    }
+	}
+	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+	position.x += 35;
+	if (lettres->Mouse_Lclick == 1)
+        {
+            if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+            {
+                f->ecart_y += 1;
+            }
+        }
+	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+        position.x += 35;
+	if (lettres->Mouse_Lclick == 1)
+        {
+            if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+            {
+                f->n_par_lignes += 1;
+            }
+        }
+	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+	position.y += 60;
+	position.x -= 70;
+	if (lettres->Mouse_Lclick == 1)
+        {
+            if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+            {
+                f->ecart_x -= 1;
+            }
+        }
+	SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
+        position.x += 35;
+	if (lettres->Mouse_Lclick == 1)
+        {
+            if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+            {
+                f->ecart_y -= 1;
+            }
+        }
+        SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
+        position.x += 35;
+	if (lettres->Mouse_Lclick == 1)
+        {
+            if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
+            {
+                f->n_par_lignes -= 1;
+            }
+        }
+        SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
+	position.x += 18;
+	position.y -= 60;
+    }
+    position.x += 20;
+    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
 }
 
 void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list)
@@ -281,6 +387,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     char txt7[] = "Main Droite";
     char txt8[] = "Vetements";
     char txt9[] = "Stockage";
+    char tmpI[10] = "";
     char *e_list = malloc(200);
     SDL_Rect position1;
     SDL_Rect position2;
@@ -361,6 +468,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     if (m->echange_on == 1)
     {
 	struct linked_char *t = perso->i_list;
+	e_list[0] = 0;
         for (int i = 0; i < 10; i++)
         {
             if (m->sel_echange1 == position14.y / 20)
@@ -369,13 +477,21 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
                 SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             if (t != NULL)
             {
-                blit_text(position14, t->nom, ecran, 20, 255);
+		strcat(e_list, t->nom);
+		strcat(e_list, " - ");
+		tmpI[0] = 0;
+                sprintf (tmpI, "%d", t->count);
+                strcat(e_list, tmpI);
+		strcat(e_list, "\n");
                 t = t->next;
             }
             position14.y += 20;
         }
-	position14.y += 20;
+	position14.y = 0;
+	blit_text(position14, e_list, ecran, 20000, 255);
+	position14.y = 220;
 	t = m->echange->i_list;
+	e_list[0] = 0;
         for (int i = 0; i < 10; i++)
         {
             if (m->sel_echange2 == (position14.y - 220) / 20)
@@ -384,11 +500,18 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
                 SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position14);
             if (t != NULL)
             {
-                blit_text(position14, t->nom, ecran, 20, 255);
+		strcat(e_list, t->nom);
+                strcat(e_list, " - ");
+		tmpI[0] = 0;
+                sprintf (tmpI, "%d", t->count);
+                strcat(e_list, tmpI);
+                strcat(e_list, "\n");
                 t = t->next;
             }
             position14.y += 20;
         }
+	position14.y = 220;
+	blit_text(position14, e_list, ecran, 20000, 255);
 	if (lettres->enter == 1)
 	{
 	    lettres->enter = 0;
@@ -480,7 +603,6 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
   		        SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
  	                    &position2);
 			m->echange = l->p;
-			
 		    }
 		    else
 			SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
@@ -515,19 +637,28 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	blit_text(position11, txt8, ecran, 20, 255);
 	blit_text(position12, txt9, ecran, 20, 255);
 	struct linked_char *t = perso->i_list;
+	e_list[0] = 0;
 	for (int i = 0; i < 10; i++)
 	{
 	    if (m->sel_inventaire == (position13.y - 100) / 20)
 	        SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
 	    else
  	        SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
+	    position13.y += 20;
 	    if (t != NULL)
 	    {
-	        blit_text(position13, t->nom, ecran, 20, 255);
+		strcat(e_list, t->nom);
+		strcat(e_list, " - ");
+		tmpI[0] = 0;
+		sprintf (tmpI, "%d", t->count);
+		strcat(e_list, tmpI);
+		strcat(e_list, "\n");
 		t = t->next;
 	    }
-	    position13.y += 20;
+
 	}
+	position13.y = 100;
+	blit_text(position13, e_list, ecran, 2000, 255);
 	if (lettres->s == 1)
         {
             lettres->s = 0;
@@ -559,6 +690,11 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	    exchange_char(2, m->sel_inventaire, perso->i_list);
 	    lettres->k3 = 0;
 	}
+	else if (lettres->enter == 1)
+	{
+	    perso->i_list = use(m->sel_inventaire + 1, perso);
+	    lettres->enter = 0;
+	}
     }
     else if (m->diplo_on == 1)
     {
@@ -579,7 +715,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	    if (lettres->enter == 1)
 	    {
 		lettres->enter = 0;
-		if (exist_in_linked_char(perso->e_list, m->add_enemi) == 0)
+		if (exist_in_linked_char(perso->e_list, m->add_enemi) == NULL)
   		    perso->e_list = append_linked_char(m->add_enemi, perso->e_list);
 	    }
 	}

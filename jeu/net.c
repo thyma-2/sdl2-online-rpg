@@ -96,6 +96,10 @@ void generate_orders(struct linked_list *l, int socket)
 	    sprintf (tmp, "%d", list->p->timer_dom);
 	    strcat (order, tmp);
 	    strcat(order , " ");
+	    tmp[0] = 0;
+            sprintf (tmp, "%d", list->p->faim);
+            strcat (order, tmp);
+            strcat(order , " ");
 	    strcat(order, list->p->skin);
 	    strcat(order, " ");
 	    strcat(order, list->p->nom);
@@ -119,6 +123,10 @@ void generate_orders(struct linked_list *l, int socket)
 	    for (struct linked_char *p = list->p->i_list; p != NULL; p = p->next)
 	    {
 	        strcat(order, p->nom);
+		strcat(order, " ");
+		tmp[0] = 0;
+	        sprintf(tmp, "%d", p->count);
+                strcat(order, tmp);
 	        if (p->next != NULL)
 	            strcat(order, " ");
 	    }
