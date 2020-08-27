@@ -40,8 +40,8 @@ void recv_order(int socket, struct linked_list *list)
         struct personnages *yalist = get_ptr_from_id(buffer, list);
         if (yalist != NULL)
         {
-            free_linked_char(yalist->e_list);
-            free_linked_char(yalist->i_list);
+            free_linked_enemie(yalist->e_list);
+            free_linked_item(yalist->i_list);
             buffer += parse_order(yalist, buffer) + 1;
             actualise_stat(yalist);
         }
@@ -113,14 +113,18 @@ void generate_orders(struct linked_list *l, int socket)
 	        strcat(order, " y [");
 	    else
 		strcat(order, " n [");
-	    for (struct linked_char *p = list->p->e_list; p != NULL; p = p->next)
+	    for (struct linked_enemie *p = list->p->e_list; p != NULL; p = p->next)
 	    {
 	        strcat(order, p->nom);
+		strcat(order, " ");
+		tmp[0] = 0;
+                sprintf(tmp, "%d", p->rang);
+                strcat(order, tmp);
 	        if (p->next != NULL)
 	    	    strcat(order, " ");
 	    }
 	    strcat(order, "] [");
-	    for (struct linked_char *p = list->p->i_list; p != NULL; p = p->next)
+	    for (struct linked_item *p = list->p->i_list; p != NULL; p = p->next)
 	    {
 	        strcat(order, p->nom);
 		strcat(order, " ");

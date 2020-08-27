@@ -178,16 +178,27 @@ int parse_order(struct personnages *list, char *line)
     while (line[i] != ']')
     {
         i += 1;
-        j = 0;
-        while (line[i] != ' ' && line[i] != ']')
+        if (line[i] != ']')
         {
-            tmpN[j] = line[i];
+            j = 0;
+            while (line[i] != ' ')
+            {
+                tmpN[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpN[j] = 0;
             i++;
-            j++;
+            j = 0;
+            while (line[i] != ' ' && line[i] != ']')
+            {
+                tmpI[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpI[j] = 0;
+                list->e_list = append_enemie(tmpN, list->e_list, atoi(tmpI));
         }
-        tmpN[j] = 0;
-        if (tmpN[0] != 0)
-            list->e_list = append_linked_char(tmpN, list->e_list);
     }
     i += 2;
     while (line[i] != ']')

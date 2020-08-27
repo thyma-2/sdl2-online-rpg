@@ -50,6 +50,14 @@ void actualise_stat(struct personnages *p)
 	p->eau = '1';
 	p->plancher = 'y';
     }
+    else if (strcmp(p->skin, "arbre1") == 0)
+    {
+        p->max_pv = 200;
+        p->dom = 0;
+        p->poid = 999;
+        p->eau = '0';
+        p->plancher = 'n';
+    }
 }
 
 void init_stat(struct personnages *p)

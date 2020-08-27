@@ -155,6 +155,9 @@ struct skin *init_skin(SDL_Window *window)
     a = SDL_LoadBMP("img/nature/nouriture/legume.bmp");
     to_return->legume = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/nature/arbre1.bmp");
+    to_return->arbre1 = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
     return to_return;
 }
 

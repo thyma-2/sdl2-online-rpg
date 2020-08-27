@@ -8,8 +8,8 @@ void free_linked(struct linked_list *list, char free_content)
         if (free_content == 1)
         {
             free(list->p);
-            free_linked_char(list->p->e_list);
-            free_linked_char(list->p->i_list);
+            //free_linked_char(list->p->e_list);
+            free_linked_item(list->p->i_list);
         }
         free(list);
     }
@@ -109,18 +109,6 @@ struct linked_list *recv_map(int socket, struct linked_list *list)
     return list;
 }
 
-void *find_perso(struct linked_list *list ,char *name)
-{
-    struct linked_list *parcour = list;
-    while (parcour != NULL)
-    {
-        if (strcmp(parcour->p->nom_de_compte, name) == 0)
-            return parcour->p;
-        parcour = parcour->next;
-    }
-    return NULL;
-}
-
 void *find_perso_by_name(struct linked_list *list ,char *name)
 {
     struct linked_list *parcour = list;
@@ -183,11 +171,11 @@ struct linked_list *death(struct linked_list *list)
     struct linked_list *prev;
     if (list != NULL)
     {
-        if (list->p->pv <= 0)
+        if (list->p->pv <= 0 || list->p->id == -1)
         {
             list = list->next;
-            free_linked_char(list->p->e_list);
-            free_linked_char(list->p->i_list);
+	    free_linked_enemie(list->p->e_list);
+            free_linked_item(list->p->i_list);
             free(ret->p);
             free(ret);
         }
@@ -195,20 +183,21 @@ struct linked_list *death(struct linked_list *list)
         {
             prev = list;
             list = list->next;
-            if (list->p->pv <= 0)
+            if (list->p->pv <= 0 || list->p->id == -1)
             {
                 prev->next = list->next;
-                free_linked_char(list->p->e_list);
-                free_linked_char(list->p->i_list);
+		free_linked_enemie(list->p->e_list);
+                free_linked_item(list->p->i_list);
                 free(list->p);
                 free(list);
+		list = prev;
             }
         }
-        if (list->p->pv <= 0)
+        if (list->p->pv <= 0 || list->p->id == -1)
         {
             prev->next = NULL;
-            free_linked_char(list->p->e_list);
-            free_linked_char(list->p->i_list);
+	    free_linked_enemie(list->p->e_list);
+            free_linked_item(list->p->i_list);
             free(list->p);
             free(list);
         }
@@ -244,6 +233,39 @@ struct linked_list *remove_from_linked_list(struct linked_list *list, struct per
 	    free(list);
             prev->next = NULL;
 	}
+    }
+    return ret;
+}
+
+struct linked_list *clean_selected(struct linked_list *list)
+{
+    struct linked_list *ret = list;
+    struct linked_list *prev;
+    if (list != NULL)
+    {
+        if (list->p->pv <= 0 || list->p->id == -1)
+        {
+            list = list->next;
+            free(ret);
+        }
+	if (list == NULL)
+	    return NULL;
+        while (list->next != NULL)
+        {
+            prev = list;
+            list = list->next;
+            if (list->p->pv <= 0 || list->p->id == -1)
+            {
+                prev->next = list->next;
+                free(list);
+		list = prev;
+            }
+        }
+        if (list->p->pv <= 0 || list->p->id == -1)
+        {
+            prev->next = NULL;
+	    free(list);
+        }
     }
     return ret;
 }

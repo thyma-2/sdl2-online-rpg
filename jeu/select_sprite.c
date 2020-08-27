@@ -116,6 +116,13 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
             return img->s->ship1gauche;
         return img->s->ship1gauchehaut;
     }
+    if (strncmp(moi->skin, "arbre", 5) == 0)
+    {
+	if (moi->skin[5] == '1')
+	    return img->s->arbre1;
+    }
+    if (strncmp(moi->skin, "fruit", 5) == 0)
+        return img->s->fruit;
     return img->s->hoArGdMa5;
 }
 

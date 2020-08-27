@@ -89,6 +89,7 @@ struct skin
     SDL_Surface *ship1droitehaut;
     SDL_Surface *fruit;
     SDL_Surface *legume;
+    SDL_Surface *arbre1;
 };
 
 struct gui_sprite

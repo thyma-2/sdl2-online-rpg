@@ -103,8 +103,8 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 	    {
 		strcat(txt, perso->echange_player);
 		strcat(txt, " vous propose un echange -> ");
-		struct linked_char *obj1 = get_char_n(perso->item2, perso->i_list); //le tiens
-		struct linked_char *obj2 = get_char_n(perso->item1, p->i_list);
+		struct linked_item *obj1 = get_item_n(perso->item2, perso->i_list); //le tiens
+		struct linked_item *obj2 = get_item_n(perso->item1, p->i_list);
 		if (obj1 != NULL)
 		    strcat(txt, obj1->nom);
 		else
@@ -380,7 +380,6 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     char txt[] = "Menu inventaire -> Taper i.\nMenu diplomatique -> Taper d.\nMenu action -> taper a";
     char txt1[] = "Ajouter un enemi";
     char txt2[] = "Retirer un enemi";
-    char txt3[] = "Ajouter les enemis du suzerain";
     char txt4[] = "Changer de suzerain";
     char txt5[] = "Prendre possession";
     char txt6[] = "Main Gauche";
@@ -394,7 +393,6 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     SDL_Rect position3;
     SDL_Rect position4;
     SDL_Rect position5;
-    SDL_Rect position6;
     SDL_Rect position7;
     SDL_Rect position8;
     SDL_Rect position9;
@@ -409,7 +407,6 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     position4.x = 50;
     position4.x = 50;
     position5.x = 700;
-    position6.x = 50;
     position7.x = 50;
     position8.x = 50;
     position9.x = 50;
@@ -423,9 +420,8 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     position3.y = 170;
     position4.y = 200;
     position5.y = 70;
-    position6.y = 300;
-    position7.y = 370;
-    position8.y = 400;
+    position7.y = 270;
+    position8.y = 300;
     position9.y = 100;
     position10.y = 120;
     position11.y = 140;
@@ -467,7 +463,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     }
     if (m->echange_on == 1)
     {
-	struct linked_char *t = perso->i_list;
+	struct linked_item *t = perso->i_list;
 	e_list[0] = 0;
         for (int i = 0; i < 10; i++)
         {
@@ -636,7 +632,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	blit_text(position10, txt7, ecran, 20, 255);
 	blit_text(position11, txt8, ecran, 20, 255);
 	blit_text(position12, txt9, ecran, 20, 255);
-	struct linked_char *t = perso->i_list;
+	struct linked_item *t = perso->i_list;
 	e_list[0] = 0;
 	for (int i = 0; i < 10; i++)
 	{
@@ -677,17 +673,17 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	}
 	if (lettres->k1 == 1)
 	{
-	    exchange_char(0, m->sel_inventaire, perso->i_list);
+	    exchange_item(0, m->sel_inventaire, perso->i_list);
 	    lettres->k1 = 0;
 	}
 	else if (lettres->k2 == 1)
 	{
-	    exchange_char(1, m->sel_inventaire, perso->i_list);
+	    exchange_item(1, m->sel_inventaire, perso->i_list);
 	    lettres->k2 = 0;
 	}
 	else if (lettres->k3 == 1)
 	{
-	    exchange_char(2, m->sel_inventaire, perso->i_list);
+	    exchange_item(2, m->sel_inventaire, perso->i_list);
 	    lettres->k3 = 0;
 	}
 	else if (lettres->enter == 1)
@@ -709,14 +705,11 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
 	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position6);
-	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);
 	    if (lettres->enter == 1)
 	    {
 		lettres->enter = 0;
-		if (exist_in_linked_char(perso->e_list, m->add_enemi) == NULL)
-  		    perso->e_list = append_linked_char(m->add_enemi, perso->e_list);
+  		rec_append_enemie(m->add_enemi, perso, list, 1);
 	    }
 	}
 	else if (m->sel_diplo == 1)
@@ -727,64 +720,52 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
             SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
 	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position6);
-	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position8);
 	    if (lettres->enter == 1)
 	    {
 		lettres->enter = 0;
-		perso->e_list = remove_enemi(m->rem_enemi, perso->e_list);
-	    }
-	}
-	else if (m->sel_diplo == 2)
-	{
-	    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-                &position6);
-            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position2);
-            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position4);
-	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position8);
-	    if (lettres->enter == 1)
-	    {
-		lettres->enter = 0;
-		append_enemi_list(list, perso);
+		rec_remove_enemie(m->rem_enemi, perso, list, get_rang(m->rem_enemi, perso->e_list));
 	    }
 	}
 	else
 	{
 	    text_input(perso->nom_superieur, 50);
 	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position6);
-            SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position2);
             SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
                 &position4);
             SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-                &position8);		
+                &position8);
 	}
 	blit_text(position2, m->add_enemi, ecran, 20, 255);
         blit_text(position4, m->rem_enemi, ecran, 20, 255);
-	blit_text(position6, txt3, ecran, 40, 255);
 	blit_text(position8, perso->nom_superieur, ecran, 20, 255);
 	if (lettres->tab == 1)
 	{
 	    lettres->tab = 0;
-	    if (m->sel_diplo == 3)
+	    if (m->sel_diplo == 2)
 		m->sel_diplo = 0;
 	    else
 		m->sel_diplo += 1;
 	}
-	e_list[0] = 0;
-	struct linked_char *parcour = perso->e_list;
-	while (parcour != NULL)
+	int max = max_rang(perso->e_list);
+	int rang = 1;
+	while (rang <= max)
 	{
-	    strcat(e_list, parcour->nom);
-	    strcat(e_list, "\n");
-	    parcour = parcour->next;
+	    struct linked_enemie *parcour = perso->e_list;
+	    e_list[0] = 0;
+	    while (parcour != NULL)
+	    {
+		if (parcour->rang == rang)
+		{
+	            strcat(e_list, parcour->nom);
+	            strcat(e_list, "\n");
+		}
+		parcour = parcour->next;
+	    }
+	    position5.x += blit_text(position5, e_list, ecran, 9999, 255) + 10;
+	    rang += 1;
 	}
-	blit_text(position5, e_list, ecran, 9999, 255);
     }
 }
 

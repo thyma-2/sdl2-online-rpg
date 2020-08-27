@@ -1,7 +1,19 @@
+#pragma once
 #include "perso.h"
-#include "linked_char.h"
 
-struct linked_char *use(int n, struct personnages *p);
+struct linked_item
+{
+    char nom[50];
+    int count;
+    struct linked_item *next;
+};
+
+struct linked_item *use(int n, struct personnages *p);
 int count(char *name);
-struct linked_char *append_in_inventory(char *name, struct linked_char *p, int n);
-struct linked_char *remove_from_inventory(char *name, struct linked_char *p, int n);
+struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n);
+struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n);
+void exchange_item(int a, int b, struct linked_item *l);
+int count_item(struct linked_item *l);
+void free_linked_item(struct linked_item *e);
+struct linked_item *get_item_n(int n, struct linked_item *l);
+struct linked_item *exist_in_linked_item(struct linked_item *e, char *cmp);

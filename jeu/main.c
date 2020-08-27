@@ -47,7 +47,7 @@ void free_malloc()
 
 void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name)
 {
-    struct personnages *moi = find_perso(list, name);
+    struct personnages *moi = find_perso_by_name(list, name);
     int max_x = 0;
     int max_y = 0;
     char *ground = rec_ground(socket, &max_x, &max_y);
@@ -107,6 +107,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
 	gui_event(moi, ecran, list);
         generate_orders(list, socket);
         recv_order(socket, list);
+	selected = clean_selected(selected);
         list = death(list);
         SDL_UpdateWindowSurface(ecran);
     }

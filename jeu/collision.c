@@ -209,6 +209,17 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 	    *y4 = perso->y + 605;
 	}
     }
+    else if (strcmp(perso->skin, "arbre1") == 0)
+    {
+	*x1 = perso->x + 35;
+        *x2 = perso->x + 55;
+        *x3 = perso->x + 35;
+        *x4 = perso->x + 55;
+	*y1 = perso->y + 110;
+	*y2 = perso->y + 110;
+	*y3 = perso->y + 152;
+	*y4 = perso->y + 152;
+    }
 }
 
 char check_eau(int x1, int y1, char *ground, int max_x, char eau)

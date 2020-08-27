@@ -31,8 +31,8 @@ struct personnages
     char titre[50];
     char region[50];
     char est_chef;
-    struct linked_char *e_list;
-    struct linked_char *i_list;
+    struct linked_enemie *e_list;
+    struct linked_item *i_list;
     char echange_player[50];
     int item1;
     int item2;
@@ -59,7 +59,7 @@ struct linked_list
     struct linked_list *next;
 };
 
-#include "linked_char.h"
+#include "diplo.h"
 #include "init_sprite.h"
 #include "stat.h"
 #include "parseur.h"
@@ -76,4 +76,5 @@ void free_linked(struct linked_list *list, char free_content);
 struct linked_list *death(struct linked_list *list);
 struct linked_list *remove_from_linked_list(struct linked_list *list, struct personnages *to_rem);
 void *find_perso_by_name(struct linked_list *list ,char *name);
+struct linked_list *clean_selected(struct linked_list *list);
 #endif /*PERSO*/

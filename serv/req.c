@@ -39,12 +39,21 @@ char handle_req(int socket, struct personnages *list, int *movedObj)
 		while (*buffer != 0)
 		{
 		    int id = get_id(buffer);
-		    append(movedObj, id, 400);
-		    struct personnages *yalist = get_ptr_from_id(id, list);
-		    if (yalist == NULL)
-		        append_perso(&buffer, list);
+		    if (id == -1)
+		    {
+			list = append_perso(&buffer, list);
+			int id = find_smalest_valid_id(list, 0);
+			struct personnages *yalist = get_ptr_from_id(-1, list);
+			yalist->id = id;
+			append(movedObj, id, 400);
+		    }
 		    else
-			buffer += parse_order(yalist, buffer) + 1;
+		    {
+		        append(movedObj, id, 400);
+		        struct personnages *yalist = get_ptr_from_id(id, list);
+		        if (yalist != NULL)
+			    buffer += parse_order(yalist, buffer) + 1;
+		    }
 		}
 		buffer = pos_buf;
 	    }

@@ -1,14 +1,5 @@
 #include "ia.h"
 
-void append_enemi_list(struct linked_list *list, struct personnages *p)
-{
-    for (struct linked_list *l = list; l != NULL; l = l->next)
-	if (strcmp(l->p->nom, p->nom_superieur) == 0)
-	    for (struct linked_char *e = l->p->e_list; e != NULL; e = e->next)
-		if (exist_in_linked_char(p->e_list, e->nom) == NULL)
-	            p->e_list = append_linked_char(e->nom, p->e_list);
-}
-
 void ia(struct linked_list *list)
 {
     for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
@@ -19,10 +10,71 @@ void ia(struct linked_list *list)
 		ia_ship(list, parcour);
 	    //else if (strncmp(skin "build", 5) == 0)
 		//ordres = ia_build(list, ordres);
+	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
+		ia_arbre(list, parcour);
+	    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
+		ia_fruit(list, parcour);
 	    else
 		ia_man(list, parcour);
 	}
     }
+}
+
+void ia_fruit(struct linked_list *list, struct linked_list *parcour)
+{
+    if (parcour->p->faim < 0)
+    {
+        parcour->p->a_bouger = 1;
+	parcour->p->pv = 0;
+	if (rand() % 4 == 1)
+	{
+            char *line = malloc(1000);
+            char *s = line;
+            line[0] = 0;
+            strcat(line, "-1 100 none ");
+            char tmpI[20];
+            tmpI[0] = 0;
+            sprintf (tmpI, "%f", parcour->p->x - 45);
+            strcat(line, tmpI);
+            strcat(line, " ");
+            tmpI[0] = 0;
+            sprintf (tmpI, "%f", parcour->p->y - 153);
+            strcat(line, tmpI);
+            strcat(line, " 0 0 0 0 100000 arbre1 none none none region1 n [] [] none 0 0 []");
+            append_perso(list, &line);
+            struct personnages *p = get_ptr_from_id(s, list);
+            p->a_bouger = 1;
+	}
+    }
+    else
+        parcour->p->faim -= 1;
+}
+
+void ia_arbre(struct linked_list *list, struct linked_list *parcour)
+{
+    if (parcour->p->faim < 0)
+    {
+        parcour->p->a_bouger = 1;
+	parcour->p->faim = 100000;
+	char *line = malloc(1000);
+	char *s = line;
+	line[0] = 0;
+        strcat(line, "-1 1 none ");
+        char tmpI[20];
+        tmpI[0] = 0;
+        sprintf (tmpI, "%f", parcour->p->x + rand() % 100 - rand() % 100 + 45);
+        strcat(line, tmpI);
+        strcat(line, " ");
+        tmpI[0] = 0;
+        sprintf (tmpI, "%f", parcour->p->y + rand() % 100 - rand() % 100 + 153);
+        strcat(line, tmpI);
+        strcat(line, " 0 0 0 0 100000 fruit none none none region1 n [] [] none 0 0 []");
+	append_perso(list, &line);
+	struct personnages *p = get_ptr_from_id(s, list);
+	p->a_bouger = 1;
+    }
+    else
+        parcour->p->faim -= 1;
 }
 
 void ia_ship(struct linked_list *list, struct linked_list *parcour)
@@ -76,8 +128,8 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 	{
 	    if (parcour2->p->sur_plancher == parcour->p)
 	    {
-		parcour2->p->last_x = parcour2->p->x;
-		parcour2->p->last_y = parcour2->p->y;
+		//parcour2->p->last_x = parcour2->p->x;
+		//parcour2->p->last_y = parcour2->p->y;
 		parcour2->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
         	parcour2->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
 		parcour2->p->a_bouger = 1;;
@@ -90,8 +142,8 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
         struct personnages *p = find_perso_by_name(list, parcour->p->echange_player);
         if (p != NULL)
         {
-	    struct linked_char *obj1 = get_char_n(parcour->p->item2, parcour->p->i_list);
-	    struct linked_char *obj2 = get_char_n(parcour->p->item1, p->i_list);
+	    struct linked_item *obj1 = get_item_n(parcour->p->item2, parcour->p->i_list);
+	    struct linked_item *obj2 = get_item_n(parcour->p->item1, p->i_list);
 	    parcour->p->echange_player[0] = 0;
             strcat(parcour->p->echange_player, "none");
 	    if (obj1 != NULL && obj2 != NULL)
@@ -130,7 +182,6 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
     }
     else
 	parcour->p->faim -= 1;
-    append_enemi_list(list, parcour->p);
     if (parcour->p->ordrex >= 0)
     {
         int x = parcour->p->x - parcour->p->ordrex;
@@ -194,7 +245,7 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
     {
         for (struct linked_list *parcour2 = list; parcour2 != NULL; parcour2 = parcour2->next)
 	{
-	    for (struct linked_char *e = parcour->p->e_list; e != NULL; e = e->next)
+	    for (struct linked_enemie *e = parcour->p->e_list; e != NULL; e = e->next)
 	    {
 		if (parcour->p->timer_dom == 0)
 		{
@@ -202,10 +253,24 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
 		    {
 		        if ((parcour->p->x - parcour2->p->x) * (parcour->p->x - parcour2->p->x) + (parcour->p->y - parcour2->p->y) * (parcour->p->y - parcour2->p->y) < parcour->p->porte_dom * parcour->p->porte_dom)
 			{
-			    parcour->p->timer_dom = parcour->p->vitesse_dom;
-			    parcour2->p->pv -= 5;
-			    parcour->p->a_bouger = 1;
-			    parcour2->p->a_bouger = 1;
+			    if (strcmp(parcour->p->skin, "archer") == 0)
+			    {
+				if (exist_in_linked_item(parcour->p->i_list, "fleche") != NULL)
+				{
+				    parcour->p->i_list = remove_from_inventory("fleche", parcour->p->i_list, 1);
+			            parcour->p->timer_dom = parcour->p->vitesse_dom;
+         	   	            parcour2->p->pv -= 5;
+			            parcour->p->a_bouger = 1;
+			            parcour2->p->a_bouger = 1;
+				}
+			    }
+			    else
+			    {
+				parcour->p->timer_dom = parcour->p->vitesse_dom;
+                                parcour2->p->pv -= 5;
+                                parcour->p->a_bouger = 1;
+                                parcour2->p->a_bouger = 1;
+			    }
 			}
 		    }
 		}

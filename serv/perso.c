@@ -124,7 +124,7 @@ int get_id(char *line)
 {
     int i = 0;
     char tmp[10] = "\0";
-    while (line[i] >= '0' && line[i] <= '9')
+    while ((line[i] >= '0' && line[i] <= '9') || line[i] == '-')
     {
         tmp[i] = line[i];
         i++;
