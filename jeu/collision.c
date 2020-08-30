@@ -38,37 +38,60 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
 			obj = check_obj(pp->p, x4, y4);
 		    if (obj == 1)
 		    {
-		        if (p->p->last_x == p->p->x && p->p->last_y == p->p->y) // je me fait percuter
+			if (strcmp(pp->p->skin, "fruit") == 0)
 			{
-			    int x = pp->p->x - pp->p->last_x;
-			    int y = pp->p->y - pp->p->last_y;
-			    p->p->x += x * pp->p->poid / p->p->poid;
-			    p->p->y += y * pp->p->poid / p->p->poid;
-			    pp->p->x = pp->p->last_x;
-			    pp->p->y = pp->p->last_y;
+			    if (count_item(p->p->i_list) < 9)
+			    {
+			        pp->p->pv = 0;
+				pp->p->a_bouger = 1;
+				p->p->a_bouger = 1;
+				p->p->i_list = append_in_inventory("fruit", p->p->i_list, 1);
+			    }
 			}
-			else if (pp->p->last_x == p->p->x && pp->p->last_y == p->p->y) // je percute qqe chose
+			else if (strcmp(p->p->skin, "fruit") == 0)
+                        {
+                            if (count_item(pp->p->i_list) < 9)
+                            {
+                                p->p->pv = 0;
+				pp->p->a_bouger = 1;
+                                p->p->a_bouger = 1;
+                                pp->p->i_list = append_in_inventory("fruit", pp->p->i_list, 1);
+                            }
+			}
+			else
 			{
-			    int x = p->p->x - p->p->last_x;
-                            int y = p->p->y - p->p->last_y;
-                            pp->p->x += x * p->p->poid / pp->p->poid;
-                            pp->p->y += y * p->p->poid / pp->p->poid;
-                            p->p->x = p->p->last_x;
-                            p->p->y = p->p->last_y;
+		            if (p->p->last_x == p->p->x && p->p->last_y == p->p->y) // je me fait percuter
+			    {
+			        int x = pp->p->x - pp->p->last_x;
+			        int y = pp->p->y - pp->p->last_y;
+			        p->p->x += x * pp->p->poid / p->p->poid;
+			        p->p->y += y * pp->p->poid / p->p->poid;
+			        pp->p->x = pp->p->last_x;
+			        pp->p->y = pp->p->last_y;
+			    }
+			    else if (pp->p->last_x == p->p->x && pp->p->last_y == p->p->y) // je percute qqe chose
+		    	    {
+			        int x = p->p->x - p->p->last_x;
+                                int y = p->p->y - p->p->last_y;
+                                pp->p->x += x * p->p->poid / pp->p->poid;
+                                pp->p->y += y * p->p->poid / pp->p->poid;
+                                p->p->x = p->p->last_x;
+                                p->p->y = p->p->last_y;
+			    }
+			    else // on ce percute mutuellement 
+			    {
+			        int x = pp->p->x - pp->p->last_x;
+                                int y = pp->p->y - pp->p->last_y;
+			        int x2 = p->p->x - p->p->last_x;
+                                int y2 = p->p->y - p->p->last_y;
+			        p->p->x += x * pp->p->poid / p->p->poid;
+			        p->p->y += y * pp->p->poid / p->p->poid;
+			        pp->p->x += x2 * p->p->poid / pp->p->poid;
+                                pp->p->y += y2 * p->p->poid / pp->p->poid;
+			    }
+		 	    pp->p->a_bouger = 1;
+			    p->p->a_bouger = 1;
 			}
-			else // on ce percute mutuellement 
-			{
-			    int x = pp->p->x - pp->p->last_x;
-                            int y = pp->p->y - pp->p->last_y;
-			    int x2 = p->p->x - p->p->last_x;
-                            int y2 = p->p->y - p->p->last_y;
-			    p->p->x += x * pp->p->poid / p->p->poid;
-			    p->p->y += y * pp->p->poid / p->p->poid;
-			    pp->p->x += x2 * p->p->poid / pp->p->poid;
-                            pp->p->y += y2 * p->p->poid / pp->p->poid;
-			}
-		 	pp->p->a_bouger = 1;
-			p->p->a_bouger = 1;
 		    }
 		}
 		else if (eau == 1 && pp->p->eau != p->p->eau)
@@ -219,6 +242,17 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 	*y2 = perso->y + 110;
 	*y3 = perso->y + 152;
 	*y4 = perso->y + 152;
+    }
+    else if (strcmp(perso->skin, "fruit") == 0)
+    {
+	*x1 = perso->x - 10;
+	*x2 = perso->x - 10;
+	*x3 = perso->x + 20;
+	*x4 = perso->x + 20;
+	*y1 = perso->y - 10;
+	*y2 = perso->y + 20;
+	*y3 = perso->y - 10;
+	*y4 = perso->y + 20;
     }
 }
 

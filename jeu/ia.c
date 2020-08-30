@@ -1,6 +1,6 @@
 #include "ia.h"
 
-void ia(struct linked_list *list)
+void ia(struct linked_list *list, char *ground, int max_x)
 {
     for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
     {
@@ -13,20 +13,39 @@ void ia(struct linked_list *list)
 	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
 		ia_arbre(list, parcour);
 	    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
-		ia_fruit(list, parcour);
+		ia_fruit(list, parcour, ground, max_x);
 	    else
 		ia_man(list, parcour);
 	}
     }
 }
 
-void ia_fruit(struct linked_list *list, struct linked_list *parcour)
+void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *ground, int max_x)
 {
     if (parcour->p->faim < 0)
     {
         parcour->p->a_bouger = 1;
 	parcour->p->pv = 0;
-	if (rand() % 4 == 1)
+	int i = 0;
+        int index = 0;
+	int x1 = parcour->p->x;
+	int y1 = parcour->p->y;
+        while (y1 > 0)
+        {
+            i++;
+            y1 -= 1;
+            if (i % 25 == 0)
+                index += max_x / 25 * 3 + 1;
+        }
+        i = 0;
+        while (x1 > 0)
+        {
+            i++;
+            x1 -= 1;
+            if (i % 25 == 0)
+                index += 3;
+        }
+	if (rand() % 3 == 1 && ((ground[index] == 'h' || ground[index] == 't') && ground[index + 1] == 'e'))
 	{
             char *line = malloc(1000);
             char *s = line;

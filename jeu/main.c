@@ -102,7 +102,7 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
             menu(ecran, menu_s, moi, list);
 	else
 	    talk(ecran, speak_s, moi);
-	ia(list);
+	ia(list, ground, max_x);
 	collision(list, ground, max_x, max_y);
 	gui_event(moi, ecran, list);
         generate_orders(list, socket);
