@@ -3,6 +3,144 @@
 SDL_Surface *select_good_img(struct personnages *moi, int i)
 {
     int angle = moi->angle;
+    if (strcmp(moi->skin, "fantassin") == 0)
+    {
+	if (i == 0)
+	{
+	    if (angle < 15 ||angle >= 345)
+	        return img->s->hoFaDoMa1;
+	    else if (angle < 45 && angle >= 15)
+		return img->s->hoFaDoDrMa1;
+	    else if (angle < 75 && angle >= 45)
+		return img->s->hoFaDrDoMa1;
+	    else if (angle < 105 && angle >= 75)
+		return img->s->hoFaDrMa1;
+	    else if (angle < 135 && angle >= 105)
+		return img->s->hoFaDrFaMa1;
+	    else if (angle < 165 && angle >= 135)
+		return img->s->hoFaFaDrMa1;
+	    else if (angle < 195 && angle >= 165)
+		return img->s->hoFaFaMa1;
+	    else if (angle < 225 && angle >= 195)
+		return img->s->hoFaFaGaMa1;
+	    else if (angle < 255 && angle >= 225)
+		return img->s->hoFaGaFaMa1;
+	    else if (angle < 285 && angle >= 255)
+		return img->s->hoFaGaMa1;
+	    else if (angle < 315 && angle >= 285)
+		return img->s->hoFaGaDoMa1;
+	    else if (angle < 345 && angle >= 315)
+		return img->s->hoFaDoGaMa1;
+	}
+	if (i == 1)
+        {
+            if (angle < 15 ||angle >= 345)
+                return img->s->hoFaDoMa2;
+            else if (angle < 45 && angle >= 15)
+                return img->s->hoFaDoDrMa2;
+            else if (angle < 75 && angle >= 45)
+                return img->s->hoFaDrDoMa2;
+            else if (angle < 105 && angle >= 75)
+                return img->s->hoFaDrMa2;
+            else if (angle < 135 && angle >= 105)
+                return img->s->hoFaDrFaMa2;
+            else if (angle < 165 && angle >= 135)
+                return img->s->hoFaFaDrMa2;
+            else if (angle < 195 && angle >= 165)
+                return img->s->hoFaFaMa2;
+            else if (angle < 225 && angle >= 195)
+                return img->s->hoFaFaGaMa2;
+            else if (angle < 255 && angle >= 225)
+                return img->s->hoFaGaFaMa2;
+            else if (angle < 285 && angle >= 255)
+                return img->s->hoFaGaMa2;
+            else if (angle < 315 && angle >= 285)
+                return img->s->hoFaGaDoMa2;
+            else if (angle < 345 && angle >= 315)
+                return img->s->hoFaDoGaMa2;
+        }
+	if (i == 2)
+        {
+            if (angle < 15 ||angle >= 345)
+                return img->s->hoFaDoMa3;
+            else if (angle < 45 && angle >= 15)
+                return img->s->hoFaDoDrMa3;
+            else if (angle < 75 && angle >= 45)
+                return img->s->hoFaDrDoMa3;
+            else if (angle < 105 && angle >= 75)
+                return img->s->hoFaDrMa3;
+            else if (angle < 135 && angle >= 105)
+                return img->s->hoFaDrFaMa3;
+            else if (angle < 165 && angle >= 135)
+                return img->s->hoFaFaDrMa3;
+            else if (angle < 195 && angle >= 165)
+                return img->s->hoFaFaMa3;
+            else if (angle < 225 && angle >= 195)
+                return img->s->hoFaFaGaMa3;
+            else if (angle < 255 && angle >= 225)
+                return img->s->hoFaGaFaMa3;
+            else if (angle < 285 && angle >= 255)
+                return img->s->hoFaGaMa3;
+            else if (angle < 315 && angle >= 285)
+                return img->s->hoFaGaDoMa3;
+            else if (angle < 345 && angle >= 315)
+                return img->s->hoFaDoGaMa3;
+        }
+	if (i == 3)
+        {
+            if (angle < 15 ||angle >= 345)
+                return img->s->hoFaDoMa4;
+            else if (angle < 45 && angle >= 15)
+                return img->s->hoFaDoDrMa4;
+            else if (angle < 75 && angle >= 45)
+                return img->s->hoFaDrDoMa4;
+            else if (angle < 105 && angle >= 75)
+                return img->s->hoFaDrMa4;
+            else if (angle < 135 && angle >= 105)
+                return img->s->hoFaDrFaMa4;
+            else if (angle < 165 && angle >= 135)
+                return img->s->hoFaFaDrMa4;
+            else if (angle < 195 && angle >= 165)
+                return img->s->hoFaFaMa4;
+            else if (angle < 225 && angle >= 195)
+                return img->s->hoFaFaGaMa4;
+            else if (angle < 255 && angle >= 225)
+                return img->s->hoFaGaFaMa4;
+            else if (angle < 285 && angle >= 255)
+                return img->s->hoFaGaMa4;
+            else if (angle < 315 && angle >= 285)
+                return img->s->hoFaGaDoMa4;
+            else if (angle < 345 && angle >= 315)
+                return img->s->hoFaDoGaMa4;
+        }
+	if (i == 4)
+        {
+            if (angle < 15 ||angle >= 345)
+                return img->s->hoFaDoMa5;
+            else if (angle < 45 && angle >= 15)
+                return img->s->hoFaDoDrMa5;
+            else if (angle < 75 && angle >= 45)
+                return img->s->hoFaDrDoMa5;
+            else if (angle < 105 && angle >= 75)
+                return img->s->hoFaDrMa5;
+            else if (angle < 135 && angle >= 105)
+                return img->s->hoFaDrFaMa5;
+            else if (angle < 165 && angle >= 135)
+                return img->s->hoFaFaDrMa5;
+            else if (angle < 195 && angle >= 165)
+                return img->s->hoFaFaMa5;
+            else if (angle < 225 && angle >= 195)
+                return img->s->hoFaFaGaMa5;
+            else if (angle < 255 && angle >= 225)
+                return img->s->hoFaGaFaMa5;
+            else if (angle < 285 && angle >= 255)
+                return img->s->hoFaGaMa5;
+            else if (angle < 315 && angle >= 285)
+                return img->s->hoFaGaDoMa5;
+            else if (angle < 345 && angle >= 315)
+                return img->s->hoFaDoGaMa5;
+        }
+    }
     if (strcmp(moi->skin, "archer") == 0)
     {
         if (i == 0)
