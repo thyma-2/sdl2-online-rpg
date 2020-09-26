@@ -8,7 +8,7 @@ struct linked_item
     struct linked_item *next;
 };
 
-struct linked_item *use(int n, struct personnages *p);
+struct linked_item *use(struct linked_item *item, struct personnages *p);
 int count(char *name);
 struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n);
 struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n);

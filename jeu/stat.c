@@ -2,7 +2,7 @@
 
 void actualise_stat(struct personnages *p)
 {
-    if (strcmp(p->skin, "archer") == 0 || strcmp(p->skin, "civil") == 0)
+    if (strcmp(p->skin, "archer") == 0 || strcmp(p->skin, "civil") == 0 || strcmp(p->skin, "fantassin") == 0)
     {
         int max_pv = 10;
         int vitesse_dom = 100;
@@ -18,9 +18,9 @@ void actualise_stat(struct personnages *p)
             {
        	        porte_dom = 200;
 	        dom = 5;
-	        if (p->i_list->next != NULL && p->i_list->next->next != NULL)
+	        if (p->i_list->next != NULL)
 	        {
-    	            if (strcmp(p->i_list->next->next->nom, "Protections_de_cuir") == 0)
+    	            if (strcmp(p->i_list->next->nom, "Protections_de_cuir") == 0)
                     {
 	                p->skin[0] = 0;
 	                strcat(p->skin, "archer");
@@ -29,6 +29,24 @@ void actualise_stat(struct personnages *p)
 		    }
 	        }
 	    }
+        }
+	if (p->i_list != NULL)
+        {
+            if (strcmp(p->i_list->nom, "epee") == 0)
+            {
+                porte_dom = 20;
+                dom = 7;
+                if (p->i_list->next != NULL)
+                {
+                    if (strcmp(p->i_list->next->nom, "Protections_de_cuir") == 0)
+                    {
+                        p->skin[0] = 0;
+                        strcat(p->skin, "fantassin");
+                        max_pv += 1;
+                        poid += 15;
+                    }
+                }
+            }
         }
         p->max_pv = max_pv;
         p->vitesse_dom = vitesse_dom;
@@ -73,4 +91,6 @@ void init_stat(struct personnages *p)
     actualise_stat(p);
     p->sur_plancher = NULL;
     p->speak_timer = 0;
+    p->chemin = NULL;
+    p->c= 0;
 }

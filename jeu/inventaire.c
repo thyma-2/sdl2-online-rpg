@@ -1,8 +1,7 @@
 #include "inventaire.h"
 
-struct linked_item *use(int n, struct personnages *p)
+struct linked_item *use(struct linked_item *item, struct personnages *p)
 {
-    struct linked_item *item = get_item_n(n, p->i_list);
     if (item != NULL)
     {
 	if (strcmp(item->nom, "fruit") == 0 || strcmp(item->nom, "legume") == 0)

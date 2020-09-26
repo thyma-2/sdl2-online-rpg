@@ -1,6 +1,6 @@
 #include "collision.h"
 
-void collision(struct linked_list *list, char *ground, int max_x, int max_y)
+void collision(struct linked_list *list, char *array)
 {
     for (struct linked_list *p = list; p != NULL; p = p->next)
     {
@@ -16,10 +16,10 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
 	coo_corner(p->p, &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
 	char obj; // colision avec un objet
 	char bord = 0; // colision avec le bord
-	char eau = check_eau(x1, y1, ground, max_x, p->p->eau); // collision avec l'eau
+	char eau = check_eau(x1, y1, array, p->p->eau); // collision avec l'eau
 	if (eau == 0)
-	    eau = check_eau(x2, y2, ground, max_x, p->p->eau);
-	if (x1 < 0 || x1 > max_x || x2 < 0 || x2 > max_x || y1 < 0 || y1 > max_y || y2 < 0 || y2 > max_y)
+	    eau = check_eau(x2, y2, array, p->p->eau);
+	if (x1 < 0 || x1 > max_x * 25 || x2 < 0 || x2 > max_x * 25 || y1 < 0 || y1 > max_y * 25 || y2 < 0 || y2 > max_y * 25)
 	    bord = 1;
 	for (struct linked_list *pp = list; pp != NULL; pp = pp->next)
 	{
@@ -124,13 +124,17 @@ void collision(struct linked_list *list, char *ground, int max_x, int max_y)
             p->p->x = p->p->last_x;
 	    p->p->y = p->p->last_y;
 	    p->p->a_bouger = 1;
+	    if (p->p->c == 0)
+		p->p->c = 1;
+	    else
+		p->p->c = 0;
 	}
     }
 }
 
 void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, int *x3, int *y3, int *x4, int *y4)
 {
-    if (strcmp(perso->skin, "archer") == 0 || strcmp(perso->skin, "civil") == 0)
+    if (strcmp(perso->skin, "archer") == 0 || strcmp(perso->skin, "civil") == 0 || strcmp(perso->skin, "fantassin") == 0)
     {
 	*x1 = perso->x + 5;
 	*x2 = perso->x + 14;
@@ -256,26 +260,11 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
     }
 }
 
-char check_eau(int x1, int y1, char *ground, int max_x, char eau)
+char check_eau(int x1, int y1, char *array, char eau)
 {
-    int i = 0;
-    int index = 0;
-    while (y1 > 0)
-    {
-	i++;
-	y1 -= 1;
-	if (i % 25 == 0)
-	    index += max_x / 25 * 3 + 1;
-    }
-    i = 0;
-    while (x1 > 0)
-    {
-	i++;
-	x1 -= 1;
-	if (i % 25 == 0)
-	    index += 3;
-    }
-    if (ground[index] == 'e' && ground[index + 1] == 'a')
+    int xx = (x1 - (x1  % 25)) / 25;
+    int yy = (y1 - (y1  % 25)) / 25;
+    if (array[yy * max_x + xx] < 3)
     {
        if (eau == '0')
             return 1;

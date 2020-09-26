@@ -146,7 +146,7 @@ struct skin *init_skin(SDL_Window *window)
     a = SDL_LoadBMP("img/homme/fantassin/faceGaucheM4.bmp");
     to_return->hoFaFaGaMa4 = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
-    a = SDL_LoadBMP("img/homme/fantassin/faceGaucheeM5.bmp");
+    a = SDL_LoadBMP("img/homme/fantassin/faceGaucheM5.bmp");
     to_return->hoFaFaGaMa5 = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
     a = SDL_LoadBMP("img/homme/fantassin/gaucheFaceRien.bmp");
@@ -185,7 +185,7 @@ struct skin *init_skin(SDL_Window *window)
     a = SDL_LoadBMP("img/homme/fantassin/gaucheM5.bmp");
     to_return->hoFaGaMa5 = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
-    a = SDL_LoadBMP("img/homme/fantassin/gaucheRien.bmp");
+    a = SDL_LoadBMP("img/homme/fantassin/gaucheDosRien.bmp");
     to_return->hoFaGaDoRien = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
     a = SDL_LoadBMP("img/homme/fantassin/gaucheDosM1.bmp");

@@ -1,9 +1,7 @@
 #include "control.h"
 extern struct lettres *lettres;
-void deplacement(struct personnages *moi, char *ground, int max_x)
+void deplacement(struct personnages *moi)
 {
-    max_x = max_x;
-    ground = ground;
     if (moi->faim < 0)
     {
 	moi->pv -= 1;

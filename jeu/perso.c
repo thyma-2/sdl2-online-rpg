@@ -127,21 +127,19 @@ void disp_perso_list(struct linked_list *list, struct personnages *moi ,SDL_Wind
     SDL_Rect position;
     SDL_Surface *affiche;
     buble_sort_perso(list);
-    int i = 0;
     while (parcour != NULL)
     {
-        i++;
         if (parcour->p == moi)
         {
             position.x = 600;
             position.y = 350;
-            affiche = select_good_img(moi, (i % 5));
+            affiche = select_good_img(moi);
         }
         else
         {
             position.x = 600 + parcour->p->x - moi->x;
             position.y = 350 + parcour->p->y - moi->y;
-            affiche = select_good_img(parcour->p, (i % 5));
+            affiche = select_good_img(parcour->p);
         }
         parcour = parcour->next;
         SDL_SetColorKey(affiche, SDL_SCANCODE_Y, SDL_MapRGB(affiche->format,255,255,255));
@@ -173,9 +171,10 @@ struct linked_list *death(struct linked_list *list)
     {
         if (list->p->pv <= 0 || list->p->id == -1)
         {
-            list = list->next;
 	    free_linked_enemie(list->p->e_list);
             free_linked_item(list->p->i_list);
+	    free(list->p->chemin);
+	    list = list->next;
             free(ret->p);
             free(ret);
         }
@@ -188,6 +187,7 @@ struct linked_list *death(struct linked_list *list)
                 prev->next = list->next;
 		free_linked_enemie(list->p->e_list);
                 free_linked_item(list->p->i_list);
+		free(list->p->chemin);
                 free(list->p);
                 free(list);
 		list = prev;
@@ -198,6 +198,7 @@ struct linked_list *death(struct linked_list *list)
             prev->next = NULL;
 	    free_linked_enemie(list->p->e_list);
             free_linked_item(list->p->i_list);
+	    free(list->p->chemin);
             free(list->p);
             free(list);
         }

@@ -1,6 +1,6 @@
 #include "ia.h"
 
-void ia(struct linked_list *list, char *ground, int max_x)
+void ia(struct linked_list *list, char *array)
 {
     for (struct linked_list *parcour = list; parcour != NULL; parcour = parcour->next)
     {
@@ -13,39 +13,23 @@ void ia(struct linked_list *list, char *ground, int max_x)
 	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
 		ia_arbre(list, parcour);
 	    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
-		ia_fruit(list, parcour, ground, max_x);
+		ia_fruit(list, parcour, array);
 	    else
-		ia_man(list, parcour);
+		ia_man(list, parcour, array);
 	}
     }
 }
 
-void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *ground, int max_x)
+void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *ground)
 {
     if (parcour->p->faim < 0)
     {
         parcour->p->a_bouger = 1;
 	parcour->p->pv = 0;
-	int i = 0;
-        int index = 0;
-	int x1 = parcour->p->x;
-	int y1 = parcour->p->y;
-        while (y1 > 0)
-        {
-            i++;
-            y1 -= 1;
-            if (i % 25 == 0)
-                index += max_x / 25 * 3 + 1;
-        }
-        i = 0;
-        while (x1 > 0)
-        {
-            i++;
-            x1 -= 1;
-            if (i % 25 == 0)
-                index += 3;
-        }
-	if (rand() % 3 == 1 && ((ground[index] == 'h' || ground[index] == 't') && ground[index + 1] == 'e'))
+	int x = ((int)(parcour->p->x + 0.5) - (int)(parcour->p->x + 0.5) % 25) / 25;
+        int y = ((int)(parcour->p->y + 0.5) - (int)(parcour->p->y + 0.5) % 25) / 25;
+	int src = y * max_x + x;
+	if (rand() % 3 == 1 && (ground[src] == 6 || ground[src] == 7 || ground[src] == 8 || ground[src] == 9 || ground[src] == 10 || ground[src] == 3 || ground[src] == 4 || ground[src] == 5))
 	{
             char *line = malloc(1000);
             char *s = line;
@@ -59,7 +43,7 @@ void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *groun
             tmpI[0] = 0;
             sprintf (tmpI, "%f", parcour->p->y - 153);
             strcat(line, tmpI);
-            strcat(line, " 0 0 0 0 100000 arbre1 none none none region1 n [] [] none 0 0 []");
+            strcat(line, " 0 0 0 0 100000 arbre1 none none none region1 n [] [] none 0 0 [] 0 0");
             append_perso(list, &line);
             struct personnages *p = get_ptr_from_id(s, list);
             p->a_bouger = 1;
@@ -87,7 +71,7 @@ void ia_arbre(struct linked_list *list, struct linked_list *parcour)
         tmpI[0] = 0;
         sprintf (tmpI, "%f", parcour->p->y + rand() % 100 - rand() % 100 + 153);
         strcat(line, tmpI);
-        strcat(line, " 0 0 0 0 100000 fruit none none none region1 n [] [] none 0 0 []");
+        strcat(line, " 0 0 0 0 100000 fruit none none none region1 n [] [] none 0 0 [] 0 0");
 	append_perso(list, &line);
 	struct personnages *p = get_ptr_from_id(s, list);
 	p->a_bouger = 1;
@@ -192,7 +176,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
     }
 }
 
-void ia_man(struct linked_list *list, struct linked_list *parcour)
+void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 {
     if (parcour->p->faim < 0)
     {
@@ -201,61 +185,22 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
     }
     else
 	parcour->p->faim -= 1;
-    if (parcour->p->ordrex >= 0)
+    if (parcour->p->ordrex > 0)
     {
-        int x = parcour->p->x - parcour->p->ordrex;
-        int y = parcour->p->ordrey - parcour->p->y;
-        if (y > 0)
-            parcour->p->angle = (atan(x/y) * 57.3) + 180;
-        else if (x > 0 && y < 0)
-            parcour->p->angle = (atan(x/y) * 57.3) + 360;
-        else if (x < 0 && y < 0)
-            parcour->p->angle = (atan(x/y) * 57.3);
-        parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
-        parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-        if (fabs(parcour->p->x - parcour->p->ordrex) <= 2 && fabs(parcour->p->y - parcour->p->ordrey) <= 2)
-            parcour->p->ordrex = -1;
+        int angle = findpath(parcour->p, array);
 	parcour->p->a_bouger = 1;
-    }
-    else
-    {
-	if (parcour->p->sur_plancher != NULL)
+	if (angle > 0)
 	{
-	    if (strcmp(parcour->p->sur_plancher->skin, "ship1") == 0)
-	    {
-      	        int x1;
- 	        int x2;
-	        int x3;
-    	        int x4;
-	        int y1;
-	        int y2;
-	        int y3;
-	        int y4;
-	        coo_corner(parcour->p->sur_plancher, &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
-		int x;
-		int y;
-		if (parcour->p->id % 2 == 0)
-		{
-		    x = parcour->p->x - (x1 + x4 * parcour->p->id) / (parcour->p->id + 1);
-	            y = (y1 + y4 * parcour->p->id) / (parcour->p->id + 1)  - parcour->p->y;
-		}
-
-		else
-		{
- 		    x = parcour->p->x - (x2 + x3 * parcour->p->id) / (parcour->p->id + 1);
-                    y = (y2 + y3 * parcour->p->id) / (parcour->p->id + 1) - parcour->p->y;
-		}
-         	if (y > 0)
-                    parcour->p->angle = (atan(x/y) * 57.3) + 180;
-                else if (x > 0 && y < 0)
-                    parcour->p->angle = (atan(x/y) * 57.3) + 360;
-                else if (x < 0 && y < 0)
-                    parcour->p->angle = (atan(x/y) * 57.3);
-                parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
-                parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-                parcour->p->sur_plancher->vitesse_dep += 1;
-		parcour->p->a_bouger = 1;
-	    }
+	    parcour->p->angle = angle;
+	    parcour->p->x += parcour->p->vitesse_dep * sin(angle / 57.3);
+	    parcour->p->y -= parcour->p->vitesse_dep * cos(angle / 57.3);
+	}
+	else
+	{
+	    if (angle < 0)
+	        parcour->p->ordrex = 0;
+	    free(parcour->p->chemin);
+	    parcour->p->chemin = NULL;
 	}
     }
     if (parcour->p->timer_dom > 0)
@@ -307,12 +252,18 @@ void ia_man(struct linked_list *list, struct linked_list *parcour)
     }
     if (parcour->p->faim == 50000)
     {
-	parcour->p->speak[0] = 0;
-        strcat(parcour->p->speak, "J'ai faim! Je n ai rien a manger !");
-        parcour->p->speak_timer = 1350;
-	parcour->p->a_bouger = 1;
+	struct linked_item *a = exist_in_linked_item(parcour->p->i_list, "fruit");
+	if (a != NULL)
+	    use(a, parcour->p);
+	else
+	{
+    	    parcour->p->speak[0] = 0;
+            strcat(parcour->p->speak, "J'ai faim! Je n ai rien a manger !");
+            parcour->p->speak_timer = 1350;
+	    parcour->p->a_bouger = 1;
+	}
     }
-    if (parcour->p->speak_timer > 0)
+    if (parcour->p->speak_timer >= 0)
 	parcour->p->speak_timer --;
     else if (parcour->p->speak_timer == 0)
     {

@@ -37,6 +37,8 @@ struct personnages
     int item1;
     int item2;
     char speak[90];
+    int animation;
+    int animation_r;
     ///////////////////////////////////////
     int speak_timer;
     struct personnages *sur_plancher;
@@ -51,6 +53,8 @@ struct personnages
     char eau; //O si terrestre 1 si aquatique 2 si les deux
     char plancher;
     char a_bouger;
+    int c;
+    struct path *chemin;
 };
 
 struct linked_list

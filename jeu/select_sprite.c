@@ -1,11 +1,47 @@
 #include "select_sprite.h"
 
-SDL_Surface *select_good_img(struct personnages *moi, int i)
+SDL_Surface *select_good_img(struct personnages *moi)
 {
     int angle = moi->angle;
+    if (moi->a_bouger == 1)
+    {
+        moi->animation += 1;
+	if (moi->animation > 20)
+	    moi->animation = 0;
+	moi->animation_r = 10;
+    }
+    else
+	moi->animation_r -= 1;
     if (strcmp(moi->skin, "fantassin") == 0)
     {
-	if (i == 0)
+	if (moi->animation_r <= 0)
+	{
+	    if (angle < 15 ||angle >= 345)
+                return img->s->hoFaDoRien;
+            else if (angle < 45 && angle >= 15)
+                return img->s->hoFaDoDrRien;
+            else if (angle < 75 && angle >= 45)
+                return img->s->hoFaDrDoRien;
+            else if (angle < 105 && angle >= 75)
+                return img->s->hoFaDrRien;
+            else if (angle < 135 && angle >= 105)
+                return img->s->hoFaDrFaRien;
+            else if (angle < 165 && angle >= 135)
+                return img->s->hoFaFaDrRien;
+            else if (angle < 195 && angle >= 165)
+                return img->s->hoFaFaRien;
+            else if (angle < 225 && angle >= 195)
+                return img->s->hoFaFaGaRien;
+            else if (angle < 255 && angle >= 225)
+                return img->s->hoFaGaFaRien;
+            else if (angle < 285 && angle >= 255)
+                return img->s->hoFaGaRien;
+            else if (angle < 315 && angle >= 285)
+                return img->s->hoFaGaDoRien;
+            else if (angle < 345 && angle >= 315)
+                return img->s->hoFaDoGaRien;
+	}
+	else if (moi->animation < 4)
 	{
 	    if (angle < 15 ||angle >= 345)
 	        return img->s->hoFaDoMa1;
@@ -32,7 +68,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
 	    else if (angle < 345 && angle >= 315)
 		return img->s->hoFaDoGaMa1;
 	}
-	if (i == 1)
+	else if (moi->animation < 8)
         {
             if (angle < 15 ||angle >= 345)
                 return img->s->hoFaDoMa2;
@@ -59,9 +95,9 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaMa2;
         }
-	if (i == 2)
+	else if (moi->animation < 12)
         {
-            if (angle < 15 ||angle >= 345)
+	    if (angle < 15 ||angle >= 345)
                 return img->s->hoFaDoMa3;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa3;
@@ -86,7 +122,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaMa3;
         }
-	if (i == 3)
+	else if (moi->animation < 16)
         {
             if (angle < 15 ||angle >= 345)
                 return img->s->hoFaDoMa4;
@@ -113,7 +149,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaMa4;
         }
-	if (i == 4)
+	else
         {
             if (angle < 15 ||angle >= 345)
                 return img->s->hoFaDoMa5;
@@ -143,7 +179,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
     }
     if (strcmp(moi->skin, "archer") == 0)
     {
-        if (i == 0)
+        if (moi->animation < 4)
         {
             if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa1;
@@ -161,7 +197,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
                 return img->s->hoArGaMa1;
             return img->s->hoArGdMa1;
         }
-        else if (i == 1)
+        else if (moi->animation < 8)
         {
             if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa2;
@@ -181,7 +217,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
                 return img->s->hoArGaMa2;
             return img->s->hoArGdMa2;
         }
-        else if (i == 2)
+        else if (moi->animation < 12)
         {
             if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa3;
@@ -199,7 +235,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
                 return img->s->hoArGaMa3;
             return img->s->hoArGdMa3;
         }
-        else if (i == 3)
+        else if (moi->animation < 16)
 	{
 	    if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa4;
@@ -217,7 +253,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
                 return img->s->hoArGaMa4;
             return img->s->hoArGdMa4;
         }
-        else if (i == 4)
+        else
         {
             if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa5;
@@ -264,86 +300,67 @@ SDL_Surface *select_good_img(struct personnages *moi, int i)
     return img->s->hoArGdMa5;
 }
 
-SDL_Surface *select_texture(char *ground)
+SDL_Surface *select_texture(char ground)
 {
-    if (ground[0] == 'h')
+
+    if (ground == 20)
+	return img->t->gr1;
+    if (ground == 21)
+	return img->t->gr2;
+    if (ground >= 10)
     {
-        if (ground[1] == 'e')
-        {
-            if (ground[2] == '1')
-                return img->t->he1;
-            else if (ground[2] == '2')
-                return img->t->he2;
-            else if (ground[3] == '3')
-                return img->t->he3;
-            else if (ground[4] == '4')
-                return img->t->he4;
-            return img->t->he5;
-        }
+	if (ground >= 15)
+	{
+	    if (ground == 15)
+		return img->t->bl2;
+	    if (ground == 16)
+		return img->t->bl3;
+	    if (ground == 17)
+		return img->t->ne1;
+	    if (ground == 18)
+		return img->t->ne2;
+	    return img->t->ne3;
+	}
+	else
+	{
+	    if (ground == 14)
+		return img->t->bl1;
+	    if (ground == 13)
+		return img->t->sa3;
+	    if (ground == 12)
+		return img->t->sa2;
+	    if (ground == 11)
+		return img->t->sa1;
+	    return img->t->he5;
+
+	}
     }
-    else if (ground[0] == 's')
+    else
     {
-        if (ground[1] == 'a')
-        {
-            if (ground[2] == '1')
-                return img->t->sa1;
-            if (ground[2] == '2')
-                return img->t->sa2;
-            return img->t->sa3;
-        }
-    }
-    else if (ground[0] == 'e')
-    {
-        if (ground[1] == 'a')
-        {
-            if (ground[2] == '1')
-                return img->t->ea1;
-            else if (ground[2] == '2')
-                return img->t->ea2;
-            return img->t->ea3;
-        }
-    }
-    else if (ground[0] == 't')
-    {
-        if (ground[1] == 'e')
-        {
-            if (ground[2] == '1')
-                return img->t->te1;
-            else if (ground[2] == '2')
-                return img->t->te2;
-            return img->t->te3;
-        }
-    }
-    else if (ground[0] == 'b')
-    {
-        if (ground[1] == 'l')
-        {
-		if (ground[2] == '1')
-                return img->t->bl1;
-            else if (ground[2] == '2')
-                return img->t->bl2;
-            return img->t->bl3;
-        }
-    }
-    else if (ground[0] == 'n')
-    {
-        if (ground[1] == 'e')
-        {
-            if (ground[2] == '1')
-                return img->t->ne1;
-            else if (ground[2] == '2')
-                return img->t->ne2;
-            return img->t->ne3;
-        }
-    }
-    else if (ground[0] == 'g')
-    {
-        if (ground[1] == 'r')
-        {
-            if (ground[2] == '1')
-                return img->t->gr1;
-            return img->t->gr2;
-        }
+        if (ground >= 5)
+	{
+	    if (ground == 5)
+		return img->t->te3;
+	    if (ground == 6)
+		return img->t->he1;
+	    if (ground == 7)
+		return img->t->he2;
+	    if (ground == 8)
+		return img->t->he3;
+	    return img->t->he4;
+	}
+	else
+	{
+	    if (ground == 0)
+		return img->t->ea1;
+	    if (ground == 1)
+		return img->t->ea2;
+	    if (ground == 2)
+		return img->t->ea3;
+	    if (ground == 3)
+		return img->t->te1;
+	    return img->t->te2;
+	}
     }
     return NULL;
 }

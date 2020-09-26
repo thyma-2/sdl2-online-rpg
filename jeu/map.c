@@ -1,6 +1,6 @@
 #include "map.h"
 
-char *rec_ground(int socket, int *x, int *y)
+char *rec_ground(int socket)
 {
     char *map = ecalloc(sizeof(char), 9);
     recv(socket, map, 8, 0);
@@ -14,14 +14,15 @@ char *rec_ground(int socket, int *x, int *y)
     {
         i += 1;
         if (i % 3 == 0)
-           *x += 25;
+           max_x += 25;
     }
-    *y = 25;
+    max_y = 25;
     while (map[i] != 0)
     {
-        i += (*x / 25) * 3 + 1;
-        *y += 25;
+        i += (max_x / 25) * 3 + 1;
+        max_y += 25;
     }
+    max_y -= 25;
     return map;
 }
 
@@ -43,53 +44,25 @@ void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran)
     SDL_BlitSurface(img->t->fond, NULL, SDL_GetWindowSurface(ecran), &position);
     int x = 0;
     int y = 0;
-
     int i = 0;
 
-    position.y =  350 + y - moi->y;
-    while ((x < droite || y < bas) && ground[i] != 0)
+    position.y = 350 - moi->y;
+    while ((x < droite || y < bas) && i < max_x * max_y)
     {
-        if (ground[i] == '\n')
-        {
-            i += 1;
-            y += 25;
-            position.y = 350 + y - moi->y;
-            x = 0;
-        }
-        else
-        {
-            if (y >= haut && x >= gauche && y <= bas && x <= droite)
-            {
-                position.x = 600 + x - moi->x;
-                SDL_BlitSurface(select_texture(&ground[i]), NULL,
-                        SDL_GetWindowSurface(ecran), &position);
-            }
-            i += 3;
-            x += 25;
-        }
-    }
-}
-
-char *ground(struct personnages *perso, char *ground)
-{
-    int x = 0;
-    int y = 0;
-    int i = 0;
-    while (ground[i] != 0)
-    {
-	if (ground[i] == '\n')
+	for (int j = 0; j < max_x; j++)
 	{
-	    y += 25;
-	    x = 0;
-	    i++;
-	}
-	else
-	{
-	    if (x >= perso->x && y >= perso->y)
-		return &ground[i];
+	    if (y >= haut && x >= gauche && y <= bas && x <= droite)
+	    {
+		position.x = 600 + x - moi->x;
+		SDL_BlitSurface(select_texture(ground[j + i]), NULL, SDL_GetWindowSurface(ecran), &position);
+	    }
 	    x += 25;
-	    i += 3;
 	}
+	i += max_x;
+	x = 0;
+	y += 25;
+	position.y += 25;
     }
-    return NULL;
+
+
 }

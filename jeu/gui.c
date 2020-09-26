@@ -688,7 +688,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	}
 	else if (lettres->enter == 1)
 	{
-	    perso->i_list = use(m->sel_inventaire + 1, perso);
+	    perso->i_list = use(get_item_n(m->sel_inventaire + 1, perso->i_list), perso);
 	    lettres->enter = 0;
 	}
     }

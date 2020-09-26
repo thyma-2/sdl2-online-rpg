@@ -34,6 +34,11 @@ void commande(struct linked_list *selected, struct personnages *moi, struct form
                 a->p->ordrex = lettres->Mouse_pos_x - 600 + moi->x + f->ecart_x * i;
                 a->p->ordrey = lettres->Mouse_pos_y - 350 + moi->y + f->ecart_y * j;
 		i++;
+		if (a->p->chemin != NULL)
+		{
+		    free(a->p->chemin);
+		    a->p->chemin = NULL;
+		}
 		if (i > f->n_par_lignes)
 		{
 		    i = 0;

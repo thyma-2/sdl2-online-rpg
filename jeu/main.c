@@ -48,9 +48,9 @@ void free_malloc()
 void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name)
 {
     struct personnages *moi = find_perso_by_name(list, name);
-    int max_x = 0;
-    int max_y = 0;
-    char *ground = rec_ground(socket, &max_x, &max_y);
+    char *ground = rec_ground(socket);
+    char *grille = create_array(ground);
+    free(ground);
     struct linked_list *selected = NULL;
     //peux être faire une sous fonction pour init tout ca
     struct menu *menu_s = malloc(sizeof(struct menu));
@@ -70,16 +70,18 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     menu_s->rem_enemi[0] = 0;
     menu_s->sel_diplo = 0;
     menu_s->sel_inventaire = 0;
-    //
+    char *grille_cp = actualise_array(grille, list);
     while (lettres->exit != 1)
     {
-        display_ground(moi, ground ,ecran);
+        display_ground(moi, grille_cp ,ecran);
+	free(grille_cp);
+	grille_cp = actualise_array(grille, list);
         gestion_touche();
         disp_perso_list(list, moi, ecran);
         display_selected(selected, ecran, moi, f);
         if (menu_s->on == 0 && speak_s->on == 0)
         {
-            deplacement(moi, ground, max_x);
+            deplacement(moi);
             selected = select(list, moi, selected);
             commande(selected, moi, f);
             if (lettres->m == 1)
@@ -102,8 +104,8 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
             menu(ecran, menu_s, moi, list);
 	else
 	    talk(ecran, speak_s, moi);
-	ia(list, ground, max_x);
-	collision(list, ground, max_x, max_y);
+	ia(list, grille_cp);
+	collision(list, grille);
 	gui_event(moi, ecran, list);
         generate_orders(list, socket);
         recv_order(socket, list);
@@ -112,7 +114,6 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         SDL_UpdateWindowSurface(ecran);
     }
     free(menu_s);
-    free(ground);
 }
 
 void set_pos(SDL_Rect *pos, int x, int y)

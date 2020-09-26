@@ -18,6 +18,8 @@
 #include <fcntl.h>
 #include "init_sprite.h"
 #include "chiffrement.h"
+#include "pathfinding.h"
+
 void set_pos(SDL_Rect *pos, int x, int y);
 void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name);
 char *log_menu(int socket, SDL_Window *ecran);

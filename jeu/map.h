@@ -10,10 +10,10 @@
 #include <err.h>
 #include "net.h"
 #include "init_sprite.h"
+#include "pathfinding.h"
 
-char *rec_ground(int socket, int *x, int *y); 
+char *rec_ground(int socket); 
 void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran);
-char *ground(struct personnages *perso, char *ground);
 
 #endif /*MAP*/
 
