@@ -6,7 +6,7 @@ void actualise_stat(struct personnages *p)
     {
         int max_pv = 10;
         int vitesse_dom = 100;
-        int vitesse_dep = 5;
+        int vitesse_dep = 4;
         int porte_dom = 10;
         int dom = 1;
         int poid = 65; 	
@@ -92,5 +92,4 @@ void init_stat(struct personnages *p)
     p->sur_plancher = NULL;
     p->speak_timer = 0;
     p->chemin = NULL;
-    p->c= 0;
 }

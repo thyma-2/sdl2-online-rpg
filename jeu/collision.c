@@ -124,10 +124,6 @@ void collision(struct linked_list *list, char *array)
             p->p->x = p->p->last_x;
 	    p->p->y = p->p->last_y;
 	    p->p->a_bouger = 1;
-	    if (p->p->c == 0)
-		p->p->c = 1;
-	    else
-		p->p->c = 0;
 	}
     }
 }
