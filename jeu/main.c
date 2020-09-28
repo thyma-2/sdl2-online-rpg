@@ -12,7 +12,11 @@ int main(void)
             SDL_WINDOWPOS_UNDEFINED,
             1200,700,
             SDL_WINDOW_OPENGL);
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	return 1;
     img = init_img(ecran);
+    struct sound *sons = init_sound();
+    Mix_PlayMusic(sons->menu, 1);
     int socket = menu_connection(ecran);
     if (socket == -1)
     {
@@ -70,12 +74,9 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     menu_s->rem_enemi[0] = 0;
     menu_s->sel_diplo = 0;
     menu_s->sel_inventaire = 0;
-    char *grille_cp = actualise_array(grille, list);
     while (lettres->exit != 1)
     {
-        display_ground(moi, grille_cp ,ecran);
-	free(grille_cp);
-	grille_cp = actualise_array(grille, list);
+        display_ground(moi, grille ,ecran);
         gestion_touche();
         disp_perso_list(list, moi, ecran);
         display_selected(selected, ecran, moi, f);
@@ -104,7 +105,9 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
             menu(ecran, menu_s, moi, list);
 	else
 	    talk(ecran, speak_s, moi);
+        char *grille_cp = actualise_array(grille, list);
 	ia(list, grille_cp);
+	free(grille_cp);
 	collision(list, grille);
 	gui_event(moi, ecran, list);
         generate_orders(list, socket);

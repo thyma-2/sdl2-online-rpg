@@ -4,6 +4,7 @@
 #define MAIN
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdlib.h>
 #include <err.h>
 #include "clavier.h"
@@ -19,6 +20,7 @@
 #include "init_sprite.h"
 #include "chiffrement.h"
 #include "pathfinding.h"
+#include "init_sound.h"
 
 void set_pos(SDL_Rect *pos, int x, int y);
 void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name);
