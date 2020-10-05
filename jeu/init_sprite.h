@@ -248,6 +248,7 @@ struct lettres_img
     SDL_Surface *X;
     SDL_Surface *Y;
     SDL_Surface *Z;
+    SDL_Surface *espace;
 };
 
 struct img *init_img(SDL_Window *window);

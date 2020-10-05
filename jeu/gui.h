@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include "perso.h"
+#include "btree.h"
 #include "clavier.h"
 #include "ia.h"
 #include "init_sprite.h"
@@ -24,6 +25,10 @@ struct menu
     char inventaire_on;
     char action_on;
     char echange_on;
+    char capacite_on;
+    char technologies_on;
+    char economie_on;
+    char religion_on;
     char add_enemi[50];
     char rem_enemi[50];
     char sel_diplo;
@@ -32,6 +37,9 @@ struct menu
     int sel_echange1;
     int sel_echange2;
     char tab_echange;
+    int yarbre;
+    struct node *t_tree;
+    struct node *r_tree;
     struct personnages *echange;
 };
 

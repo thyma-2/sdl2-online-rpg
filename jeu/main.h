@@ -21,6 +21,7 @@
 #include "chiffrement.h"
 #include "pathfinding.h"
 #include "init_sound.h"
+#include "btree.h"
 
 void set_pos(SDL_Rect *pos, int x, int y);
 void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name);

@@ -384,6 +384,8 @@ SDL_Surface *select_lettre(char lettre)
 	{
 	    if (lettre < 48)
 	    {
+                if (lettre == 32)
+		    return img->li->espace;
 	        if (lettre == 45)
 		    return img->li->tirret;
 		if (lettre == 46)

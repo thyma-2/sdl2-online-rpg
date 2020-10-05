@@ -657,6 +657,9 @@ struct lettres_img *init_lettre(SDL_Window *window)
     a = SDL_LoadBMP("img/alphabet/Z.bmp");
     to_return->Z = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/alphabet/espace.bmp");
+    to_return->espace = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    SDL_FreeSurface(a);
     return to_return;
 }
 

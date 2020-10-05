@@ -13,7 +13,7 @@ int main(void)
             1200,700,
             SDL_WINDOW_OPENGL);
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-	return 1;
+	printf ("no sound\n");
     img = init_img(ecran);
     struct sound *sons = init_sound();
     Mix_PlayMusic(sons->menu, 1);
@@ -73,7 +73,17 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     menu_s->add_enemi[0] = 0;
     menu_s->rem_enemi[0] = 0;
     menu_s->sel_diplo = 0;
+    menu_s->sel_echange1 = 0;
+    menu_s->sel_echange2 = 0;
     menu_s->sel_inventaire = 0;
+    menu_s->technologies_on = 0;
+    menu_s->religion_on = 0;
+    menu_s->yarbre = 10;
+    menu_s->r_tree = NULL;
+    menu_s->t_tree = NULL;
+    menu_s->capacite_on = 0;
+    menu_s->economie_on = 0;
+
     while (lettres->exit != 1)
     {
         display_ground(moi, grille ,ecran);
