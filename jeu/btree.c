@@ -174,7 +174,6 @@ void display_tree(struct node *root, int y, SDL_Window *ecran)
 	blit_text(position ,root->nom, ecran, 50, 255);
     display_tree(root->bas, y, ecran);
     display_tree(root->droite, y, ecran);
-
 }
 
 struct node *select_tree(struct node *root, int y)
@@ -189,4 +188,36 @@ struct node *select_tree(struct node *root, int y)
     if (root->unlocked == 0 && root->just_display == 0)
         return NULL;
     return select_tree(root->bas, y);
+}
+
+struct node *find_node(struct node *root, char *name)
+{
+    if (root == NULL)
+	return NULL;
+    if (strcmp(root->nom, name) == 0)
+	return root;
+    struct node *a = find_node(root->droite, name);
+    if (a != NULL)
+	return a;
+    return find_node(root->bas, name);
+}
+
+void append_requierment(struct node *root, char *name, char *req1, char *req2, char *req3)
+{
+    struct node *r = find_node(root, name);
+    if (req1 != NULL)
+    {
+	struct node *r1 = find_node(root, req1);
+	r->other_requierment1 = r1;
+    }
+    if (req2 != NULL)
+    {
+        struct node *r2 = find_node(root, req2);
+        r->other_requierment1 = r2;
+    }
+    if (req3 != NULL)
+    {
+        struct node *r3 = find_node(root, req3);
+        r->other_requierment1 = r3;
+    }
 }

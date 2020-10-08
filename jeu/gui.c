@@ -746,6 +746,30 @@ void menu_religion(SDL_Window *ecran, struct menu *m)
 	position.y = 0;
 	findxy_node_other_side(r, position, 0);
     }
+    if (lettres->Mouse_Lclick == 1)
+    {
+        lettres->Mouse_Lclick = 0;
+        struct node *t = select_tree(m->r_tree, 10);
+        if (t != NULL)
+	{
+	    if (strcmp(t->nom, "Judaisme") == 0)
+	    {
+		if (rand() % 2 == 0)
+	  	    Mix_PlayMusic(sons->j1, 1);
+		else
+                    Mix_PlayMusic(sons->j2, 1);
+	    }
+	    else if (strcmp(t->nom, "Christianisme") == 0)
+                Mix_PlayMusic(sons->c1, 1);
+	    else if (strcmp(t->nom, "Islam") == 0)
+	    {
+		if (rand() % 2 == 0)
+                    Mix_PlayMusic(sons->m1, 1);
+		else
+                    Mix_PlayMusic(sons->m2, 1);
+	    }
+	}
+    }
     display_tree(m->r_tree, 10, ecran);
 }
 

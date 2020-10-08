@@ -263,9 +263,9 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 	    parcour->p->a_bouger = 1;
 	}
     }
-    if (parcour->p->speak_timer >= 0)
+    if (parcour->p->speak_timer > 0)
 	parcour->p->speak_timer --;
-    else if (parcour->p->speak_timer == 0)
+    else if (parcour->p->speak_timer <= 0)
     {
         parcour->p->speak[0] = 0;
         parcour->p->a_bouger = 1;

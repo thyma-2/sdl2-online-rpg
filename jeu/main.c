@@ -2,6 +2,7 @@
 
 struct lettres *lettres;
 struct img *img;
+struct sound *sons;
 
 int main(void)
 {
@@ -15,7 +16,7 @@ int main(void)
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	printf ("no sound\n");
     img = init_img(ecran);
-    struct sound *sons = init_sound();
+    sons = init_sound();
     Mix_PlayMusic(sons->menu, 1);
     int socket = menu_connection(ecran);
     if (socket == -1)

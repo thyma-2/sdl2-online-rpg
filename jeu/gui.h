@@ -11,6 +11,7 @@
 #include "stat.h"
 #include "ordre.h"
 #include "inventaire.h"
+#include "init_sound.h"
 
 struct speak
 {
