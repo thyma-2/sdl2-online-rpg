@@ -168,6 +168,15 @@ int parse_order(struct personnages *list, char *line)
     i++;
     while (line[i] != ' ')
     {
+        list->religion[j] = line[i];
+        j++;
+        i++;
+    }
+    list->religion[j] = 0;
+    j = 0;
+    i++;
+    while (line[i] != ' ')
+    {
         list->region[j] = line[i];
         j++;
         i++;

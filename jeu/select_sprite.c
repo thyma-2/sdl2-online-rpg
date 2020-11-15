@@ -1,6 +1,6 @@
 #include "select_sprite.h"
 
-SDL_Surface *select_good_img(struct personnages *moi)
+SDL_Surface *select_good_img(struct personnages *moi, int m)
 {
     int angle = moi->angle;
     if (moi->a_bouger == 1)
@@ -16,7 +16,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
     {
 	if (moi->animation_r <= 0)
 	{
-	    if (angle < 15 ||angle >= 345)
+	    if (angle < 15 || angle >= 345 || m == 1)
                 return img->s->hoFaDoRien;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrRien;
@@ -43,7 +43,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
 	}
 	else if (moi->animation < 4)
 	{
-	    if (angle < 15 ||angle >= 345)
+	    if (angle < 15 ||angle >= 345 || m == 1)
 	        return img->s->hoFaDoMa1;
 	    else if (angle < 45 && angle >= 15)
 		return img->s->hoFaDoDrMa1;
@@ -70,7 +70,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
 	}
 	else if (moi->animation < 8)
         {
-            if (angle < 15 ||angle >= 345)
+            if (angle < 15 ||angle >= 345 || m == 1)
                 return img->s->hoFaDoMa2;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa2;
@@ -97,7 +97,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
 	else if (moi->animation < 12)
         {
-	    if (angle < 15 ||angle >= 345)
+	    if (angle < 15 ||angle >= 345 || m == 1)
                 return img->s->hoFaDoMa3;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa3;
@@ -124,7 +124,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
 	else if (moi->animation < 16)
         {
-            if (angle < 15 ||angle >= 345)
+            if (angle < 15 ||angle >= 345 || m == 1)
                 return img->s->hoFaDoMa4;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa4;
@@ -151,7 +151,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
 	else
         {
-            if (angle < 15 ||angle >= 345)
+            if (angle < 15 ||angle >= 345 || m == 1)
                 return img->s->hoFaDoMa5;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa5;
@@ -181,7 +181,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
     {
         if (moi->animation < 4)
         {
-            if (angle < 23 || angle > 337)
+            if (angle < 23 || angle > 337 || m == 1)
                 return img->s->hoArDoMa1;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa1;
@@ -199,7 +199,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
         else if (moi->animation < 8)
         {
-            if (angle < 23 || angle > 337)
+            if (angle < 23 || angle > 337 || m == 1)
                 return img->s->hoArDoMa2;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa2;
@@ -219,7 +219,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
         else if (moi->animation < 12)
         {
-            if (angle < 23 || angle > 337)
+            if (angle < 23 || angle > 337 || m == 1)
                 return img->s->hoArDoMa3;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa3;
@@ -237,7 +237,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
         else if (moi->animation < 16)
 	{
-	    if (angle < 23 || angle > 337)
+	    if (angle < 23 || angle > 337 || m == 1)
                 return img->s->hoArDoMa4;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa4;
@@ -255,7 +255,7 @@ SDL_Surface *select_good_img(struct personnages *moi)
         }
         else
         {
-            if (angle < 23 || angle > 337)
+            if (angle < 23 || angle > 337 || m == 1)
                 return img->s->hoArDoMa5;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa5;

@@ -29,6 +29,7 @@ struct personnages
     char nom[50];
     char nom_superieur[50];
     char titre[50];
+    char religion[50];
     char region[50];
     char est_chef;
     struct linked_enemie *e_list;

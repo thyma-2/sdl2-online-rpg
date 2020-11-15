@@ -9,6 +9,7 @@ char *rec_ground(int socket)
     map = emalloc(nb_char + 1);
     recv(socket, map, nb_char, 0);
     map[nb_char] = 0;
+    max_x = 0;
     int i = 0;
     while (map[i] != '\n')
     {
@@ -16,13 +17,7 @@ char *rec_ground(int socket)
         if (i % 3 == 0)
            max_x += 25;
     }
-    max_y = 25;
-    while (map[i] != 0)
-    {
-        i += (max_x / 25) * 3 + 1;
-        max_y += 25;
-    }
-    max_y -= 25;
+    max_y = 25 * nb_char / i;
     return map;
 }
 
@@ -32,12 +27,6 @@ void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran)
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
-
-    int gauche = moi->x - 600;
-    int haut = moi->y - 350;
-    int droite = moi->x + 600;
-    int bas = moi->y + 350;
-
     SDL_Rect position;
     position.x = 0;
     position.y = 0;
@@ -45,24 +34,18 @@ void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran)
     int x = 0;
     int y = 0;
     int i = 0;
-
-    position.y = 350 - moi->y;
-    while ((x < droite || y < bas) && i < max_x * max_y)
+    int s = max_x * max_y;
+    while (i < s)
     {
 	for (int j = 0; j < max_x; j++)
 	{
-	    if (y >= haut && x >= gauche && y <= bas && x <= droite)
-	    {
-		position.x = 600 + x - moi->x;
-		SDL_BlitSurface(select_texture(ground[j + i]), NULL, SDL_GetWindowSurface(ecran), &position);
-	    }
+	    position.x = (x - moi->x) * cos(moi->angle / 57.3) + (y - moi->y) * sin(moi->angle / 57.3) + 600;
+	    position.y = (y - moi->y) * cos(moi->angle / 57.3) - (x - moi->x) * sin(moi->angle / 57.3) + 550;
+	    SDL_BlitSurface(select_texture(ground[j + i]), NULL, SDL_GetWindowSurface(ecran), &position);
 	    x += 25;
 	}
 	i += max_x;
 	x = 0;
 	y += 25;
-	position.y += 25;
     }
-
-
 }

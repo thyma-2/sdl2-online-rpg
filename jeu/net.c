@@ -108,6 +108,8 @@ void generate_orders(struct linked_list *l, int socket)
 	    strcat(order , " ");
 	    strcat(order, list->p->titre);
 	    strcat(order , " ");
+	    strcat(order, list->p->religion);
+	    strcat(order, " ");
 	    strcat(order, list->p->region);
 	    if (list->p->est_chef == 'y')
 	        strcat(order, " y [");

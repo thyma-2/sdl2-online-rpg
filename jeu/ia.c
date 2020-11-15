@@ -43,7 +43,7 @@ void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *groun
             tmpI[0] = 0;
             sprintf (tmpI, "%f", parcour->p->y - 153);
             strcat(line, tmpI);
-            strcat(line, " 0 0 0 0 100000 arbre1 none none none region1 n [] [] none 0 0 [] 0 0");
+            strcat(line, " 0 0 0 0 100000 arbre1 none none none none region1 n [] [] none 0 0 [] 0 0");
             append_perso(list, &line);
             struct personnages *p = get_ptr_from_id(s, list);
             p->a_bouger = 1;
@@ -71,7 +71,7 @@ void ia_arbre(struct linked_list *list, struct linked_list *parcour)
         tmpI[0] = 0;
         sprintf (tmpI, "%f", parcour->p->y + rand() % 100 - rand() % 100 + 153);
         strcat(line, tmpI);
-        strcat(line, " 0 0 0 0 100000 fruit none none none region1 n [] [] none 0 0 [] 0 0");
+        strcat(line, " 0 0 0 0 100000 fruit none none none none region1 n [] [] none 0 0 [] 0 0");
 	append_perso(list, &line);
 	struct personnages *p = get_ptr_from_id(s, list);
 	p->a_bouger = 1;

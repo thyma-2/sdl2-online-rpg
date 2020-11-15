@@ -13,6 +13,8 @@ int main(void)
             SDL_WINDOWPOS_UNDEFINED,
             1200,700,
             SDL_WINDOW_OPENGL);
+    renderer = SDL_CreateRenderer(ecran, -1, SDL_RENDERER_ACCELERATED);
+    renderer = renderer;
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	printf ("no sound\n");
     img = init_img(ecran);
@@ -89,8 +91,6 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
     {
         display_ground(moi, grille ,ecran);
         gestion_touche();
-        disp_perso_list(list, moi, ecran);
-        display_selected(selected, ecran, moi, f);
         if (menu_s->on == 0 && speak_s->on == 0)
         {
             deplacement(moi);
@@ -125,6 +125,8 @@ void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *n
         recv_order(socket, list);
 	selected = clean_selected(selected);
         list = death(list);
+	disp_perso_list(list, moi, ecran);
+        display_selected(selected, ecran, moi, f);
         SDL_UpdateWindowSurface(ecran);
     }
     free(menu_s);

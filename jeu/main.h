@@ -29,4 +29,6 @@ char *log_menu(int socket, SDL_Window *ecran);
 int menu_connection(SDL_Window *ecran);
 int start_menu(int socket, SDL_Window *ecran);
 void free_malloc();
+
+SDL_Renderer *renderer;
 #endif /*MAIN*/

@@ -2,6 +2,17 @@
 extern int max_x;
 extern int max_y;
 
+void print_array(struct path *array)
+{
+    for (int i = 0; i < max_y; i++)
+    {
+        for (int j = 0; j < max_x; j++)
+            printf ("%d-", array[i * max_x + j].value);
+        putchar('\n');
+    }
+    printf ("\n\n--------------------\n\n");
+}
+
 char *create_array(char *ground)
 {
     max_x /= 25;
@@ -111,20 +122,15 @@ char *create_array(char *ground)
 	    i++;
 	    j--;
 	}
+	else if (i + 1 != s)
+	{
+	    printf("error while downloading the map\n");
+	    exit(1);
+	}
 	j++;
+
     }
     return array;
-}
-
-void print_array(struct path *array)
-{
-    for (int i = 0; i < max_y; i++)
-    {
-	for (int j = 0; j < max_x; j++)
-	    printf ("%d-", array[i * max_x + j].value);
-        putchar('\n');
-    }
-    printf ("\n\n--------------------\n\n");
 }
 
 char *actualise_array(char *array, struct linked_list *list)
