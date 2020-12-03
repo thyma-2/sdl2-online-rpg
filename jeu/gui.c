@@ -1,10 +1,12 @@
 #include "gui.h"
 
-void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
+void blit_mdp(SDL_Rect position1, char *text, int limite)
 {
+    SDL_Rect position = {position1.x, position1.y, 0, 0};
     int pox = position.x;
     int i = 0;
-    SDL_Surface *lettre_afficher = select_lettre('x');
+    SDL_Texture *lettre_afficher = select_lettre('x');
+    SDL_QueryTexture(lettre_afficher, NULL, NULL, &position.w, &position.h);
     while (text[i] != 0)
     {
         if (i % limite == 0 && i != 0)
@@ -22,17 +24,17 @@ void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int 
         {
             if (lettre_afficher != NULL)
             {
-                SDL_SetColorKey(lettre_afficher, SDL_SCANCODE_Y, SDL_MapRGB(lettre_afficher->format,couleur,couleur,couleur));
-                SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
-                position.x += lettre_afficher->w;
+		SDL_RenderCopy(renderer, lettre_afficher, NULL, &position);
+                position.x += position.w;
             }
             i++;
         }
     }
 }
 
-int blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur)
+int blit_text(SDL_Rect position1, char *text, int limite)
 {
+    SDL_Rect position = {position1.x, position1.y, 0, 0};
     int pox = position.x;
     int i = 0;
     int mpox = 0;
@@ -51,12 +53,12 @@ int blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int 
         }
         else
         {
-            SDL_Surface *lettre_afficher = select_lettre(text[i]);
+            SDL_Texture *lettre_afficher = select_lettre(text[i]);
+	    SDL_QueryTexture(lettre_afficher, NULL, NULL, &position.w, &position.h);
             if (lettre_afficher != NULL)
             {
-                SDL_SetColorKey(lettre_afficher, SDL_SCANCODE_Y, SDL_MapRGB(lettre_afficher->format,couleur,couleur,couleur));
-                SDL_BlitSurface(lettre_afficher, NULL, SDL_GetWindowSurface(ecran), &position);
-                position.x += lettre_afficher->w;
+		SDL_RenderCopy(renderer, lettre_afficher, NULL, &position);
+                position.x += position.w;
 		if (position.x - pox> mpox)
 	            mpox = position.x - pox;
             }
@@ -66,19 +68,15 @@ int blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int 
     return mpox;
 }
 
-void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list)
+void gui_event(struct personnages *perso, struct linked_list *list)
 {
     // ordres (que tu recois)
-    SDL_Rect position;
+    SDL_Rect position = {perso->ordrex + 550 - perso->x, perso->ordrey + 300 - perso->y, 100, 100};
     if (perso->ordrex != -1)
     {
-        position.x = perso->ordrex + 550 - perso->x;
-        position.y = perso->ordrey + 300 - perso->y;
         if (perso->x > perso->ordrex + - 50 && perso->x < perso->ordrex + 50 && perso->y > perso->ordrey - 50 && perso->y < perso->ordrey + 50)
             perso->ordrex = -1;
-        SDL_Surface *croix = SDL_LoadBMP("img/gui/croix.bmp");
-        SDL_SetColorKey(croix, SDL_SCANCODE_Y, SDL_MapRGB(croix->format, 255, 255, 255));
-        SDL_BlitSurface(croix, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_RenderCopy(renderer, img->g->croix, NULL, &position);
     }
     position.x = 50;
     position.y = 50;
@@ -142,7 +140,7 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 		}
 	    }
 	}
-	blit_text(position, txt, ecran, 90, 255);
+	blit_text(position, txt, 90);
     }
     //bulle de dialogues
     for (struct linked_list *p = list; p != NULL; p = p->next)
@@ -150,25 +148,43 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
 	if (p->p->speak[0] != 0)
 	{
 	    int s = strlen(p->p->speak);
-	    int somme = 0;
-	    for (int i = 0; p->p->speak[i] != 0; i++)
-		somme += select_lettre(p->p->speak[i])->w;
-    	    if (s > 60)
-	    {	    
-	        position.y = p->p->y + 290 - perso->y;
-		position.x = p->p->x + 600 - (somme / s) * 15 - perso->x;
-	    }
-	    else if (s > 30)
+	    if (p->p == perso)
 	    {
-		position.y = p->p->y + 310 - perso->y;
-		position.x = p->p->x + 600 - (somme / s) * 15 - perso->x;
+    	        if (s > 60)
+ 	        {	    
+	            position.y = p->p->y + 460 - perso->y;
+  		    position.x = p->p->x + 600 - 225 - perso->x;
+  	        }
+	        else if (s > 30)
+	        {
+		    position.y = p->p->y + 480 - perso->y;
+		    position.x = p->p->x + 600 - 225 - perso->x;
+	        }
+	        else
+	        {
+ 	   	    position.y = p->p->y + 500 - perso->y;
+		    position.x = p->p->x + 600 - (s * 7.5) - perso->x;
+	        }
 	    }
 	    else
 	    {
-		position.y = p->p->y + 330 - perso->y;
-		position.x = p->p->x + 600 - somme / 2 - perso->x;
+		if (s > 60)
+                {
+                    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 460;
+                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - 225;
+                }
+                else if (s > 30)
+                {
+		    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 480;
+                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - 225;
+                }
+                else
+                {
+		    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 500;
+                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - s * 7.5;
+                }
 	    }
- 	    blit_text(position, p->p->speak, ecran, 30, 0);    
+ 	    blit_text(position, p->p->speak, 30);    
 	}
 	if (perso->speak_timer > 0)
 	{
@@ -182,15 +198,14 @@ void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list 
     }
 }
 
-void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi, struct formation *f)
+void display_selected(struct linked_list *selected, struct personnages *moi, struct formation *f)
 {
     char txt[200] = "pv\nvitesse\nperiode d attaque\nporte\npoid\nfaim";
     char txt2[200];
     char tmp[20];
-    SDL_Rect position;
-    position.x = 0;
-    position.y = 550;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    SDL_Rect position = {0, 550, 4, 150};
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
+
     position.x = 12;
     txt2[0] = 0;
     tmp[0] = 0;
@@ -220,9 +235,9 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
     tmp[0] = 0;
     sprintf(tmp, "%d", moi->faim / 1000);
     strcat(txt2, tmp);
-    position.x += blit_text(position, txt, ecran, 200, 255) + 20;
-    position.x += blit_text(position, txt2, ecran, 200, 255) + 8;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += blit_text(position, txt, 200) + 20;
+    position.x += blit_text(position, txt2, 200) + 8;
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
     position.x += 12;
     int pv = 0;
     int pvm = 0;
@@ -258,11 +273,11 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
 	    strcat(txt2, "\n");
 	}
     }
-    position.x += blit_text(position,txt2,ecran, 200, 255) + 8;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += blit_text(position, txt2, 200) + 8;
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
     position.x += 12;
-    position.x += blit_text(position,txt,ecran, 200, 255) + 8;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    position.x += blit_text(position,txt, 200) + 8;
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
     position.x += 12;
     if (i > 0)
     {
@@ -296,11 +311,11 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
 	tmp[0] = 0;
 	sprintf(tmp, "%d", faim / 1000);
 	strcat(txt2, tmp);
-        position.x += blit_text(position, txt, ecran, 200, 255) + 20;
-	position.x += blit_text(position, txt2, ecran, 200, 255);
+        position.x += blit_text(position, txt, 200) + 20;
+	position.x += blit_text(position, txt2, 200);
     }
     position.x += 8;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
     if (i > 0)
     {
         position.x += 12;
@@ -311,7 +326,8 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->ecart_x += 1;
 	    }
 	}
-	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_QueryTexture(img->g->plus, NULL, NULL, &position.w, &position.h);
+	SDL_RenderCopy(renderer, img->g->plus, NULL, &position);
 	position.x += 35;
 	if (lettres->Mouse_Lclick == 1)
         {
@@ -320,7 +336,7 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->ecart_y += 1;
             }
         }
-	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_RenderCopy(renderer, img->g->plus, NULL, &position);
         position.x += 35;
 	if (lettres->Mouse_Lclick == 1)
         {
@@ -329,7 +345,7 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->n_par_lignes += 1;
             }
         }
-	SDL_BlitSurface(img->g->plus, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_RenderCopy(renderer, img->g->plus, NULL, &position);
 	position.y += 60;
 	position.x -= 70;
 	if (lettres->Mouse_Lclick == 1)
@@ -339,7 +355,7 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->ecart_x -= 1;
             }
         }
-	SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_RenderCopy(renderer, img->g->moins, NULL, &position);
         position.x += 35;
 	if (lettres->Mouse_Lclick == 1)
         {
@@ -348,8 +364,8 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->ecart_y -= 1;
             }
         }
-        SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
-        position.x += 35;
+        SDL_RenderCopy(renderer, img->g->moins, NULL, &position);
+	position.x += 35;
 	if (lettres->Mouse_Lclick == 1)
         {
             if (lettres->Mouse_pos_x > position.x && lettres->Mouse_pos_x < position.x + 30 && lettres->Mouse_pos_y > position.y && lettres->Mouse_pos_y < position.y + 30)
@@ -357,29 +373,28 @@ void display_selected(struct linked_list *selected, SDL_Window *ecran, struct pe
                 f->n_par_lignes -= 1;
             }
         }
-        SDL_BlitSurface(img->g->moins, NULL, SDL_GetWindowSurface(ecran), &position);
+	SDL_RenderCopy(renderer, img->g->moins, NULL, &position);
 	position.x += 18;
 	position.y -= 60;
     }
     position.x += 20;
-    SDL_BlitSurface(img->g->demarcation, NULL, SDL_GetWindowSurface(ecran), &position);
+    SDL_QueryTexture(img->g->demarcation, NULL, NULL, &position.w, &position.h);
+    SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
 }
 
-void menu_echange(SDL_Window *ecran, struct menu *m, struct personnages *perso)
+void menu_echange(struct menu *m, struct personnages *perso)
 {
     char tmpI[10] = "";
     char *e_list = malloc(200);
-    SDL_Rect position;
-    position.y = 0;
-    position.x = 250;
+    SDL_Rect position = {250, 0, 700, 20};
     struct linked_item *t = perso->i_list;
     e_list[0] = 0;
     for (int i = 0; i < 10; i++)
     {
         if (m->sel_echange1 == position.y / 20)
-            SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_RenderCopy(renderer, img->g->narrowSelTextInput, NULL, &position);
         else
-            SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_RenderCopy(renderer, img->g->narrowTextInput, NULL, &position);
         if (t != NULL)
         {
             strcat(e_list, t->nom);
@@ -393,16 +408,16 @@ void menu_echange(SDL_Window *ecran, struct menu *m, struct personnages *perso)
         position.y += 20;
     }
     position.y = 0;
-    blit_text(position, e_list, ecran, 20000, 255);
+    blit_text(position, e_list, 20000);
     position.y = 220;
     t = m->echange->i_list;
     e_list[0] = 0;
     for (int i = 0; i < 10; i++)
     {
         if (m->sel_echange2 == (position.y - 220) / 20)
-            SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_RenderCopy(renderer, img->g->narrowSelTextInput, NULL, &position);
         else
-	    SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_RenderCopy(renderer, img->g->narrowTextInput, NULL, &position);
         if (t != NULL)
         {
             strcat(e_list, t->nom);
@@ -416,7 +431,7 @@ void menu_echange(SDL_Window *ecran, struct menu *m, struct personnages *perso)
         position.y += 20;
     }
     position.y = 220;
-    blit_text(position, e_list, ecran, 20000, 255);
+    blit_text(position, e_list, 20000);
     if (lettres->enter == 1)
     {
         lettres->enter = 0;
@@ -472,22 +487,18 @@ void menu_echange(SDL_Window *ecran, struct menu *m, struct personnages *perso)
     }
 }
 
-void menu_action(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list)
+void menu_action(struct menu *m, struct personnages *perso, struct linked_list *list)
 {
     char txt[] = "Prendre possession";
     int c = 0;
-    SDL_Rect position;
-    position.x = 50;
-    position.y = 100;
+    SDL_Rect position = {50, 100, 558, 70};
     if (perso->sur_plancher != NULL)
     {
         if (m->sel_action == 0)
-   	    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-                &position);
+	    SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position);
 	else
-	    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                &position);
-     	blit_text(position, txt, ecran, 20, 255);
+	    SDL_RenderCopy(renderer, img->g->textInput, NULL, &position);
+     	blit_text(position, txt, 20);
    	if (lettres->enter == 1 && m->sel_action == 0)
 	{
 	    lettres->enter = 0;
@@ -509,14 +520,12 @@ void menu_action(SDL_Window *ecran, struct menu *m, struct personnages *perso, s
 	        position.y += 50;
 	        if (m->sel_action == (position.y - 100) / 50)
 	        {
-  	            SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
- 	                &position);
-	            m->echange = l->p;
+	            SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position);
+		    m->echange = l->p;
 		}
 		else
-		    SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-                        &position);
-		blit_text(position, l->p->nom, ecran, 20, 255);
+		    SDL_RenderCopy(renderer, img->g->textInput, NULL, &position);
+		blit_text(position, l->p->nom, 20);
 	    }
 	}
     }
@@ -540,26 +549,24 @@ void menu_action(SDL_Window *ecran, struct menu *m, struct personnages *perso, s
         m->sel_action = c;
 }
 
-void menu_inventaire(SDL_Window *ecran, struct menu *m, struct personnages *perso)
+void menu_inventaire(struct menu *m, struct personnages *perso)
 {
     char *e_list = malloc(200);
     char txt6[] = "Main Gauche\nMain Droite\nVetements\nStockage";
     char tmpI[10] = "";
-     SDL_Rect position9;
-    SDL_Rect position13;
+    SDL_Rect position9;
     position9.x = 50;
-    position13.x = 200;
+    SDL_Rect position13 = {200, 100, 700, 20};
     position9.y = 100;
-    position13.y = 100;
-    blit_text(position9, txt6, ecran, 200, 255);
+    blit_text(position9, txt6, 200);
     struct linked_item *t = perso->i_list;
     e_list[0] = 0;
     for (int i = 0; i < 10; i++)
     {
         if (m->sel_inventaire == (position13.y - 100) / 20)
-	    SDL_BlitSurface(img->g->narrowSelTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
+	    SDL_RenderCopy(renderer, img->g->narrowSelTextInput, NULL, &position13);
 	else
- 	    SDL_BlitSurface(img->g->narrowTextInput, NULL, SDL_GetWindowSurface(ecran), &position13);
+	    SDL_RenderCopy(renderer, img->g->narrowTextInput, NULL, &position13);
 	position13.y += 20;
 	if (t != NULL)
 	{
@@ -573,7 +580,7 @@ void menu_inventaire(SDL_Window *ecran, struct menu *m, struct personnages *pers
 	}
     }
     position13.y = 100;
-    blit_text(position13, e_list, ecran, 2000, 255);
+    blit_text(position13, e_list, 2000);
     if (lettres->s == 1)
     {
         lettres->s = 0;
@@ -612,36 +619,27 @@ void menu_inventaire(SDL_Window *ecran, struct menu *m, struct personnages *pers
     }
 }
 
-void menu_diplo(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list)
+void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *list)
 {
     char *e_list = malloc(200);
     char txt1[] = "Ajouter un enemi\n\n\n\n\nRetirer un enemi\n\n\n\n\nChanger de suzerain";
     SDL_Rect position1;
-    SDL_Rect position2;
-    SDL_Rect position4;
+    SDL_Rect position2 = {50, 100, 558, 70};
+    SDL_Rect position4 = {50, 200, 558, 70};
     SDL_Rect position5;
-    SDL_Rect position8;
+    SDL_Rect position8 = {50, 300, 558, 70};
     position1.x = 50;
-    position2.x = 50;
-    position4.x = 50;
     position4.x = 50;
     position5.x = 700;
-    position8.x = 50;
     position1.y = 70;
-    position2.y = 100;
-    position4.y = 200;
     position5.y = 70;
-    position8.y = 300;
-    blit_text(position1, txt1, ecran, 200, 255);
+    blit_text(position1, txt1, 200);
     if (m->sel_diplo == 0)
     {
         text_input(m->add_enemi, 50);
-        SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-            &position2);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position4);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position8);
+	SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position2);
+	SDL_RenderCopy(renderer, img->g->textInput, NULL, &position8);
+	SDL_RenderCopy(renderer, img->g->textInput, NULL, &position4);
         if (lettres->enter == 1)
         {
    	    lettres->enter = 0;
@@ -651,12 +649,9 @@ void menu_diplo(SDL_Window *ecran, struct menu *m, struct personnages *perso, st
     else if (m->sel_diplo == 1)
     {
         text_input(m->rem_enemi, 50);
-        SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-            &position4);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position2);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position8);
+	SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position4);
+        SDL_RenderCopy(renderer, img->g->textInput, NULL, &position8);
+        SDL_RenderCopy(renderer, img->g->textInput, NULL, &position2);
         if (lettres->enter == 1)
         {
    	    lettres->enter = 0;
@@ -666,16 +661,13 @@ void menu_diplo(SDL_Window *ecran, struct menu *m, struct personnages *perso, st
     else
     {
         text_input(perso->nom_superieur, 50);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position2);
-        SDL_BlitSurface(img->g->textInput, NULL, SDL_GetWindowSurface(ecran),
-            &position4);
-        SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran),
-            &position8);
+	SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position8);
+        SDL_RenderCopy(renderer, img->g->textInput, NULL, &position2);
+        SDL_RenderCopy(renderer, img->g->textInput, NULL, &position4);
     }
-    blit_text(position2, m->add_enemi, ecran, 20, 255);
-    blit_text(position4, m->rem_enemi, ecran, 20, 255);
-    blit_text(position8, perso->nom_superieur, ecran, 20, 255);
+    blit_text(position2, m->add_enemi, 20);
+    blit_text(position4, m->rem_enemi, 20);
+    blit_text(position8, perso->nom_superieur, 20);
     if (lettres->tab == 1)
     {
         lettres->tab = 0;
@@ -699,12 +691,12 @@ void menu_diplo(SDL_Window *ecran, struct menu *m, struct personnages *perso, st
 	    }
 	    parcour = parcour->next;
 	}
-	position5.x += blit_text(position5, e_list, ecran, 9999, 255) + 10;
+	position5.x += blit_text(position5, e_list, 9999) + 10;
 	rang += 1;
     }
 }
 
-void menu_religion(SDL_Window *ecran, struct menu *m)
+void menu_religion(struct menu *m)
 {
     SDL_Rect position;
     position.x = 10;
@@ -770,10 +762,10 @@ void menu_religion(SDL_Window *ecran, struct menu *m)
 	    }
 	}
     }
-    display_tree(m->r_tree, 10, ecran);
+    display_tree(m->r_tree, 10);
 }
 
-void menu_technologie(SDL_Window *ecran, struct menu *m)
+void menu_technologie(struct menu *m)
 {
     SDL_Rect position;
     position.x = 10;
@@ -927,10 +919,10 @@ void menu_technologie(SDL_Window *ecran, struct menu *m)
         if (t != NULL)
             t->unlocked = 0;
     }
-    display_tree(m->t_tree, m->yarbre, ecran);
+    display_tree(m->t_tree, m->yarbre);
 }
 
-void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list)
+void menu(struct menu *m, struct personnages *perso, struct linked_list *list)
 {
     char txt[] = "menu Inventaire -> Taper I.\nmenu Diplomatique -> Taper D.\nmenu Action -> taper A.\nmenu Capacites -> Taper C.\nmenu Technologies -> Taper T.\nmenu Economie -> taper E.\nmenu Religions -> Taper R.";
     SDL_Rect position1;
@@ -960,7 +952,7 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
     }
     if (m->inventaire_on == 0 && m->diplo_on == 0 && m->action_on == 0 && m->echange_on == 0 && m->capacite_on == 0 && m->technologies_on == 0 && m->economie_on == 0 && m->religion_on == 0)
     {
-	blit_text(position1, txt, ecran, 200, 255);
+	blit_text(position1, txt, 200);
 	if (lettres->i == 1)
 	{
 	    lettres->i = 0;
@@ -998,29 +990,27 @@ void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct l
 	}
     }
     if (m->echange_on == 1)
-        menu_echange(ecran, m, perso);
+        menu_echange(m, perso);
     else if (m->action_on == 1)
-	menu_action(ecran, m, perso, list);
+	menu_action(m, perso, list);
     else if (m->inventaire_on == 1)
-	menu_inventaire(ecran, m, perso);
+	menu_inventaire(m, perso);
     else if (m->diplo_on == 1)
-	menu_diplo(ecran, m, perso, list);
+	menu_diplo(m, perso, list);
     else if (m->religion_on == 1)
-	menu_religion(ecran, m);
+	menu_religion(m);
     else if (m->technologies_on == 1)
-        menu_technologie(ecran, m);
+        menu_technologie(m);
 }
 
-void talk(SDL_Window *ecran, struct speak *speak_s, struct personnages *moi)
+void talk(struct speak *speak_s, struct personnages *moi)
 {
     if (lettres->esc == 1)
 	speak_s->on = 0;
-    SDL_Rect position1;
-    position1.x = 50;
-    position1.y = 50;
+    SDL_Rect position1 = {50, 50, 558, 70};
     text_input(speak_s->speak, 90);
-    SDL_BlitSurface(img->g->selTextInput, NULL, SDL_GetWindowSurface(ecran), &position1);
-    blit_text(position1, speak_s->speak, ecran, 30, 255);
+    SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position1);
+    blit_text(position1, speak_s->speak, 30);
     if (lettres->enter == 1)
     {
 	moi->speak[0] = 0;

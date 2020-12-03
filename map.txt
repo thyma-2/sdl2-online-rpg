@@ -1,2 +1,2 @@
-0 11 thyma 849.802185 415.408813 -1.000000 0.000000 289 0 77221 archer thyma none none n n [] [arc 1 fleche 14 Protections_de_cuir 1] none 0 0 []
-1 100 none 349.698853 368.227844 -1.000000 0.000000 17 0 82536 ship1 none thyma none n n [] [Protections_de_cuir 1] none 4 1 []
+1 11 thyma 332.155762 1172.948486 -1.000000 0.000000 1 0 979797 fantassin thyma none none none region1 y [] [epee 1 Protections_de_cuir 1] None 0 0 [] 9 7
+0

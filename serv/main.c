@@ -267,7 +267,9 @@ int main(int argc, char **argv)
             {
 		int afk = handle_req(ingame_client[i], list, movedObj);
 	        if (afk == 1)
-		    ingame_client_afk_timing[i] += 1;	
+		    ingame_client_afk_timing[i] += 1;
+		else
+		    ingame_client_afk_timing[i] = 0;
                 if (ingame_client_afk_timing[i] > 5000000)
                 {
                     close(ingame_client[i]);
@@ -278,7 +280,7 @@ int main(int argc, char **argv)
         }
 	time = clock();
     	t2 = (float)(time / (CLOCKS_PER_SEC / 1000));
-	if (t2 - t > 5)
+	if (t2 - t > 20)
 	{
 	    t = t2;
             for (int i = 0; i < 100; i++)

@@ -21,16 +21,11 @@ char *rec_ground(int socket)
     return map;
 }
 
-void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran)
+void display_ground(struct personnages *moi, char *ground)
 {
-    SDL_Renderer* renderer = SDL_CreateRenderer(ecran, -1, 0);
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
     SDL_Rect position;
     position.x = 0;
     position.y = 0;
-    SDL_BlitSurface(img->t->fond, NULL, SDL_GetWindowSurface(ecran), &position);
     int x = 0;
     int y = 0;
     int i = 0;
@@ -41,7 +36,12 @@ void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran)
 	{
 	    position.x = (x - moi->x) * cos(moi->angle / 57.3) + (y - moi->y) * sin(moi->angle / 57.3) + 600;
 	    position.y = (y - moi->y) * cos(moi->angle / 57.3) - (x - moi->x) * sin(moi->angle / 57.3) + 550;
-	    SDL_BlitSurface(select_texture(ground[j + i]), NULL, SDL_GetWindowSurface(ecran), &position);
+	    if (position.x > -24 && position.x < 1224 && position.y > -24 && position.y < 724)
+	    {
+	        SDL_Texture *t = select_texture(ground[j + i]);
+	        SDL_QueryTexture(t, NULL, NULL, &position.w, &position.h);
+	        SDL_RenderCopyEx(renderer, t, NULL, &position, -moi->angle, NULL, 0);
+	    }
 	    x += 25;
 	}
 	i += max_x;

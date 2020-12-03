@@ -73,7 +73,7 @@ char exist_in_linked(struct linked_list *list, struct personnages *to_test);
 struct linked_list *append_in_linked(struct linked_list *list,struct personnages *p);
 struct linked_list *recv_map(int socket, struct linked_list *list);
 struct linked_list *append_perso(struct linked_list *list,  char **line);
-void disp_perso_list(struct linked_list *list, struct personnages *moi ,SDL_Window *ecran);
+void disp_perso_list(struct linked_list *list, struct personnages *moi);
 void *find_perso(struct linked_list *list ,char *name);
 void buble_sort_perso(struct linked_list *list);
 void free_linked(struct linked_list *list, char free_content);

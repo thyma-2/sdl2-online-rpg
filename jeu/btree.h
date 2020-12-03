@@ -22,6 +22,6 @@ void free_tree(struct node *root);
 struct node *find_node(struct node *root, char *name);
 int finxy_node(struct node *root, SDL_Rect position, int total);
 int findxy_node_other_side(struct node *root, SDL_Rect position, int total);
-void display_tree(struct node *root, int y, SDL_Window *ecran);
+void display_tree(struct node *root, int y);
 struct node *select_tree(struct node *root, int y);
 void append_requierment(struct node *root, char *name, char *req1, char *req2, char *req3);

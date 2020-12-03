@@ -13,7 +13,7 @@
 #include "pathfinding.h"
 
 char *rec_ground(int socket); 
-void display_ground(struct personnages *moi, char *ground, SDL_Window *ecran);
+void display_ground(struct personnages *moi, char *ground);
 
 #endif /*MAP*/
 

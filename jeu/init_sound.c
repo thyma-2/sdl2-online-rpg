@@ -4,6 +4,7 @@ extern struct sound *sons;
 
 struct sound *init_sound(void)
 {
+    renderer = renderer;
     sons = malloc(sizeof(struct sound));
     sons->menu = Mix_LoadMUS("sons/musiques/menu.mp3");
     sons->j1 = Mix_LoadMUS("sons/musiques/hava-nagila-original-best-version-in-this-world.mp3");

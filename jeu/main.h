@@ -1,7 +1,5 @@
+#pragma once
 #include "alloc.h"
-
-#ifndef MAIN
-#define MAIN
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -24,11 +22,8 @@
 #include "btree.h"
 
 void set_pos(SDL_Rect *pos, int x, int y);
-void boucle_jeu(int socket, SDL_Window *ecran, struct linked_list *list, char *name);
-char *log_menu(int socket, SDL_Window *ecran);
-int menu_connection(SDL_Window *ecran);
-int start_menu(int socket, SDL_Window *ecran);
+void boucle_jeu(int socket, struct linked_list *list, char *name);
+char *log_menu(int socket);
+int menu_connection();
+int start_menu(int socket);
 void free_malloc();
-
-SDL_Renderer *renderer;
-#endif /*MAIN*/

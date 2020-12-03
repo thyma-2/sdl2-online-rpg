@@ -68,7 +68,7 @@ int parse_order(struct personnages *list, char *line)
     j = 0;
     list->x = atof(tmpF);
     list->last_x = list->x;
-    i++;
+    i++;    
     while (line[i] != ' ')
     {
         tmpF[j] = line[i];

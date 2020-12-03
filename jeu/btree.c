@@ -99,11 +99,14 @@ int findxy_node(struct node *root, SDL_Rect position, int total)
 	position2.x += total;
 	root->posx = position2.x;
         root->posy = position2.y;
+	int w;
+	int h;
         int c = 0;
         int b = 0;
         while (root->nom[c] != 0)
         {
-            b += select_lettre(root->nom[c])->w;
+	    SDL_QueryTexture(select_lettre(root->nom[c]), NULL, NULL, &w, &h);
+            b += w;
             c++;
         }
 	b += 15;
@@ -136,9 +139,12 @@ int findxy_node_other_side(struct node *root, SDL_Rect position, int total)
 	root->posy = position2.y;
 	int c = 0;
 	int b = 0;
+	int w;
+	int h;
 	while (root->nom[c] != 0)
 	{
-            b += select_lettre(root->nom[c])->w;
+	    SDL_QueryTexture(select_lettre(root->nom[c]), NULL, NULL, &w, &h);
+            b += w;
 	    c++;
 	}
 	b += 15;
@@ -161,7 +167,7 @@ int findxy_node_other_side(struct node *root, SDL_Rect position, int total)
     return total;
 }
 
-void display_tree(struct node *root, int y, SDL_Window *ecran)
+void display_tree(struct node *root, int y)
 {
     if (root == NULL)
 	return;
@@ -169,11 +175,11 @@ void display_tree(struct node *root, int y, SDL_Window *ecran)
     position.x = root->posx;
     position.y = root->posy + y;
     if (root->unlocked == 0 && root->just_display == 0)
-	blit_text(position, root->nom, ecran, 50, 0);
+	blit_text(position, root->nom, 50);
     else
-	blit_text(position ,root->nom, ecran, 50, 255);
-    display_tree(root->bas, y, ecran);
-    display_tree(root->droite, y, ecran);
+	blit_text(position ,root->nom, 50);
+    display_tree(root->bas, y);
+    display_tree(root->droite, y);
 }
 
 struct node *select_tree(struct node *root, int y)

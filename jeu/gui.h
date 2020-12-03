@@ -1,7 +1,5 @@
+#pragma once
 #include "alloc.h"
-#ifndef GUI
-#define GUI
-
 #include <SDL2/SDL.h>
 #include "perso.h"
 #include "btree.h"
@@ -44,11 +42,10 @@ struct menu
     struct personnages *echange;
 };
 
-void talk(SDL_Window *ecran, struct speak *speak_s, struct personnages *moi);
-void gui_event(struct personnages *perso, SDL_Window *ecran, struct linked_list *list);
+void talk(struct speak *speak_s, struct personnages *moi);
+void gui_event(struct personnages *perso, struct linked_list *list);
 void *cast(void *p);
-void display_selected(struct linked_list *selected, SDL_Window *ecran, struct personnages *moi, struct formation *f);
-int blit_text(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur);
-void blit_mdp(SDL_Rect position, char *text, SDL_Window *ecran, int limite, int couleur);
-void menu(SDL_Window *ecran, struct menu *m, struct personnages *perso, struct linked_list *list);
-#endif /*GUI*/
+int blit_text(SDL_Rect position1, char *text, int limite);
+void blit_mdp(SDL_Rect position1, char *text, int limite);
+void menu(struct menu *m, struct personnages *perso, struct linked_list *list);
+void display_selected(struct linked_list *selected, struct personnages *moi, struct formation *f);

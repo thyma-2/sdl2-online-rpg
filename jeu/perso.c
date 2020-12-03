@@ -92,8 +92,8 @@ struct linked_list *recv_map(int socket, struct linked_list *list)
     size_t res  = 0;
     size_t nb_to_res  = atoi(buffer);
     free(buffer);
-    char *pos_buf = buffer;
     buffer = calloc(nb_to_res + 2, 1);
+    char *pos_buf = buffer;
     while (res < nb_to_res)
     {
         size_t tmp = recv(socket, buffer, nb_to_res - res, 0);
@@ -121,29 +121,29 @@ void *find_perso_by_name(struct linked_list *list ,char *name)
     return NULL;
 }
 
-void disp_perso_list(struct linked_list *list, struct personnages *moi ,SDL_Window *ecran)
+void disp_perso_list(struct linked_list *list, struct personnages *moi)
 {
     struct linked_list *parcour = list;
     SDL_Rect position;
-    SDL_Surface *affiche;
+    SDL_Texture *affiche;
     buble_sort_perso(list);
     while (parcour != NULL)
     {
         if (parcour->p == moi)
         {
             position.x = 600;
-            position.y = 550;
+	    position.y = 550;
             affiche = select_good_img(moi, 1);
-	    SDL_SetColorKey(affiche, SDL_SCANCODE_Y, SDL_MapRGB(affiche->format,255,255,255));
-    	    SDL_BlitSurface(affiche, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
+	    SDL_RenderCopy(renderer, affiche, NULL, &position);
         }
         else
         {
 	    position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600;
 	    position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 550;
             affiche = select_good_img(parcour->p, 0);
-	    SDL_SetColorKey(affiche, SDL_SCANCODE_Y, SDL_MapRGB(affiche->format,255,255,255));
-       	    SDL_BlitSurface(affiche, NULL, SDL_GetWindowSurface(ecran), &position);
+	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
+	    SDL_RenderCopy(renderer, affiche, NULL, &position);
         }
         parcour = parcour->next;
     }

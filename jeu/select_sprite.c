@@ -1,6 +1,6 @@
 #include "select_sprite.h"
 
-SDL_Surface *select_good_img(struct personnages *moi, int m)
+SDL_Texture *select_good_img(struct personnages *moi, int m)
 {
     int angle = moi->angle;
     if (moi->a_bouger == 1)
@@ -300,7 +300,7 @@ SDL_Surface *select_good_img(struct personnages *moi, int m)
     return img->s->hoArGdMa5;
 }
 
-SDL_Surface *select_texture(char ground)
+SDL_Texture *select_texture(char ground)
 {
 
     if (ground == 20)
@@ -365,7 +365,7 @@ SDL_Surface *select_texture(char ground)
     return NULL;
 }
 
-SDL_Surface *select_lettre(char lettre)
+SDL_Texture *select_lettre(char lettre)
 {
     if (lettre < 64)
     {
