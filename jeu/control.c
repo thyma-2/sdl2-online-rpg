@@ -37,15 +37,11 @@ void deplacement(struct personnages *moi)
     {
         moi->a_bouger = 1;
 	moi->angle -= 2;
-        if (moi->angle < 0)
-            moi->angle = 359;
     }
     if (lettres->d == 1)
     {
 	moi->a_bouger = 1;
         moi->angle += 2;
-        if (moi->angle > 360)
-            moi->angle = 1;
     }
     if (lettres->r == 1)
     {

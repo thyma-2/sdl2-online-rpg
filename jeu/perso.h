@@ -75,10 +75,11 @@ struct linked_list *recv_map(int socket, struct linked_list *list);
 struct linked_list *append_perso(struct linked_list *list,  char **line);
 void disp_perso_list(struct linked_list *list, struct personnages *moi);
 void *find_perso(struct linked_list *list ,char *name);
-void buble_sort_perso(struct linked_list *list);
+void buble_sort_perso(struct linked_list *list, struct personnages *moi);
 void free_linked(struct linked_list *list, char free_content);
 struct linked_list *death(struct linked_list *list);
 struct linked_list *remove_from_linked_list(struct linked_list *list, struct personnages *to_rem);
 void *find_perso_by_name(struct linked_list *list ,char *name);
 struct linked_list *clean_selected(struct linked_list *list);
+void fix_some_shit(struct linked_list *list);
 #endif /*PERSO*/

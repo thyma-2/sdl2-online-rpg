@@ -1,22 +1,37 @@
 #include "select_sprite.h"
 
-SDL_Texture *select_good_img(struct personnages *moi, int m)
+char plat_ou_volumineux(char *skin)
 {
-    int angle = moi->angle;
-    if (moi->a_bouger == 1)
+    if (strcmp(skin, "ship1") == 0)
+	return 1;
+    return 0;
+}
+
+SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
+{
+    int angle;
+    if (moi == perso)
+	angle = 1;
+    else
     {
-        moi->animation += 1;
-	if (moi->animation > 20)
-	    moi->animation = 0;
-	moi->animation_r = 10;
+        angle = perso->angle - moi->angle;
+	if (angle < 0)
+	    angle += 360;
+    }
+    if (perso->a_bouger == 1)
+    {
+        perso->animation += 1;
+	if (perso->animation > 20)
+	    perso->animation = 0;
+	perso->animation_r = 10;
     }
     else
-	moi->animation_r -= 1;
-    if (strcmp(moi->skin, "fantassin") == 0)
+	perso->animation_r -= 1;
+    if (strcmp(perso->skin, "fantassin") == 0)
     {
-	if (moi->animation_r <= 0)
+	if (perso->animation_r <= 0)
 	{
-	    if (angle < 15 || angle >= 345 || m == 1)
+	    if (angle < 15 || angle >= 345)
                 return img->s->hoFaDoRien;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrRien;
@@ -41,9 +56,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaRien;
 	}
-	else if (moi->animation < 4)
+	else if (perso->animation < 4)
 	{
-	    if (angle < 15 ||angle >= 345 || m == 1)
+	    if (angle < 15 || angle >= 345)
 	        return img->s->hoFaDoMa1;
 	    else if (angle < 45 && angle >= 15)
 		return img->s->hoFaDoDrMa1;
@@ -68,9 +83,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
 	    else if (angle < 345 && angle >= 315)
 		return img->s->hoFaDoGaMa1;
 	}
-	else if (moi->animation < 8)
+	else if (perso->animation < 8)
         {
-            if (angle < 15 ||angle >= 345 || m == 1)
+            if (angle < 15 || angle >= 345)
                 return img->s->hoFaDoMa2;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa2;
@@ -95,9 +110,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaMa2;
         }
-	else if (moi->animation < 12)
+	else if (perso->animation < 12)
         {
-	    if (angle < 15 ||angle >= 345 || m == 1)
+	    if (angle < 15 || angle >= 345)
                 return img->s->hoFaDoMa3;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa3;
@@ -122,9 +137,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
             else if (angle < 345 && angle >= 315)
                 return img->s->hoFaDoGaMa3;
         }
-	else if (moi->animation < 16)
+	else if (perso->animation < 16)
         {
-            if (angle < 15 ||angle >= 345 || m == 1)
+            if (angle < 15 || angle >= 345)
                 return img->s->hoFaDoMa4;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa4;
@@ -151,7 +166,7 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
         }
 	else
         {
-            if (angle < 15 ||angle >= 345 || m == 1)
+            if (angle < 15 || angle >= 345)
                 return img->s->hoFaDoMa5;
             else if (angle < 45 && angle >= 15)
                 return img->s->hoFaDoDrMa5;
@@ -177,11 +192,11 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
                 return img->s->hoFaDoGaMa5;
         }
     }
-    if (strcmp(moi->skin, "archer") == 0)
+    if (strcmp(perso->skin, "archer") == 0)
     {
-        if (moi->animation < 4)
+        if (perso->animation < 4)
         {
-            if (angle < 23 || angle > 337 || m == 1)
+            if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa1;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa1;
@@ -197,9 +212,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
                 return img->s->hoArGaMa1;
             return img->s->hoArGdMa1;
         }
-        else if (moi->animation < 8)
+        else if (perso->animation < 8)
         {
-            if (angle < 23 || angle > 337 || m == 1)
+            if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa2;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa2;
@@ -217,9 +232,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
                 return img->s->hoArGaMa2;
             return img->s->hoArGdMa2;
         }
-        else if (moi->animation < 12)
+        else if (perso->animation < 12)
         {
-            if (angle < 23 || angle > 337 || m == 1)
+            if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa3;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa3;
@@ -235,9 +250,9 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
                 return img->s->hoArGaMa3;
             return img->s->hoArGdMa3;
         }
-        else if (moi->animation < 16)
+        else if (perso->animation < 16)
 	{
-	    if (angle < 23 || angle > 337 || m == 1)
+	    if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa4;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa4;
@@ -255,7 +270,7 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
         }
         else
         {
-            if (angle < 23 || angle > 337 || m == 1)
+            if (angle < 23 || angle > 337)
                 return img->s->hoArDoMa5;
             else if (angle < 69  &&  angle >= 23)
                 return img->s->hoArDdMa5;
@@ -272,30 +287,14 @@ SDL_Texture *select_good_img(struct personnages *moi, int m)
             return img->s->hoArGdMa5;
         }
     }
-    if (strcmp(moi->skin, "ship1") == 0)
+    if (strcmp(perso->skin, "ship1") == 0)
+	return img->s->ship1haut;
+    if (strncmp(perso->skin, "arbre", 5) == 0)
     {
-        if (angle < 23 || angle > 337)
-            return img->s->ship1haut;
-        else if (angle < 69  &&  angle >= 23)
-            return img->s->ship1droitehaut;
-        else if (angle >= 69  &&  angle < 114)
-            return img->s->ship1droite;
-        else if (angle < 159  &&  angle >= 114)
-            return img->s->ship1droitebas;
-        else if (angle >= 159  &&  angle < 204)
-            return img->s->ship1bas;
-        else if (angle < 249  &&  angle >= 204)
-            return img->s->ship1gauchebas;
-        else if (angle >= 249  &&  angle < 294)
-            return img->s->ship1gauche;
-        return img->s->ship1gauchehaut;
-    }
-    if (strncmp(moi->skin, "arbre", 5) == 0)
-    {
-	if (moi->skin[5] == '1')
+	if (perso->skin[5] == '1')
 	    return img->s->arbre1;
     }
-    if (strncmp(moi->skin, "fruit", 5) == 0)
+    if (strncmp(perso->skin, "fruit", 5) == 0)
         return img->s->fruit;
     return img->s->hoArGdMa5;
 }

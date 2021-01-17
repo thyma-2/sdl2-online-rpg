@@ -167,23 +167,23 @@ int findpath(struct personnages *p, char *array)
     int y;
     if (p->angle == 90)
     {
-	x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
-        y = ((int)round(p->y - 3) - (int)round(p->y - 3) % 25) / 25;
+	x = ((int)round(p->x - 5) - (int)round(p->x - 5) % 25) / 25;
+        y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
     if (p->angle == 270)
     {
-	x = ((int)round(p->x + 20) - (int)round(p->x + 20) % 25) / 25;
-        y = ((int)round(p->y - 3) - (int)round(p->y - 3) % 25) / 25;
+	x = ((int)round(p->x + 16) - (int)round(p->x + 16) % 25) / 25;
+        y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
-    if (p->angle == 360)
+    if (p->angle == 360 || p->angle == 0)
     {
-	x = ((int)round(p->x + 4) - (int)round(p->x + 4) % 25) / 25;
-        y = ((int)round(p->y + 10) - (int)round(p->y + 10) % 25) / 25;
+	x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
+        y = ((int)round(p->y + 1) - (int)round(p->y + 1) % 25) / 25;
     }
     if (p->angle == 180)
     {
-	x = ((int)round(p->x + 4) - (int)round(p->x + 4) % 25) / 25;
-        y = ((int)round(p->y - 10) - (int)round(p->y - 10) % 25) / 25;
+	x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
+        y = ((int)round(p->y - 36) - (int)round(p->y - 36) % 25) / 25;
     }
     int src = (y + 1) * max_x + x;
     int srcs = src;
@@ -236,6 +236,7 @@ int findpath(struct personnages *p, char *array)
     src = dest;
     while (srcs != p->chemin[src].prev)
     {
+	array[src] = 20;
         src = p->chemin[src].prev;
 	if (src == -1)
 	    return 0;//try again

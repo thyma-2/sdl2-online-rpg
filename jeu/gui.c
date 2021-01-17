@@ -71,7 +71,7 @@ int blit_text(SDL_Rect position1, char *text, int limite)
 void gui_event(struct personnages *perso, struct linked_list *list)
 {
     // ordres (que tu recois)
-    SDL_Rect position = {perso->ordrex + 550 - perso->x, perso->ordrey + 300 - perso->y, 100, 100};
+    SDL_Rect position = {(perso->ordrex - perso->x) * cos(perso->angle / 57.3) + (perso->ordrey - perso->y) * sin(perso->angle / 57.3) + 550, (perso->ordrey - perso->y) * cos(perso->angle / 57.3) - (perso->ordrex - perso->x) * sin(perso->angle / 57.3) + 500, 100, 100};
     if (perso->ordrex != -1)
     {
         if (perso->x > perso->ordrex + - 50 && perso->x < perso->ordrex + 50 && perso->y > perso->ordrey - 50 && perso->y < perso->ordrey + 50)
@@ -168,21 +168,11 @@ void gui_event(struct personnages *perso, struct linked_list *list)
 	    }
 	    else
 	    {
-		if (s > 60)
-                {
-                    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 460;
-                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - 225;
-                }
-                else if (s > 30)
-                {
-		    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 480;
-                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - 225;
-                }
-                else
-                {
-		    position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 500;
-                    position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 600 - s * 7.5;
-                }
+		SDL_Texture *affiche = select_good_img(p->p, perso);
+                SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
+		position.x = (p->p->x - perso->x) * cos(perso->angle / 57.3) + (p->p->y - perso->y) * sin(perso->angle / 57.3) + 540 - position.w / 2;
+		position.y = (p->p->y - perso->y) * cos(perso->angle / 57.3) - (p->p->x - perso->x) * sin(perso->angle / 57.3) + 500 - position.h / 2;
+
 	    }
  	    blit_text(position, p->p->speak, 30);    
 	}
@@ -203,9 +193,10 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
     char txt[200] = "pv\nvitesse\nperiode d attaque\nporte\npoid\nfaim";
     char txt2[200];
     char tmp[20];
-    SDL_Rect position = {0, 550, 4, 150};
+    SDL_Rect position = {0, 550, 1200, 150};
+    SDL_RenderCopy(renderer, img->g->menu_bas, NULL, &position);
+    position.w = 4;
     SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
-
     position.x = 12;
     txt2[0] = 0;
     tmp[0] = 0;

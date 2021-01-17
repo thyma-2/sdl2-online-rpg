@@ -153,13 +153,6 @@ struct skin
     SDL_Texture *hoArGdMa4;
     SDL_Texture *hoArGdMa5;
     SDL_Texture *ship1haut;
-    SDL_Texture *ship1gauchehaut;
-    SDL_Texture *ship1gauche;
-    SDL_Texture *ship1gauchebas;
-    SDL_Texture *ship1bas;
-    SDL_Texture *ship1droitebas;
-    SDL_Texture *ship1droite;
-    SDL_Texture *ship1droitehaut;
     SDL_Texture *fruit;
     SDL_Texture *legume;
     SDL_Texture *arbre1;
@@ -176,6 +169,7 @@ struct gui_sprite
     SDL_Texture *demarcation;
     SDL_Texture *plus;
     SDL_Texture *moins;
+    SDL_Texture *menu_bas;
 };
 
 

@@ -19,7 +19,7 @@ void collision(struct linked_list *list, char *array)
 	char eau = check_eau(x1, y1, array, p->p->eau); // collision avec l'eau
 	if (eau == 0)
 	    eau = check_eau(x2, y2, array, p->p->eau);
-	if (x1 < 0 || x1 > max_x * 25 || x2 < 0 || x2 > max_x * 25 || y1 < 0 || y1 > max_y * 25 || y2 < 0 || y2 > max_y * 25)
+	if (x1 < -12.5 || x1 > max_x * 25 - 12.5 || x2 < -12.5 || x2 > max_x * 25 - 12.5 || y1 < -12.5 || y1 > max_y * 25 - 12.5 || y2 < - 12.5 || y2 > max_y * 25 - 12.5)
 	    bord = 1;
 	for (struct linked_list *pp = list; pp != NULL; pp = pp->next)
 	{
@@ -132,132 +132,54 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 {
     if (strcmp(perso->skin, "archer") == 0 || strcmp(perso->skin, "civil") == 0 || strcmp(perso->skin, "fantassin") == 0)
     {
-	*x1 = perso->x + 5;
-	*x2 = perso->x + 14;
-	*x3 = perso->x + 5;
-	*x4 = perso->x + 14;
-	*y1 = perso->y + 23;
-	*y2 = perso->y + 23;
-	*y3 = perso->y + 33;
-	*y4 = perso->y + 33;
+	*x1 = 10 + perso->x;
+        *y1 = perso->y;
+        *x2 = -10 + perso->x;
+        *y2 = perso->y;
+        *x3 = 10 + perso->x;
+        *y3 = 33 + perso->y;
+        *x4 = -10 + perso->x;
+        *y4 = 33 + perso->y;
     }
     else if (strcmp(perso->skin, "ship1") == 0)
     {
-	if (perso->angle < 23 || perso->angle > 337)
-	{
-	    *x1 = perso->x + 340;
-	    *x2 = perso->x + 455;
-	    *x3 = perso->x + 455;
-	    *x4 = perso->x + 340;
-	    *y1 = perso->y + 260;
-	    *y2 = perso->y + 260;
-	    *y3 = perso->y + 755;
-	    *y4 = perso->y + 755;
-	}
-	else if (perso->angle < 69  &&  perso->angle >= 23)
-	{
-	    *x1 = perso->x + 450;
-	    *x2 = perso->x + 535;
-	    *x3 = perso->x + 190;
-	    *x4 = perso->x + 115;
-	    *y1 = perso->y + 265;
-	    *y2 = perso->y + 340;
-	    *y3 = perso->y + 680;
-	    *y4 = perso->y + 610;
-	}
-	else if (perso->angle >= 69  &&  perso->angle < 114)
-	{
-	    *x1 = perso->x + 540; // droite 
-            *x2 = perso->x + 540;
-            *x3 = perso->x + 50;
-            *x4 = perso->x + 50;
-            *y1 = perso->y + 350;
-            *y2 = perso->y + 450;
-            *y3 = perso->y + 450;
-            *y4 = perso->y + 350;
-	}
-	else if (perso->angle < 159  && perso->angle >= 114)
-	{
-	    *x4 = perso->x + 190;
-	    *x3 = perso->x + 120;
-	    *x2 = perso->x + 460;
-	    *x1 = perso->x + 536;
-	    *y4 = perso->y + 120;
-	    *y3 = perso->y + 190;
-	    *y2 = perso->y + 535;
-	    *y1 = perso->y + 460;
-	}
-        else if (perso->angle >= 159  &&  perso->angle < 204)
-	{
-	    *x1 = perso->x + 345;
-            *x2 = perso->x + 455;
-            *x3 = perso->x + 445;
-            *x4 = perso->x + 345;
-            *y1 = perso->y + 535;
-            *y2 = perso->y + 535;
-            *y3 = perso->y + 50;
-            *y4 = perso->y + 50;
-	}
-        else if (perso->angle < 249  &&  perso->angle >= 204)
-	{
-	    *x4 = perso->x + 605;
-	    *y4 = perso->y + 110;
-	    *x3 = perso->x + 685;
-	    *y3 = perso->y + 190;
-	    *x2 = perso->x + 340;
-	    *y2 = perso->y + 535;
-	    *x1 = perso->x + 265;
-	    *y1 = perso->y + 460;
-	}
-        else if (perso->angle >= 249  && perso-> angle < 294)
-	{
-	    *x1 = perso->x + 260;
-            *x2 = perso->x + 260;
-            *x3 = perso->x + 765;
-            *x4 = perso->x + 765;
-            *y1 = perso->y + 350;
-            *y2 = perso->y + 450;
-            *y3 = perso->y + 450;
-            *y4 = perso->y + 350;
-	}
-        else
-	{
-	    *x1 = perso->x + 340;
-	    *y1 = perso->y + 265;
-	    *x2 = perso->x + 265;
-	    *y2 = perso->y + 340;
-	    *x3 = perso->x + 605;
-	    *y3 = perso->y + 680;
-	    *x4 = perso->x + 680; //
-	    *y4 = perso->y + 605;
-	}
+	*x1 = perso->x + 65 * cos(perso->angle / 57.3) + 135 * sin(perso->angle / 57.3);
+	*y1 = perso->y + 65 * sin(perso->angle / 57.3) - 135 * cos(perso->angle / 57.3);
+	*x2 = perso->x + 65 * cos(perso->angle / 57.3) - 370 * sin(perso->angle / 57.3);
+        *y2 = perso->y + 65 * sin(perso->angle / 57.3) + 370 * cos(perso->angle / 57.3);
+	*x3 = perso->x - 65 * cos(perso->angle / 57.3) - 370 * sin(perso->angle / 57.3);
+	*y3 = perso->y - 65 * cos(perso->angle / 57.3) + 370 * cos(perso->angle / 57.3);
+	*x4 = perso->x - 65 * cos(perso->angle / 57.3) + 135 * sin(perso->angle / 57.3);
+	*y4 = perso->y - 65 * cos(perso->angle / 57.3) - 135 * sin(perso->angle / 57.3);
     }
     else if (strcmp(perso->skin, "arbre1") == 0)
     {
-	*x1 = perso->x + 35;
-        *x2 = perso->x + 55;
-        *x3 = perso->x + 35;
-        *x4 = perso->x + 55;
-	*y1 = perso->y + 110;
-	*y2 = perso->y + 110;
-	*y3 = perso->y + 152;
-	*y4 = perso->y + 152;
+	*x1 = perso->x + 10;
+        *x2 = perso->x - 10;
+        *x3 = perso->x - 10;
+        *x4 = perso->x + 10;
+	*y1 = perso->y;
+	*y2 = perso->y;
+	*y3 = perso->y + 77;
+	*y4 = perso->y + 77;
     }
     else if (strcmp(perso->skin, "fruit") == 0)
     {
 	*x1 = perso->x - 10;
-	*x2 = perso->x - 10;
-	*x3 = perso->x + 20;
-	*x4 = perso->x + 20;
+	*x2 = perso->x + 10;
+	*x3 = perso->x - 10;
+	*x4 = perso->x + 10;
 	*y1 = perso->y - 10;
-	*y2 = perso->y + 20;
-	*y3 = perso->y - 10;
-	*y4 = perso->y + 20;
+	*y2 = perso->y - 10;
+	*y3 = perso->y + 10;
+	*y4 = perso->y + 10;
     }
 }
 
 char check_eau(int x1, int y1, char *array, char eau)
 {
+    x1 += 12.5;
+    y1 += 12.5;
     int xx = (x1 - (x1  % 25)) / 25;
     int yy = (y1 - (y1  % 25)) / 25;
     if (array[yy * max_x + xx] < 3)
@@ -288,8 +210,7 @@ char check_obj(struct personnages *perso, int xe, int ye)
     res += acos(((x2 - xe)*(x2 - xe) + (y2 - ye)*(y2-ye) + (x3 - xe)*(x3 - xe) + (y3 - ye)*(y3 - ye) - (y2 - y3)*(y2 - y3) - (x2 - x3) * (x2 - x3)) / (2 * sqrt((x2 - xe)*(x2 - xe) + (y2 - ye)*(y2-ye)) * sqrt ((x3 - xe)*(x3 - xe) + (y3 - ye)*(y3-ye)))) * 57.3;
     res += acos(((x3 - xe)*(x3 - xe) + (y3 - ye)*(y3-ye) + (x4 - xe)*(x4 - xe) + (y4 - ye)*(y4 - ye) - (y3 - y4)*(y3 - y4) - (x3 - x4) * (x3 - x4)) / (2 * sqrt((x3 - xe)*(x3 - xe) + (y3 - ye)*(y3-ye)) * sqrt ((x4 - xe)*(x4 - xe) + (y4 - ye)*(y4-ye)))) * 57.3;
     res += acos(((x4 - xe)*(x4 - xe) + (y4 - ye)*(y4-ye) + (x1 - xe)*(x1 - xe) + (y1 - ye)*(y1 - ye) - (y4 - y1)*(y4 - y1) - (x4 - x1) * (x4 - x1)) / (2 * sqrt((x4 - xe)*(x4 - xe) + (y4 - ye)*(y4-ye)) * sqrt ((x1 - xe)*(x1 - xe) + (y1 - ye)*(y1-ye)))) * 57.3;
-    if (res > 320)
-	if (res < 400)
-	    return 1;
+    if (res > 320 && res < 400)
+	return 1;
     return 0;
 }

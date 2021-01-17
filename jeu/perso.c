@@ -124,38 +124,54 @@ void *find_perso_by_name(struct linked_list *list ,char *name)
 void disp_perso_list(struct linked_list *list, struct personnages *moi)
 {
     struct linked_list *parcour = list;
+    int max;
     SDL_Rect position;
     SDL_Texture *affiche;
-    buble_sort_perso(list);
+    buble_sort_perso(list, moi);
     while (parcour != NULL)
     {
         if (parcour->p == moi)
         {
-            position.x = 600;
-	    position.y = 550;
-            affiche = select_good_img(moi, 1);
+	    affiche = select_good_img(moi, moi);
 	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
+            position.x = 600 - position.w / 2;
+	    position.y = 550 - position.h / 2;
 	    SDL_RenderCopy(renderer, affiche, NULL, &position);
         }
         else
         {
-	    position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600;
-	    position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 550;
-            affiche = select_good_img(parcour->p, 0);
+	    affiche = select_good_img(parcour->p, moi);
 	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
-	    SDL_RenderCopy(renderer, affiche, NULL, &position);
+	    position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
+	    position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 550 - position.h / 2;
+	    if (position.h > position.w)
+		max = position.h;
+	    else
+		max = position.w;
+	    if (position.x > - max && position.x < 1200 + max && position.y > - max && position.y < 550 + max)
+	    {
+		if (plat_ou_volumineux(parcour->p->skin) == 0)
+	            SDL_RenderCopy(renderer, affiche, NULL, &position);
+		else
+		{
+		    int angle = parcour->p->angle - moi->angle;
+		    if (angle < 0)
+			angle += 360;
+		    SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
+		}
+	    }
         }
         parcour = parcour->next;
     }
 }
 
-void buble_sort_perso(struct linked_list *list)
+void buble_sort_perso(struct linked_list *list, struct personnages *moi)
 {
     for (struct linked_list *par = list; par != NULL; par = par->next)
     {
         for (struct linked_list *par2 = par; par2->next != NULL; par2 = par2->next)
         {
-            if (par2->p->y > par2->next->p->y)
+            if (((par2->p->y - moi->y) * (par2->p->y - moi->y) + (par2->p->x - moi->x) * (par2->p->x - moi->x) > (par2->next->p->y - moi->y) * (par2->next->p->y - moi->y) + (par2->next->p->x - moi->x) * (par2->next->p->x - moi->x) && plat_ou_volumineux(par2->p->skin) == 0) || plat_ou_volumineux(par2->next->p->skin) == 1)
             {
                 struct personnages *tmp = par2->p;
                 par2->p = par2->next->p;
@@ -271,4 +287,16 @@ struct linked_list *clean_selected(struct linked_list *list)
         }
     }
     return ret;
+}
+
+void fix_some_shit(struct linked_list *list)
+{
+    while(list != NULL)
+    {
+	if (list->p->angle < 1)
+	    list->p->angle = 360;
+	else if (list->p->angle > 360)
+	    list->p->angle = 1;
+	list = list->next;
+    }
 }

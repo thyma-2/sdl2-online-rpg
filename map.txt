@@ -1,2 +1,3 @@
-1 11 thyma 332.155762 1172.948486 -1.000000 0.000000 1 0 979797 fantassin thyma none none none region1 y [] [epee 1 Protections_de_cuir 1] None 0 0 [] 9 7
-0
+0 11 thyma 288.727509 1181.438477 -1.000000 842.604736 360 0 392311 fantassin thyma thyma none none region1 y [] [epee 1 Protections_de_cuir 1] none 0 0 [] 6 10
+1 11 none 250.449677 1072.515015 0.000000 1024.515015 90 0 454710 fantassin bkak thyma none none region1 y [] [epee 1 Protections_de_cuir 1] none 1 1 [] 11 10
+2 800 none 494.259949 451.792206 99.247482 475.035522 266 0 0 ship1 none thyma none none region1 y [] [] none 1 2 [bonjour] 13 10

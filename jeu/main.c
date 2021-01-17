@@ -81,11 +81,12 @@ void boucle_jeu(int socket, struct linked_list *list, char *name)
     menu_s->t_tree = NULL;
     menu_s->capacite_on = 0;
     menu_s->economie_on = 0;
-
+    char *grille_cp = actualise_array(grille, list);
     while (lettres->exit != 1)
     {
 	SDL_RenderClear(renderer);
-        display_ground(moi, grille);
+        display_ground(moi, grille_cp);
+	free(grille_cp);
         gestion_touche();
         if (menu_s->on == 0 && speak_s->on == 0)
         {
@@ -112,17 +113,17 @@ void boucle_jeu(int socket, struct linked_list *list, char *name)
             menu(menu_s, moi, list);
 	else
 	    talk(speak_s, moi);
-        char *grille_cp = actualise_array(grille, list);
+        grille_cp = actualise_array(grille, list);
 	ia(list, grille_cp);
-	free(grille_cp);
 	collision(list, grille);
 	gui_event(moi, list);
         generate_orders(list, socket);
         recv_order(socket, list);
 	selected = clean_selected(selected);
         list = death(list);
-	disp_perso_list(list, moi);
+	fix_some_shit(list);
         display_selected(selected, moi, f);
+	disp_perso_list(list, moi);
         SDL_RenderPresent(renderer);
     }
     free(menu_s);

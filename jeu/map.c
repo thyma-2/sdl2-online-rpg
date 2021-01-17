@@ -34,9 +34,9 @@ void display_ground(struct personnages *moi, char *ground)
     {
 	for (int j = 0; j < max_x; j++)
 	{
-	    position.x = (x - moi->x) * cos(moi->angle / 57.3) + (y - moi->y) * sin(moi->angle / 57.3) + 600;
-	    position.y = (y - moi->y) * cos(moi->angle / 57.3) - (x - moi->x) * sin(moi->angle / 57.3) + 550;
-	    if (position.x > -24 && position.x < 1224 && position.y > -24 && position.y < 724)
+	    position.x = (x - moi->x) * cos(moi->angle / 57.3) + (y - moi->y) * sin(moi->angle / 57.3) + 587.5;
+	    position.y = (y - moi->y) * cos(moi->angle / 57.3) - (x - moi->x) * sin(moi->angle / 57.3) + 537.5;
+	    if (position.x > -24 && position.x < 1224 && position.y > -24 && position.y < 550)
 	    {
 	        SDL_Texture *t = select_texture(ground[j + i]);
 	        SDL_QueryTexture(t, NULL, NULL, &position.w, &position.h);

@@ -96,6 +96,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 	int x = ((x1 + x2 + x3 + x4) / 4) - parcour->p->ordrex;
 	int y = parcour->p->ordrey - ((y1 + y2 + y3 + y4) / 4);
 	int angle;
+	char change_angle = 0;
 	if (y > 0)
 	    angle = (atan(x/y) * 57.3) + 180;
 	else if (y < 0)
@@ -108,21 +109,30 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 	if (angle > parcour->p->angle)
 	{
 	    if (angle - parcour->p->angle < 180)
+	    {
 		parcour->p->angle += 1;
+		change_angle = 1;
+	    }
 	    else
+	    {
 		parcour->p->angle -= 1;
+		change_angle = -1;
+	    }
+
 	}
 	else
 	{
 	    if (parcour->p->angle - angle < 180)
+	    {
+		change_angle = -1;
 	        parcour->p->angle -= 1;
+	    }
 	    else
+	    {
 		parcour->p->angle += 1;
+		change_angle = 1;
+	    }
 	}
-	if (parcour->p->angle > 360)
-	    parcour->p->angle = 0;
-	else if (parcour->p->angle < 0)
-	    parcour->p->angle = 360;
         parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
         parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
         parcour->p->ordrey -= cos(angle / 57.3);
@@ -131,8 +141,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 	{
 	    if (parcour2->p->sur_plancher == parcour->p)
 	    {
-		//parcour2->p->last_x = parcour2->p->x;
-		//parcour2->p->last_y = parcour2->p->y;
+		parcour2->p->angle += change_angle;
 		parcour2->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
         	parcour2->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
 		parcour2->p->a_bouger = 1;;
