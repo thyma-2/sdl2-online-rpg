@@ -8,8 +8,9 @@ void ia(struct linked_list *list, char *array)
         {
 	    if (strncmp(parcour->p->skin, "ship", 4) == 0)
 		ia_ship(list, parcour);
-	    //else if (strncmp(skin "build", 5) == 0)
-		//ordres = ia_build(list, ordres);
+	    else if (strcmp(parcour->p->skin, "chateau") == 0)
+		;
+		//ia_build(list, ordres);
 	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
 		ia_arbre(list, parcour);
 	    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
@@ -274,7 +275,7 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
     }
     if (parcour->p->speak_timer > 0)
 	parcour->p->speak_timer --;
-    else if (parcour->p->speak_timer <= 0)
+    else if (parcour->p->speak_timer <= 0 && parcour->p->speak[0] != 0)
     {
         parcour->p->speak[0] = 0;
         parcour->p->a_bouger = 1;

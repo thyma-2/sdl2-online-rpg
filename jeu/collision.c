@@ -174,6 +174,17 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 	*y3 = perso->y + 10;
 	*y4 = perso->y + 10;
     }
+    else if (strcmp(perso->skin, "chateau") == 0)
+    {
+	*x1 = perso->x - 450;
+        *x2 = perso->x + 450;
+        *x3 = perso->x - 450;
+        *x4 = perso->x + 450;
+        *y1 = perso->y - 130;
+        *y2 = perso->y - 130;
+        *y3 = perso->y + 130;
+        *y4 = perso->y + 130;
+    }
 }
 
 char check_eau(int x1, int y1, char *array, char eau)

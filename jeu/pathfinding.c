@@ -167,12 +167,12 @@ int findpath(struct personnages *p, char *array)
     int y;
     if (p->angle == 90)
     {
-	x = ((int)round(p->x - 5) - (int)round(p->x - 5) % 25) / 25;
+	x = ((int)round(p->x - 6) - (int)round(p->x - 6) % 25) / 25;
         y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
     if (p->angle == 270)
     {
-	x = ((int)round(p->x + 16) - (int)round(p->x + 16) % 25) / 25;
+	x = ((int)round(p->x + 6) - (int)round(p->x + 6) % 25) / 25;
         y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
     if (p->angle == 360 || p->angle == 0)

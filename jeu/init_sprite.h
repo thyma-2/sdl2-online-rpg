@@ -152,10 +152,24 @@ struct skin
     SDL_Texture *hoArGdMa3;
     SDL_Texture *hoArGdMa4;
     SDL_Texture *hoArGdMa5;
+
     SDL_Texture *ship1haut;
     SDL_Texture *fruit;
     SDL_Texture *legume;
     SDL_Texture *arbre1;
+
+    SDL_Texture *chateauFace;
+    SDL_Texture *chateauFaceGauche;
+    SDL_Texture *chateauGaucheFace;
+    SDL_Texture *chateauGauche;
+    SDL_Texture *chateauGaucheDos;
+    SDL_Texture *chateauDosGauche;
+    SDL_Texture *chateauDos;
+    SDL_Texture *chateauDosDroite;
+    SDL_Texture *chateauDroiteDos;
+    SDL_Texture *chateauDroite;
+    SDL_Texture *chateauDroiteFace;
+    SDL_Texture *chateauFaceDroite;
 };
 
 struct gui_sprite

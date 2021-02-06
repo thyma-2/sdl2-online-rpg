@@ -289,6 +289,34 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
     }
     if (strcmp(perso->skin, "ship1") == 0)
 	return img->s->ship1haut;
+    if (strcmp(perso->skin, "chateau") == 0)
+    {
+	
+	if (angle < 15 || angle >= 345)
+            return img->s->chateauDos;
+        else if (angle < 45 && angle >= 15)
+            return img->s->chateauDosDroite;
+        else if (angle < 75 && angle >= 45)
+            return img->s->chateauDroiteDos;
+        else if (angle < 105 && angle >= 75)
+            return img->s->chateauDroite;
+        else if (angle < 135 && angle >= 105)
+            return img->s->chateauDroiteFace;
+        else if (angle < 165 && angle >= 135)
+            return img->s->chateauFaceDroite;
+        else if (angle < 195 && angle >= 165)
+            return img->s->chateauFace;
+        else if (angle < 225 && angle >= 195)
+            return img->s->chateauFaceGauche;
+        else if (angle < 255 && angle >= 225)
+            return img->s->chateauGaucheFace;
+        else if (angle < 285 && angle >= 255)
+            return img->s->chateauGauche;
+        else if (angle < 315 && angle >= 285)
+            return img->s->chateauGaucheDos;
+        else if (angle < 345 && angle >= 315)
+            return img->s->chateauDosGauche;
+    }
     if (strncmp(perso->skin, "arbre", 5) == 0)
     {
 	if (perso->skin[5] == '1')

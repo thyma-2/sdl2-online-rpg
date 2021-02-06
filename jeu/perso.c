@@ -150,14 +150,26 @@ void disp_perso_list(struct linked_list *list, struct personnages *moi)
 		max = position.w;
 	    if (position.x > - max && position.x < 1200 + max && position.y > - max && position.y < 550 + max)
 	    {
-		if (plat_ou_volumineux(parcour->p->skin) == 0)
+		char test = plat_ou_volumineux(parcour->p->skin);
+	        if (test == 0)
 	            SDL_RenderCopy(renderer, affiche, NULL, &position);
-		else
+		else if (test == 1)
 		{
 		    int angle = parcour->p->angle - moi->angle;
 		    if (angle < 0)
 			angle += 360;
 		    SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
+		}
+		else if (test == 2)
+		{
+		    int angle = parcour->p->angle - moi->angle;
+                    if (angle < 0)
+                        angle += 360;
+		    if (angle > 90 && angle <= 180)
+			angle += 180;
+		    else if (angle > 180 && angle < 270)
+			angle -= 180;
+                    SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
 		}
 	    }
         }
