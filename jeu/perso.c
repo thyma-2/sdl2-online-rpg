@@ -124,7 +124,6 @@ void *find_perso_by_name(struct linked_list *list ,char *name)
 void disp_perso_list(struct linked_list *list, struct personnages *moi)
 {
     struct linked_list *parcour = list;
-    int max;
     SDL_Rect position;
     SDL_Texture *affiche;
     buble_sort_perso(list, moi);
@@ -135,42 +134,34 @@ void disp_perso_list(struct linked_list *list, struct personnages *moi)
 	    affiche = select_good_img(moi, moi);
 	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
             position.x = 600 - position.w / 2;
-	    position.y = 550 - position.h / 2;
+	    position.y = 570 - position.h;
 	    SDL_RenderCopy(renderer, affiche, NULL, &position);
         }
         else
         {
 	    affiche = select_good_img(parcour->p, moi);
 	    SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
-	    position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
-	    position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 550 - position.h / 2;
-	    if (position.h > position.w)
-		max = position.h;
-	    else
-		max = position.w;
-	    if (position.x > - max && position.x < 1200 + max && position.y > - max && position.y < 550 + max)
+	    char test = plat_ou_volumineux(parcour->p->skin);
+	    if (test == 1)
 	    {
-		char test = plat_ou_volumineux(parcour->p->skin);
-	        if (test == 0)
-	            SDL_RenderCopy(renderer, affiche, NULL, &position);
-		else if (test == 1)
-		{
-		    int angle = parcour->p->angle - moi->angle;
-		    if (angle < 0)
-			angle += 360;
-		    SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
-		}
-		else if (test == 2)
-		{
-		    int angle = parcour->p->angle - moi->angle;
-                    if (angle < 0)
-                        angle += 360;
-		    if (angle > 90 && angle <= 180)
-			angle += 180;
-		    else if (angle > 180 && angle < 270)
-			angle -= 180;
-                    SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
-		}
+		position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
+                position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 570 - position.h / 2;
+		int angle = parcour->p->angle - moi->angle;
+                if (angle < 0)
+                    angle += 360;
+                SDL_RenderCopyEx(renderer, affiche, NULL, &position, angle, NULL, 0);
+	    }
+	    else if (test == 0)
+	    {
+		position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
+                position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 570 - position.h;
+		SDL_RenderCopy(renderer, affiche, NULL, &position);
+	    }
+	    else if (test == 2)
+	    {
+		position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
+                position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 570 - position.h / 1.5;
+                SDL_RenderCopyEx(renderer, affiche, NULL, &position, 0, NULL, 0);
 	    }
         }
         parcour = parcour->next;

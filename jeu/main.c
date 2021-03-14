@@ -122,8 +122,8 @@ void boucle_jeu(int socket, struct linked_list *list, char *name)
 	selected = clean_selected(selected);
         list = death(list);
 	fix_some_shit(list);
-        display_selected(selected, moi, f);
 	disp_perso_list(list, moi);
+        display_selected(selected, moi, f);
         SDL_RenderPresent(renderer);
     }
     free(menu_s);

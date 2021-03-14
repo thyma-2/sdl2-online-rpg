@@ -170,6 +170,15 @@ struct skin
     SDL_Texture *chateauDroite;
     SDL_Texture *chateauDroiteFace;
     SDL_Texture *chateauFaceDroite;
+
+    SDL_Texture *tourFace;
+    SDL_Texture *tourFaceGauche;
+    SDL_Texture *tourGaucheFace;
+    SDL_Texture *tourGauche;
+    SDL_Texture *tourDos;
+    SDL_Texture *tourDroite;
+    SDL_Texture *tourDroiteFace;
+    SDL_Texture *tourFaceDroite;
 };
 
 struct gui_sprite

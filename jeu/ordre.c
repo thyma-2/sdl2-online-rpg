@@ -9,7 +9,7 @@ struct linked_list *select(struct linked_list *list, struct personnages *moi, st
         {
 	    int xe = (lettres->Mouse_pos_x - 600) * cos(moi->angle / 57.3) - (lettres->Mouse_pos_y - 550) * sin(moi->angle / 57.3) + moi->x;
             int ye = (lettres->Mouse_pos_x - 600) * sin(moi->angle / 57.3) + (lettres->Mouse_pos_y - 550) * cos(moi->angle / 57.3) + moi->y;
-            if (check_obj(a->p, xe, ye) == 1)
+            if (check_obj_point(a->p, xe, ye) == 1)
 	    {
 		if (exist_in_linked(selected, a->p) == 0)
                     selected = append_in_linked(selected, a->p);

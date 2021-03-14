@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 		    ingame_client_afk_timing[i] += 1;
 		else
 		    ingame_client_afk_timing[i] = 0;
-                if (ingame_client_afk_timing[i] > 5000000)
+                if (ingame_client_afk_timing[i] > 50000000)
                 {
                     close(ingame_client[i]);
                     ingame_client[i] = -1;

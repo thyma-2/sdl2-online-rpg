@@ -214,7 +214,7 @@ int findpath(struct personnages *p, char *array)
         {
             generate_around(p->chemin, src, p);
             src = find_next(p->chemin);
-  	    if (src == -1)
+  	    if (src == -1) // il n'y a pas de chemin
 	        return -1;
  	    else if (src == dest)
 	    {
@@ -239,7 +239,7 @@ int findpath(struct personnages *p, char *array)
 	array[src] = 20;
         src = p->chemin[src].prev;
 	if (src == -1)
-	    return 0;//try again
+	    return 0; // le perso à dévié du chemin originel
     }
     if (srcs - max_x == src)
         return 360;

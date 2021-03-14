@@ -2,8 +2,10 @@
 
 char plat_ou_volumineux(char *skin)
 {
-    if (strcmp(skin, "ship1") == 0)
+    if (strcmp(skin, "ship1") == 0 /*|| strcmp(skin, "tour") == 0*/)
 	return 1;
+    if (strcmp(skin, "tour") == 0)
+	return 2;
     return 0;
 }
 
@@ -317,6 +319,25 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
         else if (angle < 345 && angle >= 315)
             return img->s->chateauDosGauche;
     }
+    if (strcmp(perso->skin, "tour") == 0)
+    {
+        if (angle < 75 || angle >= 285)
+            return img->s->tourDos;
+        else if (angle < 105 && angle >= 75)
+            return img->s->tourDroite;
+        else if (angle < 135 && angle >= 105)
+            return img->s->tourDroiteFace;
+        else if (angle < 165 && angle >= 135)
+            return img->s->tourFaceDroite;
+        else if (angle < 195 && angle >= 165)
+            return img->s->tourFace;
+        else if (angle < 225 && angle >= 195)
+            return img->s->tourFaceGauche;
+        else if (angle < 255 && angle >= 225)
+            return img->s->tourGaucheFace;
+        return img->s->tourGauche;
+    }
+
     if (strncmp(perso->skin, "arbre", 5) == 0)
     {
 	if (perso->skin[5] == '1')

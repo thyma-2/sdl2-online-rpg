@@ -648,6 +648,47 @@ struct skin *init_skin()
     a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     to_return->chateauFaceDroite = SDL_CreateTextureFromSurface(renderer, a);
     SDL_FreeSurface(a);
+    
+    a = SDL_LoadBMP("img/batiments/tour/face.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourFace = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/faceDroite.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourFaceDroite = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/droiteFace.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourDroiteFace = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/droite.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourDroite = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/dos.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourDos = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/gauche.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourGauche = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/gaucheFace.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourGaucheFace = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
+    a = SDL_LoadBMP("img/batiments/tour/faceGauche.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->tourFaceGauche = SDL_CreateTextureFromSurface(renderer, a);
+    SDL_FreeSurface(a);
     return to_return;
 }
 

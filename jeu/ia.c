@@ -8,7 +8,7 @@ void ia(struct linked_list *list, char *array)
         {
 	    if (strncmp(parcour->p->skin, "ship", 4) == 0)
 		ia_ship(list, parcour);
-	    else if (strcmp(parcour->p->skin, "chateau") == 0)
+	    else if (strcmp(parcour->p->skin, "chateau") == 0 || strcmp(parcour->p->skin, "tour") == 0)
 		;
 		//ia_build(list, ordres);
 	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)

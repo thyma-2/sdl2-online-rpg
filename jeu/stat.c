@@ -92,6 +92,14 @@ void actualise_stat(struct personnages *p)
 	p->eau = '0';
 	p->plancher = 'n';
     }
+    else if (strcmp(p->skin, "tour") == 0)
+    {
+        p->max_pv = 1000;
+        p->dom = 0;
+        p->poid = 10000;
+        p->eau = '0';
+        p->plancher = 'n';
+    }
 }
 
 void init_stat(struct personnages *p)
