@@ -501,11 +501,24 @@ void menu_action(struct menu *m, struct personnages *perso, struct linked_list *
     {
         if (l->p != perso)
         {
-   	    int x1, x2, x3, x4, y1, y2, y3, y4;
-	    coo_corner(l->p, &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
-	    x2 = (x1 + x2 + x3 + x4) / 4;
-	    y2 = (y1 + y2 + y3 + y4) / 4;
-	    if (sqrt((x2 - perso->x)*(x2 - perso->x) + (y2 - perso->y)*(y2 - perso->y)) < 99 + sqrt(((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1))/2))
+	    char close = 0;
+	    if (cercle_ou_rectangle(l->p) == 1)
+	    {
+   	        int x1, x2, x3, x4, y1, y2, y3, y4;
+	        coo_corner(l->p, &x1, &y1, &x2, &y2, &x3, &y3, &x4, &y4);
+	        x2 = (x1 + x2 + x3 + x4) / 4;
+	        y2 = (y1 + y2 + y3 + y4) / 4;
+		if ((x2 - perso->x)*(x2 - perso->x) + (y2 - perso->y)*(y2 - perso->y) < 99 + (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1))
+		    close = 1;
+	    }
+	    else
+	    {
+                int x1, y1;
+		int r = coo_circle(l->p, &x1, &y1);
+		if ((x1 - perso->x)*(x1 - perso->x) + (y1 - perso->y)*(y1 - perso->y) < (99 + r)*r)
+                    close = 1;
+	    }
+	    if (close == 1)
 	    {
 	        c += 1;
 	        position.y += 50;

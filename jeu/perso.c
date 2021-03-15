@@ -160,7 +160,7 @@ void disp_perso_list(struct linked_list *list, struct personnages *moi)
 	    else if (test == 2)
 	    {
 		position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
-                position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 570 - position.h / 1.5;
+                position.y = (parcour->p->y - moi->y) * cos(moi->angle / 57.3) - (parcour->p->x - moi->x) * sin(moi->angle / 57.3) + 570 - position.h;
                 SDL_RenderCopyEx(renderer, affiche, NULL, &position, 0, NULL, 0);
 	    }
         }
