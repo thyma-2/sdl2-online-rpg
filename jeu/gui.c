@@ -112,31 +112,7 @@ void gui_event(struct personnages *perso, struct linked_list *list)
 		if (lettres->y == 1)
 		{
 		    lettres->y = 0;
-		    perso->echange_player[0] = 0;
-                    strcat(perso->echange_player, "none");
-		    if (obj1 != NULL && obj2 != NULL)
-		    {
-			p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
-			perso->i_list = append_in_inventory(obj2->nom, perso->i_list, 1);
-			p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
-			perso->i_list = remove_from_inventory(obj1->nom, perso->i_list, 1);
-			perso->a_bouger = 1;
-			p->a_bouger = 1;
-		    }
-		    else if (obj1 == NULL && obj2 != NULL)
-		    {
-			perso->i_list = append_in_inventory(obj2->nom, perso->i_list, 1);
-		  	p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
-			perso->a_bouger = 1;
-                        p->a_bouger = 1;
-		    }
-		    else if (obj2 == NULL && obj1 != NULL)
-		    {
-			p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
-                        perso->i_list = remove_from_inventory(obj1->nom, perso->i_list, 1);
-			perso->a_bouger = 1;
-                        p->a_bouger = 1;
-		    }
+		    echange_item(perso, p);
 		}
 	    }
 	}
@@ -603,17 +579,17 @@ void menu_inventaire(struct menu *m, struct personnages *perso)
     }
     if (lettres->k1 == 1)
     {
-        exchange_item(0, m->sel_inventaire, perso->i_list);
+        moove_item(0, m->sel_inventaire, perso->i_list);
         lettres->k1 = 0;
     }
     else if (lettres->k2 == 1)
     {
-        exchange_item(1, m->sel_inventaire, perso->i_list);
+        moove_item(1, m->sel_inventaire, perso->i_list);
         lettres->k2 = 0;
     }
     else if (lettres->k3 == 1)
     {
-        exchange_item(2, m->sel_inventaire, perso->i_list);
+        moove_item(2, m->sel_inventaire, perso->i_list);
         lettres->k3 = 0;
     }
     else if (lettres->enter == 1)

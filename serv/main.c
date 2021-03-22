@@ -280,7 +280,7 @@ int main(int argc, char **argv)
         }
 	time = clock();
     	t2 = (float)(time / (CLOCKS_PER_SEC / 1000));
-	if (t2 - t > 15)
+	if (t2 - t > 20)
 	{
 	    t = t2;
             for (int i = 0; i < 100; i++)

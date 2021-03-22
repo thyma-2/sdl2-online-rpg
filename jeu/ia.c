@@ -154,35 +154,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
     {
         struct personnages *p = find_perso_by_name(list, parcour->p->echange_player);
         if (p != NULL)
-        {
-	    struct linked_item *obj1 = get_item_n(parcour->p->item2, parcour->p->i_list);
-	    struct linked_item *obj2 = get_item_n(parcour->p->item1, p->i_list);
-	    parcour->p->echange_player[0] = 0;
-            strcat(parcour->p->echange_player, "none");
-	    if (obj1 != NULL && obj2 != NULL)
-	    {
-	        p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
-                parcour->p->i_list = append_in_inventory(obj2->nom, parcour->p->i_list, 1);
-                p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
-                parcour->p->i_list = remove_from_inventory(obj1->nom, parcour->p->i_list, 1);
-		p->a_bouger = 1;
-                parcour->p->a_bouger = 1;
-	    }
-	    else if (obj1 == NULL && obj2 != NULL)
-	    {
-		parcour->p->i_list = append_in_inventory(obj2->nom, parcour->p->i_list, 1);
-                p->i_list = remove_from_inventory(obj2->nom, p->i_list, 1);
-		p->a_bouger = 1;
-                parcour->p->a_bouger = 1;
-	    }
-	    else if (obj2 == NULL && obj1 != NULL)
-	    {
-		p->i_list = append_in_inventory(obj1->nom, p->i_list, 1);
-                parcour->p->i_list = remove_from_inventory(obj1->nom, parcour->p->i_list, 1);
-	        p->a_bouger = 1;
-		parcour->p->a_bouger = 1;
-	    }
-	}
+	    echange_item(parcour->p, p);
     }
 }
 

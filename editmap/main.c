@@ -119,7 +119,7 @@ int main(void)
     char left = 0;
     int posy = 0;
     int sel = 0;
-    int selcontent = 0;
+    char selcontent = 0;
     int lastsel = 0;
     char lastselcontent = map[0];
     map[0] = 25;
@@ -146,7 +146,7 @@ int main(void)
         }
         position.x = 1150;
 	position.y = 0;
-	position.h = 325;
+	position.h = 350;
 	position.w = 50;
 	SDL_RenderCopy(renderer, textures->menu_textures, NULL, &position);
 	SDL_RenderPresent(renderer);
@@ -210,6 +210,8 @@ int main(void)
 			map = realloc(map, x * y - x);
 			y--;
 		    }
+		    else if (event.motion.y < 350)
+		        fill2(map, x, y, selcontent, lastselcontent, sel);
 		}
 		else if (event.motion.x > 1150)
 		{
@@ -247,6 +249,8 @@ int main(void)
                		    map[y * x + i] = 0;
 			y++;
 		    }
+		    else if (event.motion.y < 350)
+			fill(map, x, y, selcontent, sel);
 		}
 	    }
 	    if (event.button.button == SDL_BUTTON_RIGHT)
@@ -363,4 +367,30 @@ void save(char *map, char *path, int x, int y)
     }
     else
         printf ("we couldnt save\n");
+}
+
+void fill(char *map, int x, int y, char selcontent, int sel)
+{
+    map[sel] = selcontent;
+    if (sel + 1 < x * y && map[sel + 1] != selcontent)
+	fill(map, x, y, selcontent, sel + 1);
+    if (map[sel - 1] != selcontent && sel - 1 >= 0)
+        fill(map, x, y, selcontent, sel - 1);
+    if (map[sel - x] != selcontent && sel - x >= 0)
+	fill(map, x, y, selcontent, sel - x);
+    if (map[sel + x] != selcontent && sel + x < x * y)
+	fill(map, x, y, selcontent, sel + x);
+}
+
+void fill2(char *map, int x, int y, char selcontent, char to_replace, int sel)
+{
+    map[sel] = selcontent;
+    if (sel + 1 < x * y && map[sel + 1] == to_replace)
+        fill2(map, x, y, selcontent, to_replace, sel + 1);
+    if (map[sel - 1] == to_replace && sel - 1 >= 0)
+        fill2(map, x, y, selcontent, to_replace, sel - 1);
+    if (map[sel - x] == to_replace && sel - x >= 0)
+        fill2(map, x, y, selcontent, to_replace, sel - x);
+    if (map[sel + x] == to_replace && sel + x < x * y)
+        fill2(map, x, y, selcontent, to_replace, sel + x);
 }

@@ -1,4 +1,5 @@
-2 217 none 420.304626 1247.301025 -33.628242 956.332825 360 0 -1 tour none thyma none n region1 y [] [] thyma 2 2 [] 2 10
-1 11 none 876.290039 308.822906 0.000000 431.441925 164 0 632051 fantassin berk thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 1 2 [] 6 10
-0 11 thyma 477.019592 876.462585 -1.000000 1431.253174 330 0 3024474 fantassin thyma thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 1 2 [] 14 10
-4 100 none 498.067780 849.543945 1447.007446 675.843811 77 0 3353165 ship1 none thyma none n region1 y [] [] none 1 2 [] 2 10
+2 217 none 525.000000 350.000000 -33.628242 956.332825 360 0 -1 tour none thyma none n region1 y [] [] thyma 2 2 [] 3 -1963
+1 11 none 691.290039 356.822876 0.000000 431.441925 164 0 395807 fantassin berk thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 1 2 [] 19 10
+0 11 plomi 1012.753784 208.629837 -1.000000 1431.253174 64 0 2540380 fantassin plomi thyma none n region1 y [] [epee 1 Protections_de_cuir 1 epee 1] none 3 3 [] 5 10
+4 100 none 1172.915894 118.303101 1141.384644 4.639267 46 0 3353165 ship1 none thyma none n region1 y [] [Protections_de_cuir 1 Protections_de_cuir 1] none 1 2 [] 18 10
+3 11 thyma 905.961182 375.343140 -1.000000 1431.253174 35 0 2408475 civil thyma thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 2 2 [] 4 -81

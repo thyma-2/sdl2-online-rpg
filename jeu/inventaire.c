@@ -69,12 +69,37 @@ struct linked_item *append_in_inventory(char *name, struct linked_item *p, int n
 }
 
 
+struct linked_item *del(struct linked_item *root, struct linked_item *to_del)
+{
+    struct linked_item *p;
+    if (root == to_del)
+    {
+	p = root->next;
+	free(root);
+	return p;
+    }
+    p = root;
+    while (p->next != NULL)
+    {
+	if (p->next == to_del)
+	{
+	    p->next = to_del->next;
+	    free(to_del);
+	    return root;
+	}
+	p = p->next;
+    }
+    return root;
+}
+
 //on suppose que le personnage possède ce qu'on lui retire (sinon on crash)
 struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int n)
 {
-    while (n > 0)
+    while (n > 0 && p != NULL)
     {
 	struct linked_item *a = exist_in_linked_item(p, name);
+	if (a == NULL)
+	    return p;
 	if (a->count > n)
 	{
 	    a->count -= n;
@@ -83,37 +108,13 @@ struct linked_item *remove_from_inventory(char *name, struct linked_item *p, int
 	else
 	{
 	    n -= a->count;
-	    struct linked_item *ret = p;
-	    struct linked_item *prev;
-	    if (strcmp(p->nom, name) == 0)
-	    {
-		ret = p->next;
-		free(p);
-		return ret;
-	    }
-	    while (p->next != NULL)
-	    {
-		prev = p;
-		p = p->next;
-		if (strcmp(p->nom, name) == 0)
-		{
-		    prev->next = p->next;
-		    free(p);
-		    return ret;
-		}
-	    }
-	    if (strcmp(p->nom, name) == 0)
-	    {
-		prev->next = NULL;
-		free(p);
-		return ret;
-	    }
+            p = del(p, a);
 	}
     }
     return p;
 }
 
-void exchange_item(int a, int b, struct linked_item *l)
+void moove_item(int a, int b, struct linked_item *l)
 {
     struct linked_item *sa = NULL;
     struct linked_item *sb = NULL;
@@ -181,5 +182,40 @@ void free_linked_item(struct linked_item *e)
     {
         free_linked_item(e->next);
         free(e);
+    }
+}
+
+void echange_item(struct personnages *perso1, struct personnages *perso2)
+{
+    struct linked_item *obj1 = get_item_n(perso1->item2, perso1->i_list); //le tiens
+    struct linked_item *obj2 = get_item_n(perso1->item1, perso2->i_list);
+    printf ("%s %s\n", obj1->nom, obj2->nom);
+    perso1->echange_player[0] = 0;
+    strcat(perso1->echange_player, "none");
+    if (obj1 != NULL && obj2 != NULL)
+    {
+	printf ("%s %s 1\n", perso1->nom, perso2->nom);
+	perso2->i_list = append_in_inventory(obj1->nom, perso2->i_list, 1);
+        perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
+        perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
+        perso1->i_list = remove_from_inventory(obj1->nom, perso1->i_list, 1);
+        perso1->a_bouger = 1;
+        perso2->a_bouger = 1;
+    }
+    else if (obj1 == NULL && obj2 != NULL)
+    {
+	printf ("%s %s 2\n", perso1->nom, perso2->nom);
+        perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
+        perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
+        perso1->a_bouger = 1;
+        perso2->a_bouger = 1;
+    }
+    else if (obj2 == NULL && obj1 != NULL)    
+    {
+	printf ("%s %s 3\n", perso1->nom, perso2->nom);
+        perso2->i_list = append_in_inventory(obj1->nom, perso2->i_list, 1);
+        perso1->i_list = remove_from_inventory(obj1->nom, perso1->i_list, 1);
+        perso1->a_bouger = 1;
+        perso2->a_bouger = 1;
     }
 }
