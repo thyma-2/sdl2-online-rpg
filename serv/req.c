@@ -20,7 +20,7 @@ char handle_req(int socket, struct personnages *list, int *movedObj)
 			int size = atoi(&buffer[5]);
 			if (size > 0)
 			{
-				buffer = realloc(buffer, size + 3);
+				buffer = realloc(buffer, size + 2);
 				int res  = 0;
 				char *pos_buf = buffer;
 				while (res < size)
@@ -35,6 +35,8 @@ char handle_req(int socket, struct personnages *list, int *movedObj)
 					buffer = buffer + tmp;
 				}
 				buffer = pos_buf;
+				buffer[size] = 0;
+				buffer[size + 1] = 0;
 				while (*buffer != 0)
 				{
 					int id = get_id(buffer);

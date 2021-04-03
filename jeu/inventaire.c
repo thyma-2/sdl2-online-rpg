@@ -185,16 +185,25 @@ void free_linked_item(struct linked_item *e)
     }
 }
 
+void print(struct linked_item *e)
+{
+    if (e != NULL)
+    {
+	printf ("%s ", e->nom);
+	print(e->next);
+    }
+    else
+        putchar('\n');
+}
+
 void echange_item(struct personnages *perso1, struct personnages *perso2)
 {
     struct linked_item *obj1 = get_item_n(perso1->item2, perso1->i_list); //le tiens
     struct linked_item *obj2 = get_item_n(perso1->item1, perso2->i_list);
-    printf ("%s %s\n", obj1->nom, obj2->nom);
     perso1->echange_player[0] = 0;
     strcat(perso1->echange_player, "none");
     if (obj1 != NULL && obj2 != NULL)
     {
-	printf ("%s %s 1\n", perso1->nom, perso2->nom);
 	perso2->i_list = append_in_inventory(obj1->nom, perso2->i_list, 1);
         perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
         perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
@@ -204,7 +213,6 @@ void echange_item(struct personnages *perso1, struct personnages *perso2)
     }
     else if (obj1 == NULL && obj2 != NULL)
     {
-	printf ("%s %s 2\n", perso1->nom, perso2->nom);
         perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
         perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
         perso1->a_bouger = 1;
@@ -212,7 +220,6 @@ void echange_item(struct personnages *perso1, struct personnages *perso2)
     }
     else if (obj2 == NULL && obj1 != NULL)    
     {
-	printf ("%s %s 3\n", perso1->nom, perso2->nom);
         perso2->i_list = append_in_inventory(obj1->nom, perso2->i_list, 1);
         perso1->i_list = remove_from_inventory(obj1->nom, perso1->i_list, 1);
         perso1->a_bouger = 1;

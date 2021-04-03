@@ -6,18 +6,17 @@ void ia(struct linked_list *list, char *array)
     {
         if (strcmp(parcour->p->nom_de_compte, "none") == 0)
         {
-	    if (strncmp(parcour->p->skin, "ship", 4) == 0)
-		ia_ship(list, parcour);
-	    else if (strcmp(parcour->p->skin, "chateau") == 0 || strcmp(parcour->p->skin, "tour") == 0)
-		;
-		//ia_build(list, ordres);
-	    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
-		ia_arbre(list, parcour);
-	    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
-		ia_fruit(list, parcour, array);
-	    else
-		ia_man(list, parcour, array);
-	}
+	    	if (strncmp(parcour->p->skin, "ship", 4) == 0)
+				ia_ship(list, parcour);
+		    else if (strcmp(parcour->p->skin, "chateau") == 0 || strcmp(parcour->p->skin, "tour") == 0)
+				ia_build(list, parcour);
+		    else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
+				ia_arbre(list, parcour);
+		    else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
+				ia_fruit(list, parcour, array);
+		    else
+				ia_man(list, parcour, array);
+		}
     }
 }
 
@@ -48,7 +47,7 @@ void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *groun
             append_perso(list, &line);
             struct personnages *p = get_ptr_from_id(s, list);
             p->a_bouger = 1;
-	}
+		}
     }
     else
         parcour->p->faim -= 1;
@@ -59,10 +58,10 @@ void ia_arbre(struct linked_list *list, struct linked_list *parcour)
     if (parcour->p->faim < 0)
     {
         parcour->p->a_bouger = 1;
-	parcour->p->faim = 100000;
-	char *line = malloc(1000);
-	char *s = line;
-	line[0] = 0;
+		parcour->p->faim = 100000;
+		char *line = malloc(1000);
+		char *s = line;
+		line[0] = 0;
         strcat(line, "-1 1 none ");
         char tmpI[20];
         tmpI[0] = 0;
@@ -73,12 +72,22 @@ void ia_arbre(struct linked_list *list, struct linked_list *parcour)
         sprintf (tmpI, "%f", parcour->p->y + rand() % 100 - rand() % 100 + 153);
         strcat(line, tmpI);
         strcat(line, " 0 0 0 0 100000 fruit none none none none region1 n [] [] none 0 0 [] 0 0");
-	append_perso(list, &line);
-	struct personnages *p = get_ptr_from_id(s, list);
-	p->a_bouger = 1;
+		append_perso(list, &line);
+		struct personnages *p = get_ptr_from_id(s, list);
+		p->a_bouger = 1;
     }
     else
         parcour->p->faim -= 1;
+}
+
+void ia_build(struct linked_list *list, struct linked_list *parcour)
+{
+	if (strcmp(parcour->p->echange_player, "none") != 0)
+    {
+        struct personnages *p = find_perso_by_name(list, parcour->p->echange_player);
+        if (p != NULL)
+        echange_item(parcour->p, p);
+    }
 }
 
 void ia_ship(struct linked_list *list, struct linked_list *parcour)

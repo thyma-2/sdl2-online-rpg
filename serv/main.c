@@ -261,10 +261,13 @@ int main(int argc, char **argv)
 		if (t2 - t > 20)
 		{
 			t = t2;
+			char *order = calloc(100000, 1);
+			int size = generate_order(list, movedObj, order);
 			for (struct linked_client *client = ingame_client; client != NULL; client=client->next)
-				send_order(client->socket, list, movedObj);
+				send(client->socket, order, size + 20, MSG_NOSIGNAL);
 			for (int i = 0; i < 400; i++)
 				movedObj[i] = -1;
+			free(order);
 		}
 		list = remove_perso(list);
 		save++;

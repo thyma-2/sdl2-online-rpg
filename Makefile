@@ -8,7 +8,7 @@ j:
 	gcc ${cflags} jeu/main.c $(jfiles) -o empireExpense -Bstatic -lSDL2 -lSDL2_mixer -Bdynamic -Wl,--no-undefined -lm -ldl -lasound -lm -ldl -lpthread -lpulse-simple -lpulse -lsndio -lX11 -lXext -lXcursor -lXinerama -lXi -lXrandr -lXss -lXxf86vm -lwayland-egl -lwayland-client -lwayland-cursor -lxkbcommon -lpthread -lrt
 
 s:
-	gcc $(cflags) serv/main.c $(sfiles) -o serveur
+	gcc $(cflags) serv/main.c $(sfiles) -lpthread -o serveur
 
 satan:
 	gcc ${cflags} -fsanitize=address jeu/main.c $(jfiles) -o empireExpense -lSDL2 -lm

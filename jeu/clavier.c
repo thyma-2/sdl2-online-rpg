@@ -37,7 +37,7 @@ void text_input(char *text, unsigned int limite)
 void gestion_touche(void)
 {
     SDL_Event event;
-    SDL_EventState(SDL_KEYDOWN, SDL_ENABLE);
+    //SDL_EventState(SDL_KEYDOWN, SDL_ENABLE);
     SDL_WaitEventTimeout(&event, 10);
     if (event.type == SDL_KEYDOWN)
     {
@@ -236,5 +236,5 @@ void gestion_touche(void)
         SDL_Quit();
         exit(0);
     }
-    SDL_EventState(SDL_KEYDOWN, SDL_IGNORE);
+   // SDL_EventState(SDL_KEYDOWN, SDL_IGNORE);
 }

@@ -7,12 +7,39 @@
 #include <netinet/in.h>
 #define size_order 2000
 
+struct linked_list
+{
+    struct personnages *p;
+    struct linked_list *next;
+};
+
 struct personnages
 {
     int id;
     int pv;
     char nom_de_compte[50];
-    char tout_le_reste[1940];
+    float x;
+    float y;
+    float ordrex;
+    float ordrey;
+    int angle;
+    int timer_dom;
+    int faim;
+    char skin[50];
+    char nom[50];
+    char nom_superieur[50];
+    char titre[50];
+    char religion[50];
+    char region[50];
+    char est_chef;
+    char *e_list;
+    char *i_list;
+    char echange_player[50];
+    int item1;
+    int item2;
+    char speak[90];
+    int animation;
+    int animation_r;
     struct personnages *next;
 };
 
@@ -22,6 +49,6 @@ struct personnages *init_map(void);
 void send_map(int socket, struct personnages *list);
 struct personnages *get_ptr_from_id(int id, struct personnages *list);
 int get_id(char *line);
-void send_order(int socket, struct personnages *list, int *movedObj);
+int generate_order(struct personnages *list, int *movedObj, char *ret);
 void append_enemi(char *name, struct personnages *p);
 struct personnages *remove_perso(struct personnages *list);

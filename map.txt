@@ -1,10 +1,3 @@
-2 217 none 525.000000 350.000000 -33.628242 956.332825 360 0 -1 tour none thyma none n region1 y [] [] thyma 2 2 [] 14 10
-1 1 none 691.290039 356.822876 0.000000 431.441925 164 0 -1 fantassin berk thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 1 2 [] 6 10
-0 11 plomi 1517.199097 184.662964 -1.000000 1431.253174 104 0 2540380 fantassin plomi thyma none n region1 y [] [epee 1 Protections_de_cuir 1 epee 1] none 3 3 [] 1 10
-4 100 none 1455.496704 98.189667 1574.514526 485.389130 166 0 3353165 ship1 none thyma none n region1 y [] [] none 1 1 [] 5 10
-3 11 thyma 1536.621704 104.230240 -1.000000 1431.253174 241 0 1930523 fantassin thyma thyma none n region1 y [] [epee 1 Protections_de_cuir 1] none 2 2 [] 9 10
-0
-
-
- 10
-tions_de_cuir 1] none 2 2 [] 10 10
+1 11 thyma 963.682373 568.490723 -1.000000 0.000000 268 0 973522 fantassin thyma thyma none none region1 y [test 1] [epee 1 Protections_de_cuir 1] none 1 1 [] 4 -15
+2 800 none 450.000000 450.000000 -1.000000 0.000000 360 0 0 tour none thyma none none region1 n [] [epee 1] none 1 1 [] 15 10918888
+3 800 none 1057.365356 223.970551 1638.687988 234.635056 91 0 0 ship1 none thyma none none region1 n [] [] none 2 1 [] 0 1004141_cuir 1] none 2 2 [] 10 -323258
