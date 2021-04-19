@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "perso.h"
+#include "net.h"
 #include "map_op.h"
 #include "req.h"
 #include "utile.h"
@@ -59,24 +60,8 @@ void cut(char *str, char cutter)
 	}
 }
 
-char *load_ground(size_t *size)
-{
-	FILE *f = fopen("gmap.txt", "rb");
-	fseek(f, 0, SEEK_END);
-	size_t fsize = ftell(f);
-	fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-
-	char *source = malloc(fsize + 1);
-	fread(source, 1, fsize, f);
-	fclose(f);
-	*size = fsize;
-	source[fsize] = 0;
-	return source;
-}
-
 int main(int argc, char **argv)
 {
-	int movedObj[400] = {-1};
 	clock_t time = clock();
 	float t = (float)(time / CLOCKS_PER_SEC);
 	float t2;
@@ -86,10 +71,29 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	size_t len_of_ground;
-	char *ground = load_ground(&len_of_ground);
-	if (ground == NULL)
+	FILE *f = fopen("ground.txt", "rb");
+	if (f == NULL)
+	{
 		fputs("connot open gmap.txt", stderr);
+		exit(0);
+	}
+
+    fseek(f, 0, SEEK_END);
+	size_t size_ground = ftell(f);
+    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+    size_t sizeline = 0;
+	while (fgetc(f) != '\n')
+    	sizeline++;
+	size_ground -= sizeline;
+    char *ground = malloc(size_ground);
+    char *spawn = malloc(sizeline);
+    fseek(f, 0, SEEK_SET);
+    fread(spawn, sizeline, 1, f);
+    fseek(f, sizeline + 1, SEEK_SET);
+    fread(ground, size_ground, 1, f);
+    fclose(f);
+    ground[size_ground] = 0;
+    spawn[sizeline] = 0;
 
 	struct personnages *list = init_map();
 	struct linked_client *unlog_client = NULL;
@@ -169,7 +173,7 @@ int main(int argc, char **argv)
 						send(client->socket, &boolrep, 1, MSG_NOSIGNAL);
 						send_map(client->socket, list);
 						ingame_client = append_linked(ingame_client, client->socket, client->name);
-						send_background(client->socket, ground, len_of_ground);
+						send_background(client->socket, ground, size_ground);
 						logged_client = remove_linked(logged_client, client->socket);
 					}
 					else
@@ -189,41 +193,23 @@ int main(int argc, char **argv)
 					{
 						char *line = malloc(1000);
 						char tmp[20];
-						line[0] = 0;
 						tmp[0] = 0;
 						int id = find_smalest_valid_id(list, 0);
 						sprintf (tmp, "%d", id); 
-						strcat(line, tmp);
+						strcpy(line, tmp);
 						strcat(line, " 10 ");
 						strcat(line, client->name);
-						strcat(line, " 10 10 -1 0 0 0 civil ");
-						int k = 1;
-						int j = strlen(line);
-						while (buffer[k] != ' ')
-						{
-							line[j] = buffer[k];
-							k++;
-							j++;
-						}
-						line[j] = 0;
-						strcat(line, " none none ");
-						j += 12;
-						k++;
-						while (buffer[k] != 0)
-						{
-							line[j] = buffer[k];
-							k++;
-							j++;
-						}
-						line[j] = 0;
-						strcat (line, " n [] []none 0 0 []");
+						strcat(line, " ");
+						strcat(line, spawn);
+						strcat(line, " -1 0 0 0 1000000 civil ");
+						strcat(line, client->name);
+						strcat(line, " none none none region1 n [] [] none 0 0 [] 0 0 ");
 						append_perso(&line, list);
-						append(movedObj, id, 400);
 						boolrep = 'o';
 						send(client->socket, &boolrep, 1,MSG_NOSIGNAL);
 						send_map(client->socket, list);
 						ingame_client = append_linked(ingame_client, client->socket, client->name);
-						send_background(client->socket, ground, len_of_ground);
+						send_background(client->socket, ground, size_ground);
 						logged_client = remove_linked(logged_client, client->socket);
 					}
 				}
@@ -244,7 +230,7 @@ int main(int argc, char **argv)
 		while (client != NULL)
 		{
 			next = next->next;
-			int afk = handle_req(client->socket, list, movedObj);
+			int afk = handle_req(client->socket, list);
 			if (afk == 1)
 				client->afk_timmer += 1;
 			else
@@ -262,11 +248,9 @@ int main(int argc, char **argv)
 		{
 			t = t2;
 			char *order = calloc(100000, 1);
-			int size = generate_order(list, movedObj, order);
+			int size = generate_order(list, order);
 			for (struct linked_client *client = ingame_client; client != NULL; client=client->next)
 				send(client->socket, order, size + 20, MSG_NOSIGNAL);
-			for (int i = 0; i < 400; i++)
-				movedObj[i] = -1;
 			free(order);
 		}
 		list = remove_perso(list);

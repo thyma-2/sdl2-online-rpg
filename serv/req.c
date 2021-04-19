@@ -10,7 +10,7 @@ void send_background(int socket,char *map, size_t size_map)
 }
 
 
-char handle_req(int socket, struct personnages *list, int *movedObj)
+char handle_req(int socket, struct personnages *list)
 {
 	char *buffer = calloc(20, 1);
 	if (recv(socket, buffer, 20, 0) > 0)
@@ -46,14 +46,15 @@ char handle_req(int socket, struct personnages *list, int *movedObj)
 						int id = find_smalest_valid_id(list, 0);
 						struct personnages *yalist = get_ptr_from_id(-1, list);
 						yalist->id = id;
-						append(movedObj, id, 400);
 					}
 					else
 					{
-						append(movedObj, id, 400);
 						struct personnages *yalist = get_ptr_from_id(id, list);
 						if (yalist != NULL)
+						{
+							cp_original(yalist, 0);
 							buffer += parse_order(yalist, buffer) + 1;
+						}
 					}
 				}
 				buffer = pos_buf;

@@ -296,10 +296,10 @@ void fix_some_shit(struct linked_list *list)
 {
     while(list != NULL)
     {
-	if (list->p->angle < 1)
-	    list->p->angle = 360;
-	else if (list->p->angle > 360)
-	    list->p->angle = 1;
-	list = list->next;
+		if (list->p->angle < 1)
+	    	list->p->angle = 360;
+		else if (list->p->angle > 360)
+		    list->p->angle = 1;
+		list = list->next;
     }
 }

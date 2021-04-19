@@ -138,15 +138,15 @@ char *actualise_array(char *array, struct linked_list *list)
     int s = max_x * max_y + 1;
     char *array_cp = malloc(s);
     for (int i = 0; i < s; i++)
-	array_cp[i] = array[i];
+		array_cp[i] = array[i];
     for (struct linked_list *ll = list; ll != NULL; ll = ll->next)
     {
-	if (strcmp(ll->p->skin, "arbre1") == 0)
-	{
-	    int xx = ((int)round(ll->p->x) - (int)round(ll->p->x) % 25) / 25;
-	    int yy = ((int)round(ll->p->y) - (int)round(ll->p->y) % 25) / 25;
-	    array_cp[yy * max_x + xx] = -3;
-	}
+		if (strcmp(ll->p->skin, "arbre1") == 0)
+		{
+		    int xx = ((int)round(ll->p->x) - (int)round(ll->p->x) % 25) / 25;
+		    int yy = ((int)round(ll->p->y) - (int)round(ll->p->y) % 25) / 25;
+		    array_cp[yy * max_x + xx] = -3;
+		}
     }
     return array_cp;
 }
@@ -154,35 +154,35 @@ char *actualise_array(char *array, struct linked_list *list)
 int findpath(struct personnages *p, char *array)
 {
     if (p->y >= 25 * (max_y - 2))
-	return 360;
+		return 360;
     if (p->y <= 25)
-	return 180;
+		return 180;
     if (p->x <= 25)
-	return 90;
+		return 90;
     if (p->x >= 25 * (max_x - 1))
-	return 270;
+		return 270;
 
     int s = max_x * max_y;
     int x;
     int y;
     if (p->angle == 90)
     {
-	x = ((int)round(p->x - 6) - (int)round(p->x - 6) % 25) / 25;
+		x = ((int)round(p->x - 6) - (int)round(p->x - 6) % 25) / 25;
         y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
     if (p->angle == 270)
     {
-	x = ((int)round(p->x + 6) - (int)round(p->x + 6) % 25) / 25;
+		x = ((int)round(p->x + 6) - (int)round(p->x + 6) % 25) / 25;
         y = ((int)round(p->y) - (int)round(p->y) % 25) / 25;
     }
     if (p->angle == 360 || p->angle == 0)
     {
-	x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
+		x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
         y = ((int)round(p->y + 1) - (int)round(p->y + 1) % 25) / 25;
     }
     if (p->angle == 180)
     {
-	x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
+		x = ((int)round(p->x) - (int)round(p->x) % 25) / 25;
         y = ((int)round(p->y - 36) - (int)round(p->y - 36) % 25) / 25;
     }
     int src = (y + 1) * max_x + x;
@@ -221,13 +221,13 @@ int findpath(struct personnages *p, char *array)
 	        while (srcs != p->chemin[src].prev)
 	            src = p->chemin[src].prev;
 	        if (srcs - max_x == src)
-		    return 360;
+			    return 360;
 	        if (srcs + 1 == src)
-		    return 90;
+			    return 90;
 	        if (srcs + max_x == src)
-		    return 180;
+			    return 180;
 	        if (srcs - 1 == src)
-		    return 270;
+			    return 270;
  	    }
 	    else
                 p->chemin[src].already = 1;

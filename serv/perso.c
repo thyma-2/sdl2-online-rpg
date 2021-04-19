@@ -23,8 +23,11 @@ int parse_order(struct personnages *list, char *line)
 {
 	int i = 0;
 	int j = 0;
+	int tmpint;
+	float tmpfloat;
 	char tmpI[10];
 	char tmpF[30];
+	char tmpC[90];
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -32,7 +35,9 @@ int parse_order(struct personnages *list, char *line)
 		i++;
 	}
 	tmpI[j] = 0;
-	list->id = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (list->original->id != tmpint)
+		list->id = tmpint;
 	i++;
 	j = 0;
 	while (line[i] != ' ')
@@ -44,14 +49,18 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	i++;
-	list->pv = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (list->original->id != tmpint)
+		list->pv = tmpint;
 	while (line[i] != ' ')
 	{
-		list->nom_de_compte[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->nom_de_compte[j] = 0;
+	tmpC[j] = 0;
+	if (strcmp(list->original->nom_de_compte, tmpC) != 0)
+		strcpy(list->nom_de_compte, tmpC);
 	i++;
 	j = 0;
 	while (line[i] != ' ')
@@ -62,7 +71,9 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->x = atof(tmpF);
+	tmpfloat = atof(tmpF);
+	if (list->original->x != tmpfloat)
+		list->x = tmpfloat;
 	i++;
 	while (line[i] != ' ')
 	{
@@ -72,7 +83,9 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->y = atof(tmpF);
+	tmpfloat = atof(tmpF);
+	if (tmpfloat != list->original->y)
+		list->y = tmpfloat;
 	i++;
 	while (line[i] != ' ')
 	{
@@ -82,7 +95,9 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->ordrex = atof(tmpF);
+	tmpfloat = atof(tmpF);
+	if (tmpfloat != list->original->ordrex)
+		list->ordrex = tmpfloat;
 	i++;
 	while (line[i] != ' ')
 	{
@@ -92,7 +107,9 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->ordrey = atof(tmpF);
+	tmpfloat = atof(tmpF);
+	if (tmpfloat != list->original->ordrey)
+		list->ordrey = tmpfloat;
 	i++;
 	while (line[i] != ' ')
 	{
@@ -103,7 +120,9 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	i++;
-	list->angle = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (tmpint != list->original->angle)
+		list->angle = tmpint;
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -113,7 +132,9 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	i++;
-	list->timer_dom = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (tmpint != list->original->timer_dom)
+		list->timer_dom = tmpint;
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -123,60 +144,75 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	i++;
-	list->faim = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (tmpint != list->original->faim)
+		list->faim = tmpint;
 	while (line[i] != ' ')
 	{
-		list->skin[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->skin[j] = 0;
+	tmpC[j] = 0;
+	if (strcmp(tmpC, list->original->skin) != 0)
+		strcpy(list->skin, tmpC);
 	j = 0;
 	i++;
 	while (line[i] != ' ')
 	{
-		list->nom[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->nom[j] = 0;
+	tmpC[j] = 0;
 	j = 0;
 	i++;
+	if (strcmp(tmpC, list->original->nom) != 0)
+		strcpy(list->nom, tmpC);
 	while (line[i] != ' ')
 	{
-		list->nom_superieur[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->nom_superieur[j] = 0;
+	tmpC[j] = 0;
 	j = 0;
 	i++;
+	if (strcmp(tmpC, list->original->nom_superieur) != 0)
+		strcpy(list->nom_superieur, tmpC);
 	while (line[i] != ' ')
 	{
-		list->titre[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->titre[j] = 0;
+	tmpC[j] = 0;
 	j = 0;
 	i++;
+	if (strcmp(tmpC, list->original->titre) != 0)
+		strcpy(list->titre, tmpC);
 	while (line[i] != ' ')
 	{
-		list->religion[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->religion[j] = 0;
+	tmpC[j] = 0;
 	j = 0;
 	i++;
+	if (strcmp(tmpC, list->original->religion) != 0)
+		strcpy(list->religion, tmpC);
 	while (line[i] != ' ')
 	{
-		list->region[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->region[j] = 0;
-	list->est_chef = line[i + 1];
+	tmpC[j] = 0;
+	if (strcmp(tmpC, list->original->region) != 0)
+		strcpy(list->region, tmpC);
+	if (list->original->est_chef != line[i + 1])
+		list->est_chef = line[i + 1];
 	i += 3;
 	j = 0;
 	while (line[i] != ']')
@@ -184,9 +220,12 @@ int parse_order(struct personnages *list, char *line)
 		i += 1;
 		j += 1;
 	}
-	list->e_list = realloc(list->e_list, j + 2);
-	list->e_list[0] = 0;
-	strncat(list->e_list, &line[i - j], j + 1);
+	if (strncmp(&line[i - j], list->original->e_list, j + 1) != 0)
+	{
+		list->e_list = realloc(list->e_list, j + 2);
+		strncpy(list->e_list, &line[i -j], j + 1);
+		list->e_list[j + 1] = 0;
+	}
 	i += 2;
 	j = 0;
 	while (line[i] != ']')
@@ -194,18 +233,23 @@ int parse_order(struct personnages *list, char *line)
 		i += 1;
 		j += 1;
 	}
-	list->i_list = realloc(list->i_list, j + 2);
-	list->i_list[0] = 0;
-	strncat(list->i_list, &line[i - j], j + 1);
+	if (strncmp(&line[i - j], list->original->i_list, j + 1) != 0)
+    {
+        list->i_list = realloc(list->i_list, j + 2);
+        strncpy(list->i_list, &line[i -j], j + 1);
+		list->i_list[j + 1] = 0;
+    }
 	i += 2;
 	j = 0;
 	while (line[i] != ' ')
 	{
-		list->echange_player[j] = line[i];
+		tmpC[j] = line[i];
 		j++;
 		i++;
 	}
-	list->echange_player[j] = 0;
+	tmpC[j] = 0;
+	if (strcmp(tmpC, list->original->echange_player) != 0)
+        strcpy(list->echange_player, tmpC);
 	i++;
 	j = 0;
 	while (line[i] != ' ')
@@ -217,7 +261,9 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	i++;
-	list->item1 = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (list->original->item1 != tmpint)
+		list->item1 = tmpint;
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -225,18 +271,22 @@ int parse_order(struct personnages *list, char *line)
 		j++;
 	}
 	tmpI[j] = 0;
-	list->item2 = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (list->original->item2 != tmpint)
+		list->item2 = tmpint;
 	i += 2;
 	j = 0;
 	while (line[i] != ']')
 	{
-		list->speak[j] = line[i];
+		tmpC[j] = line[i];
 		i++;
 		j++;
 	}
-	list->speak[j] = 0;
+	tmpC[j] = 0;
 	i += 2;
 	j = 0;
+	if (strcmp(tmpC, list->original->speak) != 0)
+		strcpy(list->speak, tmpC);
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -246,7 +296,9 @@ int parse_order(struct personnages *list, char *line)
 	i++;
 	tmpI[j] = 0;
 	j = 0;
-	list->animation = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (tmpint != list->original->animation)
+		list->animation = tmpint;
 	while (line[i] != 0 && line[i] != '\n')
 	{
 		tmpI[j] = line[i];
@@ -254,7 +306,9 @@ int parse_order(struct personnages *list, char *line)
 		i++;
 	}
 	tmpI[j] = 0;
-	list->animation_r = atoi(tmpI);
+	tmpint = atoi(tmpI);
+	if (tmpint != list->original->animation_r)
+		list->animation_r = tmpint;
 	return i;
 }
 
@@ -265,6 +319,7 @@ struct personnages *append_perso(char **line, struct personnages *list)
 		list = malloc(sizeof(struct personnages));
 		list->e_list = NULL;
 		list->i_list = NULL;
+		cp_original(list, 1);
 		int a = parse_order(list, *line);
 		*line = *line + a;
 		list->next = NULL;
@@ -276,6 +331,7 @@ struct personnages *append_perso(char **line, struct personnages *list)
 			struct personnages *n = malloc(sizeof(struct personnages));
 			n->e_list = NULL;
 			n->i_list = NULL;
+			cp_original(n, 1);
 			int a = parse_order(n, *line);
 			*line = *line + a;
 			list->next = n;
@@ -285,102 +341,6 @@ struct personnages *append_perso(char **line, struct personnages *list)
 			append_perso(line, list->next);
 	}
 	return list;
-}
-
-void send_map(int socket, struct personnages *list)
-{
-	char order[100000];
-	order[0] = 0;
-	char tmp[20] = "\0";
-	while (list)
-	{
-		sprintf (tmp, "%d", list->id);
-		strcat(order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->pv);
-		strcat(order, tmp);
-		strcat(order, " ");
-		strcat(order, list->nom_de_compte);
-		strcat(order, " ");
-		tmp[0] = 0;
-		sprintf(tmp, "%f", list->x);
-		strcat(order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf(tmp, "%f", list->y);
-		strcat(order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf(tmp, "%f", list->ordrex);
-		strcat(order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf(tmp, "%f", list->ordrey);
-		strcat(order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->angle);
-		strcat (order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->timer_dom);
-		strcat (order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->faim);
-		strcat (order, tmp);
-		strcat(order , " ");
-		strcat(order, list->skin);
-		strcat(order, " ");
-		strcat(order, list->nom);
-		strcat(order , " ");
-		strcat(order, list->nom_superieur);
-		strcat(order , " ");
-		strcat(order, list->titre);
-		strcat(order , " ");
-		strcat(order, list->religion);
-		strcat(order, " ");
-		strcat(order, list->region);
-		if (list->est_chef == 'y')
-			strcat(order, " y ");
-		else
-			strcat(order, " n ");
-		strcat(order, list->e_list);
-		strcat(order, " ");
-		strcat(order, list->i_list);
-		strcat(order, " ");
-		strcat(order, list->echange_player);
-		strcat(order, " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->item1);
-		strcat (order, tmp);
-		strcat(order , " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->item2);
-		strcat (order, tmp);
-		strcat (order, " [");
-		strcat (order, list->speak);
-		strcat (order, "] ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->animation);
-		strcat (order, tmp);
-		strcat (order, " ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->animation_r);
-		strcat (order, tmp);
-		if (list->next != NULL)
-			strcat(order, "\n");
-		list = list->next;
-	}
-	tmp[0] = 0;
-	int s = strlen(order);
-	if (s > 0)
-	{
-		sprintf (tmp, "%d", s);
-		send(socket, tmp, 20, MSG_NOSIGNAL);
-		send(socket, order, s, MSG_NOSIGNAL);
-	}
 }
 
 int get_id(char *line)
@@ -408,112 +368,6 @@ struct personnages *get_ptr_from_id(int id, struct personnages *list)
 	return NULL;
 }
 
-int in_list(int *list, int id, int size)
-{
-	int i = 0;
-	while (i < size)
-	{
-		if (list[i] == id)
-			return 1;
-		i++;
-	}
-	return -1;
-}
-
-int generate_order(struct personnages *list, int *moveObj, char *ret)
-{
-	char *order = &ret[20];	
-	char tmp[20] = "\0";
-	while (list != NULL)
-	{
-		if (in_list(moveObj, list->id, 400) == 1)
-		{
-			sprintf(tmp, "%d", list->id);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%d", list->pv);
-			strcat(order, tmp);
-			strcat(order, " ");
-			strcat(order, list->nom_de_compte);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->x);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->y);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->ordrex);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->ordrey);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->angle);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->timer_dom);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->faim);
-			strcat (order, tmp);
-			strcat(order , " ");
-			strcat(order, list->skin);
-			strcat(order, " ");
-			strcat(order, list->nom);
-			strcat(order , " ");
-			strcat(order, list->nom_superieur);
-			strcat(order , " ");
-			strcat(order, list->titre);
-			strcat(order , " ");
-			strcat(order, list->religion);
-			strcat(order, " ");
-			strcat(order, list->region);
-			if (list->est_chef == 'y')
-				strcat(order, " y ");
-			else
-				strcat(order, " n ");
-			strcat(order, list->e_list);
-			strcat(order, " ");
-			strcat(order, list->i_list);
-			strcat(order, " ");
-			strcat(order, list->echange_player);
-			strcat(order, " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->item1);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->item2);
-			strcat (order, tmp);
-			strcat (order, " [");
-			strcat (order, list->speak);
-			strcat (order, "] ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->animation);
-			strcat (order, tmp);
-			strcat (order, " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->animation_r);
-			strcat (order, tmp);
-			if (list->next != NULL)
-				strcat(order, "\n");
-		}
-		list = list->next;
-	}
-	tmp[0] = 0;
-	int s = strlen(order);
-	sprintf (ret, "%d", s);
-	return s;
-}
-
 struct personnages *remove_perso(struct personnages *list)
 {
 	struct personnages *ret = list;
@@ -523,9 +377,9 @@ struct personnages *remove_perso(struct personnages *list)
 		if (list->pv <= 0)
 		{
 			list = list->next;
-			free(ret);
 			free(ret->e_list);
 			free(ret->i_list);
+			free(ret);
 			ret = list;
 		}
 		while (list->next != NULL)
@@ -535,9 +389,9 @@ struct personnages *remove_perso(struct personnages *list)
 			if (list->pv <= 0)
 			{
 				prev->next = list->next;
-				free(list);
 				free(list->e_list);
 				free(list->i_list);
+				free(list);
 				list = prev;
 			}
 		}
@@ -550,4 +404,47 @@ struct personnages *remove_perso(struct personnages *list)
 		}
 	}
 	return ret;
+}
+
+void cp_original(struct personnages *p, char new)
+{
+	p->original = malloc(sizeof(struct personnages));
+	if (new == 0)
+	{
+		p->original->id = p->id;
+		p->original->pv = p->pv;
+		strcpy(p->original->nom_de_compte, p->nom_de_compte);
+		p->original->x = p->x;
+		p->original->y = p->y;
+		p->original->ordrex = p->x;
+		p->original->ordrey = p->y;
+		p->original->angle = p->angle;
+		p->original->timer_dom = p->timer_dom;
+		p->original->faim = p->faim;
+		strcpy(p->original->skin, p->skin);
+		strcpy(p->original->nom, p->nom);
+	    strcpy(p->original->nom_superieur, p->nom_superieur);
+		strcpy(p->original->titre, p->titre);
+		strcpy(p->original->religion, p->religion);
+		strcpy(p->original->region, p->region);
+		p->original->est_chef = p->est_chef;
+		p->original->e_list = malloc(strlen(p->e_list) + 1);
+		strcpy(p->original->e_list, p->e_list);
+		p->original->i_list = malloc(strlen(p->i_list) + 1);
+	    strcpy(p->original->i_list, p->i_list);
+		strcpy(p->original->echange_player, p->echange_player);
+		p->original->item1 = p->item1;
+		p->original->item2 = p->item2;
+		strcpy(p->original->speak, p->speak);
+		p->original->animation = p->animation;
+		p->original->animation_r = p->animation_r;
+	}
+	else
+	{
+		p->original->id = -1;
+		p->original->i_list = malloc(1);
+		p->original->i_list[0] = 0;
+		p->original->e_list = malloc(1);
+        p->original->e_list[0] = 0;
+	}
 }

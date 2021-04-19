@@ -7,12 +7,6 @@
 #include <netinet/in.h>
 #define size_order 2000
 
-struct linked_list
-{
-    struct personnages *p;
-    struct linked_list *next;
-};
-
 struct personnages
 {
     int id;
@@ -41,14 +35,14 @@ struct personnages
     int animation;
     int animation_r;
     struct personnages *next;
+	struct personnages *original;
 };
 
 int parse_order(struct personnages *list, char *line);
 struct personnages *append_perso(char **line, struct personnages *list);
 struct personnages *init_map(void);
-void send_map(int socket, struct personnages *list);
 struct personnages *get_ptr_from_id(int id, struct personnages *list);
 int get_id(char *line);
-int generate_order(struct personnages *list, int *movedObj, char *ret);
 void append_enemi(char *name, struct personnages *p);
 struct personnages *remove_perso(struct personnages *list);
+void cp_original(struct personnages *p, char new);
