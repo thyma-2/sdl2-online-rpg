@@ -6,7 +6,7 @@ int generate_order(struct personnages *list, char *ret)
     char tmp[20] = "\0";
     while (list != NULL)
     {
-        if (list->original != NULL)
+        if (list->a_bouger == 1)
         {
             sprintf(tmp, "%d", list->id);
             strcat(order, tmp);
@@ -85,10 +85,7 @@ int generate_order(struct personnages *list, char *ret)
             strcat (order, tmp);
             if (list->next != NULL)
                 strcat(order, "\n");
-            free(list->original->e_list);
-            free(list->original->i_list);
-            free(list->original);
-			list->original = NULL;
+			list->a_bouger = 0;
         }
         list = list->next;
     }

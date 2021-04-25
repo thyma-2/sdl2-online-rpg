@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 						strcat(line, " -1 0 0 0 1000000 civil ");
 						strcat(line, client->name);
 						strcat(line, " none none none region1 n [] [] none 0 0 [] 0 0 ");
-						append_perso(&line, list);
+						append_perso(line, list);
 						boolrep = 'o';
 						send(client->socket, &boolrep, 1,MSG_NOSIGNAL);
 						send_map(client->socket, list);

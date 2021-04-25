@@ -13,6 +13,8 @@
 #include <string.h>
 
 void recv_order(int socket, struct linked_list *list);
-void generate_orders(struct linked_list *l, int socket);
+void send_orders(int socket);
 int try_connect(char *ip, char *port);
+
+char ordre[9999];
 #endif /*NET*/

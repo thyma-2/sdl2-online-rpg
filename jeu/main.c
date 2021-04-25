@@ -116,7 +116,7 @@ void boucle_jeu(int socket, struct linked_list *list, char *name)
 		free(grille_cp);
 		collision(list, grille);
 		gui_event(moi, list);
-		generate_orders(list, socket);
+		send_orders(socket);
 		recv_order(socket, list);
 		selected = clean_selected(selected);
 		list = death(list);
@@ -276,7 +276,7 @@ int start_menu(int socket)
 
 char *log_menu(int socket)
 {
-	char err1[] = "Mauvais identifiant .il est pas gentil.";
+	char err1[] = "Mauvais identifiant";
 	char txt1[] = "Nom";
 	char txt2[] = "Mot de passe";
 	char *nom = ecalloc(50, 1);

@@ -1,4 +1,5 @@
 #include "net.h"
+extern char ordre[9999];
 
 int try_connect(char *ip, char *port) // Connecter
 {
@@ -52,120 +53,16 @@ void recv_order(int socket, struct linked_list *list)
 }
 
 
-void generate_orders(struct linked_list *l, int socket)
+void send_orders(int socket)
 {
-	char *order = malloc(10000);
-	order[0] = 0;
-	char tmp[20];
-	for (struct linked_list *list = l; list != NULL; list = list->next)
+	char tmp[20] =  {0};
+	int size_ordre = strlen(ordre);
+	if (size_ordre > 0)
 	{
-		if (list->p->a_bouger == 1)
-		{
-			if (order[0] != 0)
-				strcat(order, "\n");
-			sprintf (tmp, "%d", list->p->id);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->pv);
-			strcat (order, tmp);
-			strcat(order , " ");
-			strcat(order, list->p->nom_de_compte);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->p->x);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->p->y);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->p->ordrex);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf(tmp, "%f", list->p->ordrey);
-			strcat(order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->angle);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->timer_dom);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->faim);
-			strcat (order, tmp);
-			strcat(order , " ");
-			strcat(order, list->p->skin);
-			strcat(order, " ");
-			strcat(order, list->p->nom);
-			strcat(order , " ");
-			strcat(order, list->p->nom_superieur);
-			strcat(order , " ");
-			strcat(order, list->p->titre);
-			strcat(order , " ");
-			strcat(order, list->p->religion);
-			strcat(order, " ");
-			strcat(order, list->p->region);
-			if (list->p->est_chef == 'y')
-				strcat(order, " y [");
-			else
-				strcat(order, " n [");
-			for (struct linked_enemie *p = list->p->e_list; p != NULL; p = p->next)
-			{
-				strcat(order, p->nom);
-				strcat(order, " ");
-				tmp[0] = 0;
-				sprintf(tmp, "%d", p->rang);
-				strcat(order, tmp);
-				if (p->next != NULL)
-					strcat(order, " ");
-			}
-			strcat(order, "] [");
-			for (struct linked_item *p = list->p->i_list; p != NULL; p = p->next)
-			{
-				strcat(order, p->nom);
-				strcat(order, " ");
-				tmp[0] = 0;
-				sprintf(tmp, "%d", p->count);
-				strcat(order, tmp);
-				if (p->next != NULL)
-					strcat(order, " ");
-			}
-			strcat(order, "] ");
-			strcat(order, list->p->echange_player);
-			strcat(order, " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->item1);
-			strcat (order, tmp);
-			strcat(order , " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->item2);
-			strcat (order, tmp);
-			strcat (order, " [");
-			strcat (order, list->p->speak);
-			strcat (order, "] ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->animation);
-			strcat (order, tmp);
-			strcat (order, " ");
-			tmp[0] = 0;
-			sprintf (tmp, "%d", list->p->animation_r);
-			strcat (order, tmp);
-		}
-	}
-	int s = strlen(order);
-	if (s > 0)
-	{
-		tmp[0] = 0;
 		strcat(tmp, "ordre");
-		sprintf (tmp + 5, "%d", s);
+		sprintf (tmp + 5, "%d", size_ordre);
 		send(socket, tmp, 20, MSG_NOSIGNAL);
-		send(socket, order, s, MSG_NOSIGNAL);
+		send(socket, ordre, size_ordre, MSG_NOSIGNAL);
 	}
-	free(order);
+	ordre[0] = 0;
 }

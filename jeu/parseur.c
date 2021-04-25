@@ -23,7 +23,6 @@ int parse_order(struct personnages *list, char *line)
 {
 	list->e_list = NULL;
 	list->i_list = NULL;
-	list->a_bouger = 0;
 	int i = 0;
 	int j = 0;
 	char tmpI[10];

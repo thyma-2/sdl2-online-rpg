@@ -20,7 +20,7 @@ char handle_req(int socket, struct personnages *list)
 			int size = atoi(&buffer[5]);
 			if (size > 0)
 			{
-				buffer = realloc(buffer, size + 2);
+				buffer = realloc(buffer, size + 1);
 				int res  = 0;
 				char *pos_buf = buffer;
 				while (res < size)
@@ -28,44 +28,18 @@ char handle_req(int socket, struct personnages *list)
 					int tmp = recv(socket, buffer, size - res, MSG_WAITALL);
 					if (tmp == -1)
 					{
-						res = size + 1;
-						pos_buf[0] = 0;
+						free(buffer);
+						return -1;
 					}
 					res += tmp;
 					buffer = buffer + tmp;
 				}
 				buffer = pos_buf;
 				buffer[size] = 0;
-				buffer[size + 1] = 0;
-				while (*buffer != 0)
-				{
-					int id = get_id(buffer);
-					if (id == -1)
-					{
-						list = append_perso(&buffer, list);
-						int id = find_smalest_valid_id(list, 0);
-						struct personnages *yalist = get_ptr_from_id(-1, list);
-						yalist->id = id;
-					}
-					else
-					{
-						struct personnages *yalist = get_ptr_from_id(id, list);
-						if (yalist != NULL)
-						{
-							cp_original(yalist, 0);
-							buffer += parse_order(yalist, buffer) + 1;
-						}
-					}
-				}
-				buffer = pos_buf;
+				parse_order(list, buffer);
 			}
 		}
-		free(buffer);
-		return 0;
 	}
-	else
-	{
-		free(buffer);
-		return 1;
-	}
+	free(buffer);
+	return 1;
 }

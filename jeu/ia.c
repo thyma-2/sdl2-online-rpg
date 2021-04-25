@@ -24,60 +24,22 @@ void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *groun
 {
 	if (parcour->p->faim < 0)
 	{
-		parcour->p->a_bouger = 1;
-		parcour->p->pv = 0;
 		int x = ((int)(parcour->p->x + 0.5) - (int)(parcour->p->x + 0.5) % 25) / 25;
 		int y = ((int)(parcour->p->y + 0.5) - (int)(parcour->p->y + 0.5) % 25) / 25;
 		int src = y * max_x + x;
 		if (rand() % 3 == 1 && (ground[src] == 6 || ground[src] == 7 || ground[src] == 8 || ground[src] == 9 || ground[src] == 10 || ground[src] == 3 || ground[src] == 4 || ground[src] == 5))
-		{
-			char *line = malloc(1000);
-			char *s = line;
-			line[0] = 0;
-			strcat(line, "-1 100 none ");
-			char tmpI[20];
-			tmpI[0] = 0;
-			sprintf (tmpI, "%f", parcour->p->x - 45);
-			strcat(line, tmpI);
-			strcat(line, " ");
-			tmpI[0] = 0;
-			sprintf (tmpI, "%f", parcour->p->y - 153);
-			strcat(line, tmpI);
-			strcat(line, " 0 0 0 0 100000 arbre1 none none none none region1 n [] [] none 0 0 [] 0 0");
-			append_perso(list, &line);
-			struct personnages *p = get_ptr_from_id(s, list);
-			p->a_bouger = 1;
-		}
+			sprintf(ordre + strlen(ordre), "%d 0 100 %d 8 arbre %d 7 100000 ", parcour->p->id parcour->p->id, parcour->p->id);
+		else
+			sprintf(ordre + strlen(ordre), "%d 0 0 ", parcour->p->id);
 	}
 	else
-		parcour->p->faim -= 1;
+		sprintf(ordre + strlen(ordre), "%d 7 %d ", parcour->p->faim - 1);
 }
 
 void ia_arbre(struct linked_list *list, struct linked_list *parcour)
 {
-	if (parcour->p->faim < 0)
-	{
-		parcour->p->a_bouger = 1;
-		parcour->p->faim = 100000;
-		char *line = malloc(1000);
-		char *s = line;
-		line[0] = 0;
-		strcat(line, "-1 1 none ");
-		char tmpI[20];
-		tmpI[0] = 0;
-		sprintf (tmpI, "%f", parcour->p->x + rand() % 100 - rand() % 100 + 45);
-		strcat(line, tmpI);
-		strcat(line, " ");
-		tmpI[0] = 0;
-		sprintf (tmpI, "%f", parcour->p->y + rand() % 100 - rand() % 100 + 153);
-		strcat(line, tmpI);
-		strcat(line, " 0 0 0 0 100000 fruit none none none none region1 n [] [] none 0 0 [] 0 0");
-		append_perso(list, &line);
-		struct personnages *p = get_ptr_from_id(s, list);
-		p->a_bouger = 1;
-	}
-	else
-		parcour->p->faim -= 1;
+	list = list;
+	parcour = parcour;
 }
 
 void ia_build(struct linked_list *list, struct linked_list *parcour)
@@ -170,20 +132,15 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 {
 	if (parcour->p->faim < 0)
-	{
-		parcour->p->pv -= 1;
-		parcour->p->a_bouger = 1;
-	}
+		sprintf (ordre + strlen(ordre), "%d 0 %d ", parcour->p->id, parcour->p->pv - 1);
 	else
-		parcour->p->faim -= 1;
+		sprintf (ordre + strlen(ordre), "%d 7 %d ", parcour->p->id, parcour->p->faim - 1);
 	if (parcour->p->ordrex > 0)
 	{
 		int angle = findpath(parcour->p, array);
-		parcour->p->a_bouger = 1;
 		if (angle > 0)
 		{
 			parcour->p->angle = (parcour->p->angle + angle) / 2;
-			parcour->p->angle = angle;
 			parcour->p->x += parcour->p->vitesse_dep * sin(angle / 57.3);
 			parcour->p->y -= parcour->p->vitesse_dep * cos(angle / 57.3);
 		}
