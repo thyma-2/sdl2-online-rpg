@@ -1,3 +1,0 @@
-1 11 thyma 963.682373 568.490723 -1.000000 0.000000 268 0 973522 fantassin thyma thyma none none region1 y [test 1] [epee 1 Protections_de_cuir 1] none 1 1 [] 4 -15
-2 800 none 450.000000 450.000000 -1.000000 0.000000 360 0 0 tour none thyma none none region1 n [] [epee 1] none 1 1 [] 15 10918888
-3 800 none 1057.365356 223.970551 1638.687988 234.635056 91 0 0 ship1 none thyma none none region1 n [] [] none 2 1 [] 0 1004141_cuir 1] none 2 2 [] 10 -323258
