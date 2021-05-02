@@ -33,7 +33,6 @@ struct personnages
     int item2;
     char speak[90];
     int animation;
-    int animation_r;
     struct personnages *next;
     /////////////
 	char a_bouger;

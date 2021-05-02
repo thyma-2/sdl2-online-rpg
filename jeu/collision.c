@@ -35,23 +35,23 @@ void collision(struct linked_list *list, char *array)
 						{
 							if (p->p->last_x == p->p->x && p->p->last_y == p->p->y) // je me fait percuter
 							{
-								int x = pp->p->x - pp->p->last_x;
-								int y = pp->p->y - pp->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 1 %f %d 2 %f %d 1 %f %d 2 %f ", p->p->id, p->p->x + x * pp->p->poid / p->p->poid, p->p->id, p->p->y + y * pp->p->poid / p->p->poid, pp->p->id, pp->p->last_x, pp->p->id, pp->p->last_y);
+								float x = pp->p->x - pp->p->last_x;
+								float y = pp->p->y - pp->p->last_y;
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 -%f %d 2 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
 							}
 							else if (pp->p->last_x == pp->p->x && pp->p->last_y == pp->p->y) // je percute qqe chose
 							{
-								int x = p->p->x - p->p->last_x;
-								int y = p->p->y - p->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 1 %f %d 2 %f %d 1 %f %d 2 %f ", pp->p->id, pp->p->x + x * p->p->poid / pp->p->poid, pp->p->id, pp->p->y + y * p->p->poid / pp->p->poid, p->p->id, p->p->last_x, p->p->id, p->p->last_y);
+								float x = p->p->x - p->p->last_x;
+								float y = p->p->y - p->p->last_y;
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 -%f %d 2 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
 							}
 							else // on ce percute mutuellement 
 							{
-								int x = pp->p->x - pp->p->last_x;
-								int y = pp->p->y - pp->p->last_y;
-								int x2 = p->p->x - p->p->last_x;
-								int y2 = p->p->y - p->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 1 %f %d 2 %f %d 1 %f %d 2 %f ", p->p->id, p->p->x + x * pp->p->poid / p->p->poid, p->p->id, p->p->y + y * pp->p->poid / p->p->poid, pp->p->id, pp->p->x + x2 * p->p->poid / pp->p->poid, pp->p->id, pp->p->y + y2 * p->p->poid / pp->p->poid);
+								float x = pp->p->x - pp->p->last_x;
+								float y = pp->p->y - pp->p->last_y;
+								float x2 = p->p->x - p->p->last_x;
+								float y2 = p->p->y - p->p->last_y;
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 +%f %d 2 +%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x2 * p->p->poid / pp->p->poid, pp->p->id, y2 * p->p->poid / pp->p->poid);
 							}
 						}
 					}
@@ -64,7 +64,7 @@ void collision(struct linked_list *list, char *array)
 			}
 		}
 		if (bord == 1 || eau == 1)
-			sprintf (ordre + strlen(ordre), "%d 1 %f %d 2 %f ", p->p->id, p->p->last_x, p->p->id, p->p->last_y);
+			sprintf (ordre + strlen(ordre), "%d 01  %f %d 02  %f ", p->p->id, p->p->last_x, p->p->id, p->p->last_y);
 	}
 }
 

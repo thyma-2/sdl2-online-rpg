@@ -197,7 +197,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 	strcat(txt2, tmp);
 	strcat(txt2, "\n");
 	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->faim / 1000);
+	sprintf(tmp, "%d", moi->faim);
 	strcat(txt2, tmp);
 	position.x += blit_text(position, txt, 200) + 20;
 	position.x += blit_text(position, txt2, 200) + 8;
@@ -210,7 +210,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 	int vitesse_dep = 99999;
 	int portee = 99999;
 	int poid = 0;
-	int faim = 99999;
+	int faim = 100;
 	txt[0] = 0;
 	txt2[0] = 0;
 	for (struct linked_list *parcour = selected; parcour != NULL; parcour = parcour->next)
@@ -273,7 +273,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 		strcat(txt2, tmp);
 		strcat(txt2, "\n");
 		tmp[0] = 0;
-		sprintf(tmp, "%d", faim / 1000);
+		sprintf(tmp, "%d", faim);
 		strcat(txt2, tmp);
 		position.x += blit_text(position, txt, 200) + 20;
 		position.x += blit_text(position, txt2, 200);

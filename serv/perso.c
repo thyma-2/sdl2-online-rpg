@@ -29,19 +29,60 @@ void parse_order(struct personnages *list, char *line)
 		switch(idaction)
 		{
 			case 0:
-				p->pv = atoi(&line[i]);
+				if (line[i] == '+')
+				{
+					i++;
+					p->pv += atoi(&line[i]);
+				}
+				else if (line[i] == '-')
+				{
+					i++;
+					p->pv -= atoi(&line[i]);
+				}
+				else
+				{
+					i++;
+					p->pv = atoi(&line[i]);
+				}
 				while(line[i] != ' ')
 					i++;
-				i++;
 				break;
 			case 1:
-				p->x = atof(&line[i]);
+				if (line[i] == '+')
+                {
+                    i++;
+                    p->x += atoi(&line[i]);
+                }
+                else if (line[i] == '-')
+                {
+                    i++;
+                    p->x -= atoi(&line[i]);
+                }
+                else
+				{
+					i++;
+					p->x = atof(&line[i]);
+				}
                 while(line[i] != ' ')
                     i++;
                 i++;
 				break;
 			case 2:
-				p->y = atof(&line[i]);
+				if (line[i] == '+')
+                {
+                    i++;
+                    p->y += atoi(&line[i]);
+                }
+                else if (line[i] == '-')
+                {
+                    i++;
+                    p->y -= atoi(&line[i]);
+                }
+                else
+				{
+					i++;
+					p->y = atof(&line[i]);
+				}
                 while(line[i] != ' ')
                     i++;
                 i++;
@@ -85,6 +126,119 @@ void parse_order(struct personnages *list, char *line)
 					j++;
 				}
 				p->skin[j] = 0;
+                i++;
+                break;
+			case 10:
+				j = 0;
+				while(line[i] != ' ')
+				{
+					p->nom_superieur[j] = line[i];
+					i++;
+					j++;
+				}
+				p->nom_superieur[j] = 0;
+				i++;
+				break;
+			case 11:
+				j = 0;
+				while (line[i] != ' ')
+				{
+					p->titre[j] = line[i];
+					i++;
+					j++;
+				}
+				p->titre[j] = 0;
+				i++;
+				break;
+			case 12:
+                j = 0;
+                while (line[i] != ' ')
+                {
+                    p->religion[j] = line[i];
+                    i++;
+                    j++;
+                }
+                p->religion[j] = 0;
+                i++;
+                break;
+			case 13:
+                j = 0;
+                while (line[i] != ' ')
+                {
+                    p->region[j] = line[i];
+                    i++;
+                    j++;
+                }
+                p->region[j] = 0;
+                i++;
+                break;
+			case 14:
+				p->est_chef = line[i];
+				i += 2;
+				break;
+			case 15: //pas sur
+				j = 0;
+				while (line[i] != ']')
+                {
+					i++;
+					j++;
+                }
+				p->e_list = realloc(p->e_list, j + 2);
+				strncpy(list->e_list, &line[i - j], j + 1);
+				list->e_list[j + 1] = 0;
+				i += 2;
+				break;
+			case 16: // pas sur
+				j = 0;
+                while (line[i] != ']')
+                {
+                    i++;
+                    j++;
+                }
+                p->e_list = realloc(p->i_list, j + 2);
+                strncpy(list->i_list, &line[i - j], j + 1);
+                list->i_list[j + 1] = 0;
+                i += 2;
+                break;
+			case 17:
+				j = 0;
+                while (line[i] != ' ')
+                {
+                    p->echange_player[j] = line[i];
+                    i++;
+                    j++;
+                }
+                p->echange_player[j] = 0;
+                i++;
+                break;
+			case 18:
+				p->item1 = atoi(&line[i]);
+                while(line[i] != ' ')
+                    i++;
+                i++;
+                break;
+			case 19:
+				p->item2 = atoi(&line[i]);
+                while(line[i] != ' ')
+                    i++;
+                i++;
+                break;
+			case 20: // pas sur
+                j = 0;
+                while (line[i] != ']')
+                {
+                    p->speak[j] = line[i];
+					i++;
+                    j++;
+                }
+                p->speak[j] = ']';
+                list->speak[j + 1] = 0;
+                i += 2;
+                break;
+			case 21:
+                p->animation = atoi(&line[i]);
+                while(line[i] != ' ')
+                    i++;
                 i++;
                 break;
 		}
@@ -298,7 +452,7 @@ void parse_new(struct personnages *list, char *line)
 	}
 	tmpI[j] = 0;
 	list->item2 = atoi(tmpI);
-	i += 2;
+	i++;
 	j = 0;
 	while (line[i] != ']')
 	{
@@ -306,10 +460,11 @@ void parse_new(struct personnages *list, char *line)
 		i++;
 		j++;
 	}
-	list->speak[j] = 0;
+	list->speak[j] = ']';
+	list->speak[j + 1] = 0;
 	i += 2;
 	j = 0;
-	while (line[i] != ' ')
+	while (line[i] != 0 && line[i] != '\n')
 	{
 		tmpI[j] = line[i];
 		j++;
@@ -319,14 +474,6 @@ void parse_new(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	list->animation = atoi(tmpI);
-	while (line[i] != 0 && line[i] != '\n')
-	{
-		tmpI[j] = line[i];
-		j++;
-		i++;
-	}
-	tmpI[j] = 0;
-	list->animation_r = atoi(tmpI);
 }
 
 struct personnages *append_perso(char *line, struct personnages *list)
@@ -359,10 +506,12 @@ struct personnages *append_perso(char *line, struct personnages *list)
 int get_id(char *line, int *i)
 {
 	char tmp[10] = "\0";
+	int j = 0;
 	while ((line[*i] >= '0' && line[*i] <= '9'))
 	{
-		tmp[*i] = line[*i];
+		tmp[j] = line[*i];
 		*i = *i + 1;
+		j++;
 	}
 	return atoi(tmp);
 }

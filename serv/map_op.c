@@ -73,15 +73,11 @@ void save_map(struct personnages *list)
 		tmp[0] = 0;
 		sprintf (tmp, "%d", list->item2);
 		strcat (order, tmp);
-		strcat (order, " [");
+		strcat (order, " ");
 		strcat (order, list->speak);
-		strcat (order, "] ");
-		tmp[0] = 0;
-		sprintf (tmp, "%d", list->animation);
-		strcat (order, tmp);
 		strcat (order, " ");
 		tmp[0] = 0;
-		sprintf (tmp, "%d", list->animation_r);
+		sprintf (tmp, "%d", list->animation);
 		strcat (order, tmp);
 		if (list->next != NULL)
 			strcat(order, "\n");

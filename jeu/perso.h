@@ -1,7 +1,5 @@
+#pragma once
 #include "alloc.h"
-#ifndef PERSO
-#define PERSO
-#include <stdlib.h>
 #include <stdio.h>
 #include <err.h>
 #include  <string.h>
@@ -39,9 +37,10 @@ struct personnages
     int item2;
     char speak[90];
     int animation;
-    int animation_r;
     ///////////////////////////////////////
+	char animation_time;
     int speak_timer;
+	int faim_time; 
     struct personnages *sur_plancher;
     int max_pv;
     int vitesse_dom;
@@ -62,6 +61,7 @@ struct linked_list
     struct linked_list *next;
 };
 
+#include "net.h"
 #include "diplo.h"
 #include "init_sprite.h"
 #include "stat.h"
@@ -81,4 +81,3 @@ struct linked_list *remove_from_linked_list(struct linked_list *list, struct per
 void *find_perso_by_name(struct linked_list *list ,char *name);
 struct linked_list *clean_selected(struct linked_list *list);
 void fix_some_shit(struct linked_list *list);
-#endif /*PERSO*/

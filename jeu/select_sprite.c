@@ -20,12 +20,76 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 		if (angle < 0)
 			angle += 360;
 	}
-	perso->animation += 1;
-	if (perso->animation > 20)
-		perso->animation = 0;
+
+	if (strcmp(perso->skin, "ship1") == 0)
+		return img->s->ship1haut;
+	if (strcmp(perso->skin, "chateau") == 0)
+	{
+		if (angle < 15 || angle >= 345)
+			return img->s->chateauDos;
+		else if (angle < 45 && angle >= 15)
+			return img->s->chateauDosDroite;
+		else if (angle < 75 && angle >= 45)
+			return img->s->chateauDroiteDos;
+		else if (angle < 105 && angle >= 75)
+			return img->s->chateauDroite;
+		else if (angle < 135 && angle >= 105)
+			return img->s->chateauDroiteFace;
+		else if (angle < 165 && angle >= 135)
+			return img->s->chateauFaceDroite;
+		else if (angle < 195 && angle >= 165)
+			return img->s->chateauFace;
+		else if (angle < 225 && angle >= 195)
+			return img->s->chateauFaceGauche;
+		else if (angle < 255 && angle >= 225)
+			return img->s->chateauGaucheFace;
+		else if (angle < 285 && angle >= 255)
+			return img->s->chateauGauche;
+		else if (angle < 315 && angle >= 285)
+			return img->s->chateauGaucheDos;
+		else if (angle < 345 && angle >= 315)
+			return img->s->chateauDosGauche;
+	}
+	if (strcmp(perso->skin, "tour") == 0)
+	{
+		if (angle < 75 || angle >= 285)
+			return img->s->tourDos;
+		else if (angle < 105 && angle >= 75)
+			return img->s->tourDroite;
+		else if (angle < 135 && angle >= 105)
+			return img->s->tourDroiteFace;
+		else if (angle < 165 && angle >= 135)
+			return img->s->tourFaceDroite;
+		else if (angle < 195 && angle >= 165)
+			return img->s->tourFace;
+		else if (angle < 225 && angle >= 195)
+			return img->s->tourFaceGauche;
+		else if (angle < 255 && angle >= 225)
+			return img->s->tourGaucheFace;
+		return img->s->tourGauche;
+	}
+	if (strncmp(perso->skin, "arbre", 5) == 0)
+	{
+		if (perso->skin[5] == '1')
+			return img->s->arbre1;
+	}
+	if (strncmp(perso->skin, "fruit", 5) == 0)
+	{
+		return img->s->fruit;
+	}
+
+	perso->animation_time += 1;
+	if (perso->animation_time > 8)
+	{
+		sprintf (ordre + strlen(ordre), "%d 21 %d ", perso->id, perso->animation + 1);
+		if (perso->animation >= 5)
+			sprintf (ordre + strlen(ordre), "%d 21 1 ", perso->id);
+		perso->animation_time = 0;
+	}
+
 	if (strcmp(perso->skin, "fantassin") == 0)
 	{
-		if (perso->animation <= 0)
+		if (perso->last_x  == perso->x && perso->last_y == perso->y)
 		{
 			if (angle < 15 || angle >= 345)
 				return img->s->hoFaDoRien;
@@ -52,7 +116,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			else if (angle < 345 && angle >= 315)
 				return img->s->hoFaDoGaRien;
 		}
-		else if (perso->animation < 4)
+		else if (perso->animation == 1)
 		{
 			if (angle < 15 || angle >= 345)
 				return img->s->hoFaDoMa1;
@@ -79,7 +143,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			else if (angle < 345 && angle >= 315)
 				return img->s->hoFaDoGaMa1;
 		}
-		else if (perso->animation < 8)
+		else if (perso->animation == 2)
 		{
 			if (angle < 15 || angle >= 345)
 				return img->s->hoFaDoMa2;
@@ -106,7 +170,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			else if (angle < 345 && angle >= 315)
 				return img->s->hoFaDoGaMa2;
 		}
-		else if (perso->animation < 12)
+		else if (perso->animation == 3)
 		{
 			if (angle < 15 || angle >= 345)
 				return img->s->hoFaDoMa3;
@@ -133,7 +197,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			else if (angle < 345 && angle >= 315)
 				return img->s->hoFaDoGaMa3;
 		}
-		else if (perso->animation < 16)
+		else if (perso->animation == 4)
 		{
 			if (angle < 15 || angle >= 345)
 				return img->s->hoFaDoMa4;
@@ -190,7 +254,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 	}
 	if (strcmp(perso->skin, "archer") == 0)
 	{
-		if (perso->animation < 4)
+		if (perso->last_x == perso->x && perso->last_y == perso->y)
 		{
 			if (angle < 23 || angle > 337)
 				return img->s->hoArDoMa1;
@@ -208,7 +272,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 				return img->s->hoArGaMa1;
 			return img->s->hoArGdMa1;
 		}
-		else if (perso->animation < 8)
+		else if (perso->animation == 2)
 		{
 			if (angle < 23 || angle > 337)
 				return img->s->hoArDoMa2;
@@ -228,7 +292,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 				return img->s->hoArGaMa2;
 			return img->s->hoArGdMa2;
 		}
-		else if (perso->animation < 12)
+		else if (perso->animation == 3)
 		{
 			if (angle < 23 || angle > 337)
 				return img->s->hoArDoMa3;
@@ -246,7 +310,7 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 				return img->s->hoArGaMa3;
 			return img->s->hoArGdMa3;
 		}
-		else if (perso->animation < 16)
+		else if (perso->animation == 4)
 		{
 			if (angle < 23 || angle > 337)
 				return img->s->hoArDoMa4;
@@ -283,126 +347,57 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			return img->s->hoArGdMa5;
 		}
 	}
-	if (strcmp(perso->skin, "ship1") == 0)
-		return img->s->ship1haut;
-	if (strcmp(perso->skin, "chateau") == 0)
-	{
-
-		if (angle < 15 || angle >= 345)
-			return img->s->chateauDos;
-		else if (angle < 45 && angle >= 15)
-			return img->s->chateauDosDroite;
-		else if (angle < 75 && angle >= 45)
-			return img->s->chateauDroiteDos;
-		else if (angle < 105 && angle >= 75)
-			return img->s->chateauDroite;
-		else if (angle < 135 && angle >= 105)
-			return img->s->chateauDroiteFace;
-		else if (angle < 165 && angle >= 135)
-			return img->s->chateauFaceDroite;
-		else if (angle < 195 && angle >= 165)
-			return img->s->chateauFace;
-		else if (angle < 225 && angle >= 195)
-			return img->s->chateauFaceGauche;
-		else if (angle < 255 && angle >= 225)
-			return img->s->chateauGaucheFace;
-		else if (angle < 285 && angle >= 255)
-			return img->s->chateauGauche;
-		else if (angle < 315 && angle >= 285)
-			return img->s->chateauGaucheDos;
-		else if (angle < 345 && angle >= 315)
-			return img->s->chateauDosGauche;
-	}
-	if (strcmp(perso->skin, "tour") == 0)
-	{
-		if (angle < 75 || angle >= 285)
-			return img->s->tourDos;
-		else if (angle < 105 && angle >= 75)
-			return img->s->tourDroite;
-		else if (angle < 135 && angle >= 105)
-			return img->s->tourDroiteFace;
-		else if (angle < 165 && angle >= 135)
-			return img->s->tourFaceDroite;
-		else if (angle < 195 && angle >= 165)
-			return img->s->tourFace;
-		else if (angle < 225 && angle >= 195)
-			return img->s->tourFaceGauche;
-		else if (angle < 255 && angle >= 225)
-			return img->s->tourGaucheFace;
-		return img->s->tourGauche;
-	}
-
-	if (strncmp(perso->skin, "arbre", 5) == 0)
-	{
-		if (perso->skin[5] == '1')
-			return img->s->arbre1;
-	}
-	if (strncmp(perso->skin, "fruit", 5) == 0)
-		return img->s->fruit;
 	return img->s->hoArGdMa5;
 }
 
 SDL_Texture *select_texture(char ground)
 {
-
-	if (ground == 20)
-		return img->t->gr1;
-	if (ground == 21)
-		return img->t->gr2;
-	if (ground >= 10)
+	switch(ground)
 	{
-		if (ground >= 15)
-		{
-			if (ground == 15)
-				return img->t->bl2;
-			if (ground == 16)
-				return img->t->bl3;
-			if (ground == 17)
-				return img->t->ne1;
-			if (ground == 18)
-				return img->t->ne2;
+		case 20:
+			return img->t->gr1;
+		case 21:
+			return img->t->gr2;
+		case 15:
+			return img->t->bl2;
+		case 16:
+			return img->t->bl3;
+		case 17:
+			return img->t->ne1;
+		case 18:
+			return img->t->ne2;
+		case 19:
 			return img->t->ne3;
-		}
-		else
-		{
-			if (ground == 14)
-				return img->t->bl1;
-			if (ground == 13)
-				return img->t->sa3;
-			if (ground == 12)
-				return img->t->sa2;
-			if (ground == 11)
-				return img->t->sa1;
+		case 14:
+			return img->t->bl1;
+		case 13:
+			return img->t->sa3;
+		case 12:
+			return img->t->sa2;
+		case 11:
+			return img->t->sa1;
+		case 10:
 			return img->t->he5;
-
-		}
-	}
-	else
-	{
-		if (ground >= 5)
-		{
-			if (ground == 5)
-				return img->t->te3;
-			if (ground == 6)
-				return img->t->he1;
-			if (ground == 7)
-				return img->t->he2;
-			if (ground == 8)
-				return img->t->he3;
+		case 5:
+			return img->t->te3;
+		case 6:
+			return img->t->he1;
+		case 7:
+			return img->t->he2;
+		case 8:
+			return img->t->he3;
+		case 9:
 			return img->t->he4;
-		}
-		else
-		{
-			if (ground == 0)
-				return img->t->ea1;
-			if (ground == 1)
-				return img->t->ea2;
-			if (ground == 2)
-				return img->t->ea3;
-			if (ground == 3)
-				return img->t->te1;
+		case 0:
+			return img->t->ea1;
+		case 1:
+			return img->t->ea2;
+		case 2:
+			return img->t->ea3;
+		case 3:
+			return img->t->te1;
+		case 4:
 			return img->t->te2;
-		}
 	}
 	return NULL;
 }

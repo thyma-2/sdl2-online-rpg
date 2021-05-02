@@ -65,8 +65,8 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->x = atof(tmpF);
 	list->last_x = list->x;
+	list->x = atof(tmpF);
 	i++;    
 	while (line[i] != ' ')
 	{
@@ -76,8 +76,8 @@ int parse_order(struct personnages *list, char *line)
 	}
 	tmpF[j] = 0;
 	j = 0;
-	list->y = atof(tmpF);
 	list->last_y = list->y;
+	list->y = atof(tmpF);
 	i++;
 	while (line[i] != ' ')
 	{
@@ -274,7 +274,7 @@ int parse_order(struct personnages *list, char *line)
 	list->speak[j] = 0;
 	i += 2;
 	j = 0;
-	while (line[i] != ' ')
+	while (line[i] != 0 && line[i] != '\n')
 	{
 		tmpI[j] = line[i];
 		j++;
@@ -284,13 +284,5 @@ int parse_order(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	list->animation = atoi(tmpI);
-	while (line[i] != 0 && line[i] != '\n')
-	{
-		tmpI[j] = line[i];
-		j++;
-		i++;
-	}
-	tmpI[j] = 0;
-	list->animation_r = atoi(tmpI);
 	return i;
 }

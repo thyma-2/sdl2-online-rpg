@@ -114,13 +114,13 @@ void boucle_jeu(int socket, struct linked_list *list, char *name)
 		char *grille_cp = actualise_array(grille, list);
 		ia(list, grille_cp);
 		free(grille_cp);
-		collision(list, grille);
 		gui_event(moi, list);
+		collision(list, grille);
+		fix_some_shit(list);
 		send_orders(socket);
 		recv_order(socket, list);
-		selected = clean_selected(selected);
 		list = death(list);
-		fix_some_shit(list);
+		selected = clean_selected(selected);
 		disp_perso_list(list, moi);
 		display_selected(selected, moi, f);
 		SDL_RenderPresent(renderer);

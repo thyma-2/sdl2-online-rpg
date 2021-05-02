@@ -101,8 +101,7 @@ struct linked_list *recv_map(int socket, struct linked_list *list)
         buffer = buffer + tmp;
     }
     buffer = pos_buf;
-    if (list == NULL)
-        list = append_perso(list,  &buffer);
+    list = append_perso(list,  &buffer);
     while ((append_perso(list,  &buffer) != NULL));
     buffer = pos_buf;
     free(buffer);
@@ -296,10 +295,18 @@ void fix_some_shit(struct linked_list *list)
 {
     while(list != NULL)
     {
+		//angle
 		if (list->p->angle < 1)
-	    	list->p->angle = 360;
+			sprintf(ordre + strlen(ordre), "%d 05 360 ", list->p->id);
 		else if (list->p->angle > 360)
-		    list->p->angle = 1;
+			sprintf(ordre + strlen(ordre), "%d 05 1 ", list->p->id);
+		//faim
+		list->p->faim_time++;
+		if (list->p->faim_time > 1000)
+		{
+			sprintf(ordre + strlen(ordre), "%d 07 %d ", list->p->id, list->p->faim - 1);
+			list->p->faim_time = 0;
+		}
 		list = list->next;
     }
 }

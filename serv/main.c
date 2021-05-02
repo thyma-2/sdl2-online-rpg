@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 		}
 		time = clock();
 		t2 = (float)(time / (CLOCKS_PER_SEC / 1000));
-		if (t2 - t > 20)
+		if (t2 - t > 15)
 		{
 			t = t2;
 			char *order = calloc(100000, 1);

@@ -13,14 +13,14 @@ void ia(struct linked_list *list, char *array)
 			else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
 				ia_arbre(list, parcour);
 			else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
-				ia_fruit(list, parcour, array);
+				ia_fruit(parcour, array);
 			else
 				ia_man(list, parcour, array);
 		}
 	}
 }
 
-void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *ground)
+void ia_fruit(struct linked_list *parcour, char *ground)
 {
 	if (parcour->p->faim < 0)
 	{
@@ -28,12 +28,10 @@ void ia_fruit(struct linked_list *list, struct linked_list *parcour, char *groun
 		int y = ((int)(parcour->p->y + 0.5) - (int)(parcour->p->y + 0.5) % 25) / 25;
 		int src = y * max_x + x;
 		if (rand() % 3 == 1 && (ground[src] == 6 || ground[src] == 7 || ground[src] == 8 || ground[src] == 9 || ground[src] == 10 || ground[src] == 3 || ground[src] == 4 || ground[src] == 5))
-			sprintf(ordre + strlen(ordre), "%d 0 100 %d 8 arbre %d 7 100000 ", parcour->p->id parcour->p->id, parcour->p->id);
+			sprintf(ordre + strlen(ordre), "%d 00 100 %d 08 arbre %d 07 100 ", parcour->p->id, parcour->p->id, parcour->p->id);
 		else
-			sprintf(ordre + strlen(ordre), "%d 0 0 ", parcour->p->id);
+			sprintf(ordre + strlen(ordre), "%d 00 0 ", parcour->p->id);
 	}
-	else
-		sprintf(ordre + strlen(ordre), "%d 7 %d ", parcour->p->faim - 1);
 }
 
 void ia_arbre(struct linked_list *list, struct linked_list *parcour)
@@ -82,12 +80,12 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (angle - parcour->p->angle < 180)
 			{
-				parcour->p->angle += 1;
+				 sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle + 1);
 				change_angle = 1;
 			}
 			else
 			{
-				parcour->p->angle -= 1;
+				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle - 1);
 				change_angle = -1;
 			}
 
@@ -96,27 +94,21 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (parcour->p->angle - angle < 180)
 			{
+				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle - 1);
 				change_angle = -1;
-				parcour->p->angle -= 1;
 			}
 			else
 			{
-				parcour->p->angle += 1;
+				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle = 1);
 				change_angle = 1;
 			}
 		}
-		parcour->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
-		parcour->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-		parcour->p->ordrey -= cos(angle / 57.3);
-		parcour->p->ordrex += sin(angle / 57.3);
+		sprintf (ordre + strlen(ordre), "%d 02 -%f %d 01 +%f %d 04 %f %d 03 %f ", parcour->p->id, parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3), parcour->p->id, parcour->p->ordrey - cos(angle / 57.3), parcour->p->id, parcour->p->ordrex + sin(angle / 57.3));
 		for (struct linked_list *parcour2 = list; parcour2 != NULL; parcour2 = parcour2->next)
 		{
 			if (parcour2->p->sur_plancher == parcour->p)
 			{
-				parcour2->p->angle += change_angle;
-				parcour2->p->x += parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3);
-				parcour2->p->y -= parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3);
-				parcour2->p->a_bouger = 1;;
+				sprintf (ordre + strlen(ordre), "%d 05 %d %d 01 %f %d 02 %f ", parcour2->p->id, parcour2->p->angle + change_angle, parcour2->p->id, parcour2->p->x + parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3), parcour2->p->id, parcour2->p->y - parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3));
 			}
 		}
 		parcour->p->vitesse_dep -= 1;
@@ -132,22 +124,18 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 {
 	if (parcour->p->faim < 0)
-		sprintf (ordre + strlen(ordre), "%d 0 %d ", parcour->p->id, parcour->p->pv - 1);
-	else
-		sprintf (ordre + strlen(ordre), "%d 7 %d ", parcour->p->id, parcour->p->faim - 1);
+		sprintf (ordre + strlen(ordre), "%d 00 -1 ", parcour->p->id);
 	if (parcour->p->ordrex > 0)
 	{
 		int angle = findpath(parcour->p, array);
 		if (angle > 0)
 		{
-			parcour->p->angle = (parcour->p->angle + angle) / 2;
-			parcour->p->x += parcour->p->vitesse_dep * sin(angle / 57.3);
-			parcour->p->y -= parcour->p->vitesse_dep * cos(angle / 57.3);
+			sprintf (ordre + strlen(ordre), "%d 05 %d %d 01 +%f %d 02 -%f ", parcour->p->id, (parcour->p->angle + angle) / 2, parcour->p->id, parcour->p->vitesse_dep * sin(angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * cos(angle / 57.3));
 		}
 		else
 		{
 			if (angle < 0)
-				parcour->p->ordrex = 0;
+				sprintf (ordre + strlen(ordre), "%d 03 %f ", parcour->p->id, parcour->p->ordrex);
 			free(parcour->p->chemin);
 			parcour->p->chemin = NULL;
 		}
@@ -170,19 +158,13 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 							{
 								if (exist_in_linked_item(parcour->p->i_list, "fleche") != NULL)
 								{
-									parcour->p->i_list = remove_from_inventory("fleche", parcour->p->i_list, 1);
-									parcour->p->timer_dom = parcour->p->vitesse_dom;
-									parcour2->p->pv -= 5;
-									parcour->p->a_bouger = 1;
-									parcour2->p->a_bouger = 1;
+									parcour->p->i_list = remove_from_inventory("fleche", parcour->p->i_list, 1); //TODO
+									sprintf (ordre + strlen(ordre), "%d 00 -5 %d 06 %d ", parcour2->p->id, parcour->p->id, parcour->p->vitesse_dom);
 								}
 							}
 							else
 							{
-								parcour->p->timer_dom = parcour->p->vitesse_dom;
-								parcour2->p->pv -= 5;
-								parcour->p->a_bouger = 1;
-								parcour2->p->a_bouger = 1;
+								sprintf (ordre + strlen(ordre), "%d 00 -5 %d 06 %d ", parcour2->p->id, parcour->p->id, parcour->p->vitesse_dom);
 							}
 						}
 					}
@@ -192,31 +174,22 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 	}
 	if (strcmp(parcour->p->echange_player, "none") != 0)
 	{
-		parcour->p->speak[0] = 0;
-		strcat(parcour->p->speak, "Votre proposition est ininteressante");
+		sprintf (ordre + strlen(ordre), "%d 20 [Votre proposition est ininteressante] %d 17 none ", parcour->p->id, parcour->p->id);
 		parcour->p->speak_timer = 1350;
-		parcour->p->echange_player[0] = 0;
-		strcat(parcour->p->echange_player, "none");
-		parcour->p->a_bouger = 1;
 	}
-	if (parcour->p->faim == 50000)
+	if (parcour->p->faim == 50)
 	{
 		struct linked_item *a = exist_in_linked_item(parcour->p->i_list, "fruit");
 		if (a != NULL)
 			use(a, parcour->p);
 		else
 		{
-			parcour->p->speak[0] = 0;
-			strcat(parcour->p->speak, "J'ai faim! Je n ai rien a manger !");
+			sprintf (ordre + strlen(ordre), "%d 20 [J ai faim et je n ai rien a manger] ", parcour->p->id);
 			parcour->p->speak_timer = 1350;
-			parcour->p->a_bouger = 1;
 		}
 	}
 	if (parcour->p->speak_timer > 0)
 		parcour->p->speak_timer --;
 	else if (parcour->p->speak_timer <= 0 && parcour->p->speak[0] != 0)
-	{
-		parcour->p->speak[0] = 0;
-		parcour->p->a_bouger = 1;
-	}
+		sprintf (ordre + strlen(ordre), "%d 20 [] ", parcour->p->id);
 }

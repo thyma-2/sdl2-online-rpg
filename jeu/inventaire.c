@@ -6,7 +6,7 @@ struct linked_item *use(struct linked_item *item, struct personnages *p)
     {
 	if (strcmp(item->nom, "fruit") == 0 || strcmp(item->nom, "legume") == 0)
 	{
-	    p->faim += 25000;
+	    p->faim += 25;
 	    p->i_list = remove_from_inventory(item->nom, p->i_list, 1);
 	}
     }
@@ -16,9 +16,9 @@ struct linked_item *use(struct linked_item *item, struct personnages *p)
 int count(char *name)
 {
     if (strcmp(name, "fruit") == 0 || strcmp(name, "legume") == 0)
-	return 10;
+		return 10;
     if (strcmp(name, "fleche") == 0)
-	return 20;
+		return 20;
     return 1;
 }
 
@@ -208,21 +208,15 @@ void echange_item(struct personnages *perso1, struct personnages *perso2)
         perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
         perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
         perso1->i_list = remove_from_inventory(obj1->nom, perso1->i_list, 1);
-        perso1->a_bouger = 1;
-        perso2->a_bouger = 1;
     }
     else if (obj1 == NULL && obj2 != NULL)
     {
         perso1->i_list = append_in_inventory(obj2->nom, perso1->i_list, 1);
         perso2->i_list = remove_from_inventory(obj2->nom, perso2->i_list, 1);
-        perso1->a_bouger = 1;
-        perso2->a_bouger = 1;
     }
     else if (obj2 == NULL && obj1 != NULL)    
     {
         perso2->i_list = append_in_inventory(obj1->nom, perso2->i_list, 1);
         perso1->i_list = remove_from_inventory(obj1->nom, perso1->i_list, 1);
-        perso1->a_bouger = 1;
-        perso2->a_bouger = 1;
     }
 }
