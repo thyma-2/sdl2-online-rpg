@@ -83,6 +83,7 @@ struct lettres
     char Mouse_Rclick;
     char Mouse_Mclick;
     char esc;
+	char esp;
 };
 struct lettres *lettres;
 #endif /*CLAVIER*/

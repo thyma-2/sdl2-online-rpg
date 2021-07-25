@@ -109,4 +109,6 @@ void init_stat(struct personnages *p)
 	p->speak_timer = 0;
 	p->faim_time = 0;
 	p->chemin = NULL;
+	p->last_x = p->x;
+	p->last_y = p->y;
 }

@@ -18,18 +18,7 @@ void collision(struct linked_list *list, char *array)
 						if (strcmp(pp->p->skin, "fruit") == 0)
 						{
 							if (count_item(p->p->i_list) < 9)
-							{
-								sprintf (ordre + strlen(ordre), "%d 0 0 ", pp->p->id);
-								//p->p->i_list = append_in_inventory("fruit", p->p->i_list, 1); TODO
-							}
-						}
-						else if (strcmp(p->p->skin, "fruit") == 0)
-						{
-							if (count_item(pp->p->i_list) < 9)
-							{
-								sprintf (ordre + strlen(ordre), "%d 0 0 ", p->p->id);	
-								//pp->p->i_list = append_in_inventory("fruit", pp->p->i_list, 1); TODO
-							}
+								sprintf (ordre + strlen(ordre), "%d 00  0 %d 16 +1 fruit ", pp->p->id, p->p->id);
 						}
 						else
 						{
@@ -37,13 +26,13 @@ void collision(struct linked_list *list, char *array)
 							{
 								float x = pp->p->x - pp->p->last_x;
 								float y = pp->p->y - pp->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 -%f %d 2 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
 							}
 							else if (pp->p->last_x == pp->p->x && pp->p->last_y == pp->p->y) // je percute qqe chose
 							{
 								float x = p->p->x - p->p->last_x;
 								float y = p->p->y - p->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 -%f %d 2 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
 							}
 							else // on ce percute mutuellement 
 							{
@@ -51,7 +40,7 @@ void collision(struct linked_list *list, char *array)
 								float y = pp->p->y - pp->p->last_y;
 								float x2 = p->p->x - p->p->last_x;
 								float y2 = p->p->y - p->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 1 +%f %d 2 +%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x2 * p->p->poid / pp->p->poid, pp->p->id, y2 * p->p->poid / pp->p->poid);
+								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 +%f %d 02 +%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x2 * p->p->poid / pp->p->poid, pp->p->id, y2 * p->p->poid / pp->p->poid);
 							}
 						}
 					}
@@ -138,6 +127,12 @@ int coo_circle(struct personnages *perso, int *x, int *y)
 		*x = perso->x - 5 * sin(perso->angle / 57.3);
 		*y = perso->y + 5 * cos(perso->angle / 57.3);
 		return 6;
+	}
+	else if (strcmp(perso->skin, "arbre1") == 0)
+ 	{
+		*x = perso->x - 15 * sin(perso->angle / 57.3);
+		*y = perso->y + 15 * cos(perso->angle / 57.3);
+		return 10;
 	}
 	return -1;
 }

@@ -40,38 +40,6 @@ struct linked_enemie *append_enemie(char nom[50], struct linked_enemie *l, int n
 	}
 }
 
-struct linked_enemie *remove_enemie(char nom[50], struct linked_enemie *l)
-{
-	struct linked_enemie *ret = l;
-	struct linked_enemie *prev;
-	if (l != NULL)
-	{
-		if (strcmp(l->nom, nom) == 0)
-		{
-			l = l->next;
-			free(ret);
-			return l;
-		}
-		while (l->next != NULL)
-		{
-			prev = l;
-			l = l->next;
-			if (strcmp(l->nom, nom) == 0)
-			{
-				prev->next = l->next;
-				free(l);
-				return ret;
-			}
-		}
-		if (strcmp(l->nom, nom) == 0)
-		{
-			free(l);
-			prev->next = NULL;
-		}
-	}
-	return ret;
-}
-
 void free_linked_enemie(struct linked_enemie *e)
 {
 	if (e != NULL)
@@ -103,7 +71,7 @@ int max_rang(struct linked_enemie *l)
 
 void rec_append_enemie(char *nom, struct personnages *p, struct linked_list *l, int n)
 {
-	p->e_list = append_enemie(nom, p->e_list, n);
+	sprintf (ordre + strlen(ordre), "%d 15 +%d %s ", p->id, n, nom);
 	for (struct linked_list *ll = l; ll != NULL; ll = ll->next)
 		if (strcmp(ll->p->nom_superieur, p->nom) == 0 && ll->p != p && strcmp(p->nom, "none") != 0)
 			rec_append_enemie(nom, ll->p, l, n + 1);
@@ -122,7 +90,7 @@ void rec_remove_enemie(char *nom, struct personnages *p, struct linked_list *l, 
 	int r = get_rang(nom, p->e_list);
 	if (r >= n)
 	{
-		p->e_list = remove_enemie(nom, p->e_list);
+		sprintf (ordre + strlen(ordre), "%d 15 - %s ", p->id, nom);
 		for (struct linked_list *ll = l; ll != NULL; ll = ll->next)
 			if (strcmp(ll->p->nom_superieur, p->nom) == 0 && ll->p != p && strcmp(p->nom, "none") != 0)
 				rec_remove_enemie(nom, ll->p, l, n + 1);	    

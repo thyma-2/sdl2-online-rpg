@@ -36,7 +36,8 @@ struct personnages
     int item1;
     int item2;
     char speak[90];
-    int animation;
+    int animation; // gestion frame
+	int animation_2; // ce qu'il est en train de faire
     ///////////////////////////////////////
 	char animation_time;
     int speak_timer;

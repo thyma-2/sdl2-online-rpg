@@ -7,7 +7,23 @@ int generate_order(struct personnages *list, char *ret)
     {
         if (list->a_bouger == 1)
         {
-			sprintf(order + strlen(order), "%d %d %s %f %f %f %f %d %d %d %s %s %s %s %s %s %c %s %s %s %d %d %s %d", list->id, list->pv, list->nom_de_compte, list->x, list->y, list->ordrex, list->ordrey, list->angle, list->timer_dom, list->faim, list->skin, list->nom, list->nom_superieur, list->titre, list->religion, list->region, list->est_chef, list->e_list, list->i_list, list->echange_player, list->item1, list->item2, list->speak, list->animation);
+			sprintf(order + strlen(order), "%d %d %s %f %f %f %f %d %d %d %s %s %s %s %s %s %c [", list->id, list->pv, list->nom_de_compte, list->x, list->y, list->ordrex, list->ordrey, list->angle, list->timer_dom, list->faim, list->skin, list->nom, list->nom_superieur, list->titre, list->religion, list->region, list->est_chef);
+			for (struct linked_enemie *p = list->e_list; p != NULL; p = p->next)
+			{
+				if (p->next != NULL)
+					sprintf (order + strlen(order), "%s %d ", p->nom, p->rang);
+				else
+					sprintf (order + strlen(order), "%s %d", p->nom, p->rang);
+			}
+			strcat(order, "] [");
+			for (struct linked_item *p = list->i_list; p != NULL; p =p->next)
+			{
+				if (p->next != NULL)
+                    sprintf (order + strlen(order), "%s %d ", p->nom, p->count);
+                else
+                    sprintf (order + strlen(order), "%s %d", p->nom, p->count);
+			}
+			sprintf(order + strlen(order),  "] %s %d %d %s %d %d", list->echange_player, list->item1, list->item2, list->speak, list->animation, list->animation_2);
             if (list->next != NULL)
                 strcat(order, "\n");
 			list->a_bouger = 0;
@@ -21,14 +37,29 @@ int generate_order(struct personnages *list, char *ret)
 
 void send_map(int socket, struct personnages *list)
 {
-    char order[100020];
+    char order[100020] = {0};
 	char *ordre = &order[20];
-    ordre[0] = 0;
     while (list)
     {
-		sprintf(ordre + strlen(ordre), "%d %d %s %f %f %f %f %d %d %d %s %s %s %s %s %s %c %s %s %s %d %d %s %d", list->id, list->pv, list->nom_de_compte, list->x, list->y, list->ordrex, list->ordrey, list->angle, list->timer_dom, list->faim, list->skin, list->nom, list->nom_superieur, list->titre, list->religion, list->region, list->est_chef, list->e_list, list->i_list, list->echange_player, list->item1, list->item2, list->speak, list->animation);
+		sprintf(ordre + strlen(ordre), "%d %d %s %f %f %f %f %d %d %d %s %s %s %s %s %s %c [", list->id, list->pv, list->nom_de_compte, list->x, list->y, list->ordrex, list->ordrey, list->angle, list->timer_dom, list->faim, list->skin, list->nom, list->nom_superieur, list->titre, list->religion, list->region, list->est_chef);
+        for (struct linked_enemie *p = list->e_list; p != NULL; p = p->next)
+        {
+            if (p->next != NULL) 
+                sprintf (ordre + strlen(order), "%s %d ", p->nom, p->rang);
+            else
+                sprintf (ordre + strlen(order), "%s %d", p->nom, p->rang);
+        }
+        strcat(ordre, "] [");
+        for (struct linked_item *p = list->i_list; p != NULL; p =p->next)
+        {
+            if (p->next != NULL) 
+                sprintf (ordre + strlen(ordre), "%s %d ", p->nom, p->count);
+            else
+                sprintf (ordre + strlen(ordre), "%s %d", p->nom, p->count);
+        }
+        sprintf(ordre + strlen(ordre),  "] %s %d %d %s %d %d", list->echange_player, list->item1, list->item2, list->speak, list->animation, list->animation_2);
         if (list->next != NULL)
-            strcat(order, "\n");
+            strcat(ordre, "\n");
         list = list->next;
     }
 	int s = strlen(ordre);

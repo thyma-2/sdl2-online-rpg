@@ -121,8 +121,10 @@ void gestion_touche(void)
             lettres->point = 1;
         if (event.key.keysym.sym == SDLK_BACKSPACE)
             lettres->back = 1;
-	if (event.key.keysym.sym == SDLK_ESCAPE)
-	    lettres->esc = 1;
+		if (event.key.keysym.sym == SDLK_ESCAPE)
+		    lettres->esc = 1;
+		if (event.key.keysym.sym == SDLK_KP_SPACE)
+            lettres->esp = 1;
     }
     if (event.type == SDL_KEYUP)
     {
@@ -206,8 +208,10 @@ void gestion_touche(void)
             lettres->point = 0;
         if (event.key.keysym.sym == SDLK_BACKSPACE)
             lettres->back = 0;
-	if (event.key.keysym.sym == SDLK_ESCAPE)
-	    lettres->esc = 0;
+		if (event.key.keysym.sym == SDLK_ESCAPE)
+		    lettres->esc = 0;
+		if (event.key.keysym.sym == SDLK_KP_SPACE)
+			lettres->esp = 0;		
     }
     if (event.type ==  SDL_MOUSEBUTTONDOWN)
     {

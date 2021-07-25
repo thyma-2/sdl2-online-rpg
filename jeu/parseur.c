@@ -274,6 +274,16 @@ int parse_order(struct personnages *list, char *line)
 	list->speak[j] = 0;
 	i += 2;
 	j = 0;
+	while (line[i] != ' ')
+	{
+		tmpI[j] = line[i];
+		j++;	
+		i++;
+	}
+	i++;
+	tmpI[j] = 0;
+	j = 0;
+	list->animation = atoi(tmpI);
 	while (line[i] != 0 && line[i] != '\n')
 	{
 		tmpI[j] = line[i];
@@ -283,6 +293,6 @@ int parse_order(struct personnages *list, char *line)
 	i++;
 	tmpI[j] = 0;
 	j = 0;
-	list->animation = atoi(tmpI);
+	list->animation_2 = atoi(tmpI);
 	return i;
 }

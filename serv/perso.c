@@ -17,6 +17,7 @@ void parse_order(struct personnages *list, char *line)
 {
 	int i = 0;
 	int j;
+	char tmpC[50];
 	while (line[i] != 0)
 	{
 		struct personnages *p = get_ptr_from_id(get_id(line, &i), list);
@@ -46,6 +47,7 @@ void parse_order(struct personnages *list, char *line)
 				}
 				while(line[i] != ' ')
 					i++;
+				i++;
 				break;
 			case 1:
 				if (line[i] == '+')
@@ -100,7 +102,21 @@ void parse_order(struct personnages *list, char *line)
 				i++;
 				break;
 			case 5:
-                p->angle = atoi(&line[i]);
+				if (line[i] == '+')
+                {
+                    i++;
+                    p->angle += atoi(&line[i]);
+                }
+                else if (line[i] == '-')
+                {
+                    i++;
+                    p->angle -= atoi(&line[i]);
+                }
+                else
+                {
+                    i++;
+                    p->angle = atoi(&line[i]);
+                }
                 while(line[i] != ' ')
                     i++;
                 i++;
@@ -176,30 +192,81 @@ void parse_order(struct personnages *list, char *line)
 				p->est_chef = line[i];
 				i += 2;
 				break;
-			case 15: //pas sur
-				j = 0;
-				while (line[i] != ']')
-                {
+			case 15:
+				if (line[i] == '+')
+				{
 					i++;
-					j++;
-                }
-				p->e_list = realloc(p->e_list, j + 2);
-				strncpy(list->e_list, &line[i - j], j + 1);
-				list->e_list[j + 1] = 0;
-				i += 2;
+					int n = atoi(&line[i]);
+					while (line[i] != ' ')
+						i++;
+					i++;
+					j = 0;
+					while (line[i] != ' ')
+					{
+						tmpC[j] = line[i];
+						j++;
+						i++;
+					}
+					tmpC[j] = 0;
+					i++;
+					p->e_list = append_enemie(tmpC, p->e_list, n);
+				}
+				else
+				{
+					i++;
+                    while (line[i] != ' ')
+                        i++;
+                    i++;
+                    j = 0;
+                    while (line[i] != ' ')
+                    {
+                        tmpC[j] = line[i];
+                        j++;
+                        i++;
+                    }
+                    tmpC[j] = 0;
+                    i++;
+                    p->e_list = remove_enemie(tmpC, p->e_list);
+				}
 				break;
 			case 16: // pas sur
-				j = 0;
-                while (line[i] != ']')
+				if (line[i] == '+')
                 {
                     i++;
-                    j++;
+                    int n = atoi(&line[i]);
+                    while (line[i] != ' ')
+                        i++;
+                    i++;
+                    j = 0;
+                    while (line[i] != ' ')
+                    {
+                        tmpC[j] = line[i];
+                        j++;
+                        i++;
+                    }
+                    tmpC[j] = 0;
+                    i++;
+                    p->i_list = append_in_inventory(tmpC, p->i_list, n);
                 }
-                p->e_list = realloc(p->i_list, j + 2);
-                strncpy(list->i_list, &line[i - j], j + 1);
-                list->i_list[j + 1] = 0;
-                i += 2;
-                break;
+                else
+                {
+                    i++;
+					int n = atoi(&line[i]);
+                    while (line[i] != ' ')
+                        i++;
+                    i++;
+                    j = 0;
+                    while (line[i] != ' ')
+                    {
+                        tmpC[j] = line[i];
+                        j++;
+                        i++;
+                    }
+                    tmpC[j] = 0;
+                    i++;
+                    p->i_list = remove_from_inventory(tmpC, p->i_list, n);
+                }
+				break;
 			case 17:
 				j = 0;
                 while (line[i] != ' ')
@@ -241,6 +308,12 @@ void parse_order(struct personnages *list, char *line)
                     i++;
                 i++;
                 break;
+			case 22:
+				p->animation_2 = atoi(&line[i]);
+				while (line[i] != ' ')
+					i++;
+				i++;
+				break;
 		}
 	}
 }
@@ -251,6 +324,7 @@ void parse_new(struct personnages *list, char *line)
 	int j = 0;
 	char tmpI[10];
 	char tmpF[30];
+	char tmpN[50];
 	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
@@ -404,25 +478,57 @@ void parse_new(struct personnages *list, char *line)
 	list->region[j] = 0;
 	list->est_chef = line[i + 1];
 	i += 3;
-	j = 0;
+	while (line[i] != ']')
+    {
+        i += 1;
+        if (line[i] != ']')
+        {
+            j = 0;
+            while (line[i] != ' ')
+            {
+                tmpN[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpN[j] = 0;
+            i++;
+            j = 0;
+            while (line[i] != ' ' && line[i] != ']')
+            {
+                tmpI[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpI[j] = 0;
+            list->e_list = append_enemie(tmpN, list->e_list, atoi(tmpI));
+        }
+    }
+    i += 2;
 	while (line[i] != ']')
 	{
-		i += 1;
-		j += 1;
-	}
-	list->e_list = realloc(list->e_list, j + 2);
-	strncpy(list->e_list, &line[i -j], j + 1);
-	list->e_list[j + 1] = 0;
-	i += 2;
-	j = 0;
-	while (line[i] != ']')
-	{
-		i += 1;
-		j += 1;
-	}
-    list->i_list = realloc(list->i_list, j + 2);
-    strncpy(list->i_list, &line[i -j], j + 1);
-	list->i_list[j + 1] = 0;
+        i += 1;
+        if (line[i] != ']')
+        {
+            j = 0;
+            while (line[i] != ' ')
+            {
+                tmpN[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpN[j] = 0;
+            i++;
+            j = 0;
+            while (line[i] != ' ' && line[i] != ']')
+            {
+                tmpI[j] = line[i];
+                i++;
+                j++;
+            }
+            tmpI[j] = 0;
+            list->i_list = append_in_inventory(tmpN, list->i_list, atoi(tmpI));
+        }
+    }
 	i += 2;
 	j = 0;
 	while (line[i] != ' ')
@@ -464,7 +570,7 @@ void parse_new(struct personnages *list, char *line)
 	list->speak[j + 1] = 0;
 	i += 2;
 	j = 0;
-	while (line[i] != 0 && line[i] != '\n')
+	while (line[i] != ' ')
 	{
 		tmpI[j] = line[i];
 		j++;
@@ -474,6 +580,17 @@ void parse_new(struct personnages *list, char *line)
 	tmpI[j] = 0;
 	j = 0;
 	list->animation = atoi(tmpI);
+	while (line[i] != 0 && line[i] != '\n')
+	{
+		tmpI[j] = line[i];
+		j++;
+		i++;
+	}
+	i++;
+	tmpI[j] = 0;
+	j = 0;
+	list->animation_2 = atoi(tmpI);
+	
 }
 
 struct personnages *append_perso(char *line, struct personnages *list)
@@ -538,8 +655,8 @@ struct personnages *remove_perso(struct personnages *list)
 		if (list->pv <= 0)
 		{
 			list = list->next;
-			free(ret->e_list);
-			free(ret->i_list);
+			free_linked_enemie(ret->e_list);
+			free_linked_item(ret->i_list);
 			free(ret);
 			ret = list;
 		}
@@ -550,8 +667,8 @@ struct personnages *remove_perso(struct personnages *list)
 			if (list->pv <= 0)
 			{
 				prev->next = list->next;
-				free(list->e_list);
-				free(list->i_list);
+				free_linked_enemie(list->e_list);
+				free_linked_item(list->i_list);
 				free(list);
 				list = prev;
 			}
@@ -559,8 +676,8 @@ struct personnages *remove_perso(struct personnages *list)
 		if (list->pv <= 0)
 		{
 			prev->next = NULL;
-			free(list->e_list);
-			free(list->i_list);
+			free_linked_enemie(list->e_list);
+			free_linked_item(list->i_list);
 			free(list);
 		}
 	}

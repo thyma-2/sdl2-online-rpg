@@ -78,22 +78,22 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 
-    fseek(f, 0, SEEK_END);
+	fseek(f, 0, SEEK_END);
 	size_t size_ground = ftell(f);
-    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-    size_t sizeline = 0;
+	fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+	size_t sizeline = 0;
 	while (fgetc(f) != '\n')
-    	sizeline++;
+		sizeline++;
 	size_ground -= sizeline;
-    char *ground = malloc(size_ground);
-    char *spawn = malloc(sizeline);
-    fseek(f, 0, SEEK_SET);
-    fread(spawn, sizeline, 1, f);
-    fseek(f, sizeline + 1, SEEK_SET);
-    fread(ground, size_ground, 1, f);
-    fclose(f);
-    ground[size_ground] = 0;
-    spawn[sizeline] = 0;
+	char *ground = malloc(size_ground);
+	char *spawn = malloc(sizeline);
+	fseek(f, 0, SEEK_SET);
+	fread(spawn, sizeline, 1, f);
+	fseek(f, sizeline + 1, SEEK_SET);
+	fread(ground, size_ground, 1, f);
+	fclose(f);
+	ground[size_ground] = 0;
+	spawn[sizeline] = 0;
 
 	struct personnages *list = init_map();
 	struct linked_client *unlog_client = NULL;
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 		next = unlog_client;
 		client = unlog_client;
 		while (client != NULL)
-        {
+		{
 			next = next->next;
 			if (recv(client->socket, &buffer,101, 0) > 0)
 			{
@@ -251,9 +251,9 @@ int main(int argc, char **argv)
 			int size = generate_order(list, order);
 			for (struct linked_client *client = ingame_client; client != NULL; client=client->next)
 				send(client->socket, order, size + 20, MSG_NOSIGNAL);
+			list = remove_perso(list);
 			free(order);
 		}
-		list = remove_perso(list);
 		save++;
 		if (save > 1000000)
 		{

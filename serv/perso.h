@@ -26,17 +26,21 @@ struct personnages
     char religion[50];
     char region[50];
     char est_chef;
-    char *e_list;
-    char *i_list;
+	struct linked_enemie *e_list;
+    struct linked_item *i_list;
     char echange_player[50];
     int item1;
     int item2;
     char speak[90];
     int animation;
+	int animation_2;
     struct personnages *next;
     /////////////
 	char a_bouger;
 };
+
+#include "inventaire.h"
+#include "diplo.h"
 
 void parse_new(struct personnages *list, char *line);
 void parse_order(struct personnages *list, char *line);

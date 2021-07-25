@@ -80,7 +80,7 @@ void gui_event(struct personnages *perso, struct linked_list *list)
 	}
 	position.x = 50;
 	position.y = 50;
-	char txt[150];
+	char txt[231];
 	txt[0] = 0;
 	//proposition d'échange
 	if (strcmp(perso->echange_player, "none") != 0)
@@ -89,20 +89,14 @@ void gui_event(struct personnages *perso, struct linked_list *list)
 		{
 			if (p != NULL)
 			{
-				strcat(txt, perso->echange_player);
-				strcat(txt, " vous propose un echange -> ");
 				struct linked_item *obj1 = get_item_n(perso->item2, perso->i_list); //le tiens
 				struct linked_item *obj2 = get_item_n(perso->item1, p->i_list);
-				if (obj1 != NULL)
-					strcat(txt, obj1->nom);
+				if (obj1 == NULL)
+					sprintf(txt, "%s vous propose un echange -> rien contre %s\n appuyez sur y pour accepter et n pour refuser", perso->echange_player, obj2->nom);
+				else if (obj2 == NULL)
+					sprintf(txt, "%s vous propose un echange -> %s contre rien\n appuyez sur y pour accepter et n pour refuser", perso->echange_player, obj1->nom);
 				else
-					strcat(txt, "rien");
-				strcat(txt, " contre : ");
-				if (obj2 != NULL)
-					strcat(txt, obj2->nom);
-				else
-					strcat(txt, "rien");
-				strcat(txt, "\nappuyez sur y pour accepter et n pour refuser");
+					sprintf(txt, "%s vous propose un echange -> %s contre %s\n appuyez sur y pour accepter et n pour refuser", perso->echange_player, obj1->nom, obj2->nom);
 				if (lettres->n == 1)
 				{
 					perso->echange_player[0] = 0;
@@ -172,33 +166,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 	SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
 	position.x = 12;
 	txt2[0] = 0;
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->pv);
-	strcat(txt2, tmp);
-	strcat(txt2, "/");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->max_pv);
-	strcat(txt2, tmp);
-	strcat(txt2, "\n");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->vitesse_dep);
-	strcat(txt2, tmp);
-	strcat(txt2, "\n");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->vitesse_dom);
-	strcat(txt2, tmp);
-	strcat(txt2, "\n");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->porte_dom);
-	strcat(txt2, tmp);
-	strcat(txt2, "\n");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->poid);
-	strcat(txt2, tmp);
-	strcat(txt2, "\n");
-	tmp[0] = 0;
-	sprintf(tmp, "%d", moi->faim);
-	strcat(txt2, tmp);
+	sprintf (txt2, "%d/%d\n%d\n%d\n%d\n%d\n%d", moi->pv, moi->max_pv, moi->vitesse_dep, moi->vitesse_dom, moi->porte_dom, moi->poid, moi->faim);
 	position.x += blit_text(position, txt, 200) + 20;
 	position.x += blit_text(position, txt2, 200) + 8;
 	SDL_RenderCopy(renderer, img->g->demarcation, NULL, &position);
@@ -248,33 +216,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 		txt[0] = 0;
 		txt2[0] = 0;
 		strcat(txt, "pv\nvitesse\nperiode d attaque\nportee\npoid\nfaim");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", pv / i);
-		strcat(txt2, tmp);
-		strcat(txt2, "/");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", pvm / i);
-		strcat(txt2, tmp);
-		strcat(txt2, "\n");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", vitesse_dep);
-		strcat(txt2, tmp);
-		strcat(txt2, "\n");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", vitesse_dom / i);
-		strcat(txt2, tmp);
-		strcat(txt2, "\n");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", portee);
-		strcat(txt2, tmp);
-		strcat(txt2, "\n");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", poid / i);
-		strcat(txt2, tmp);
-		strcat(txt2, "\n");
-		tmp[0] = 0;
-		sprintf(tmp, "%d", faim);
-		strcat(txt2, tmp);
+		sprintf(tmp, "%d/%d\n%d\n%d\n%d\n%d\n%d", pv / i, pvm/i, vitesse_dep, vitesse_dom / i, portee, poid / i, faim);
 		position.x += blit_text(position, txt, 200) + 20;
 		position.x += blit_text(position, txt2, 200);
 	}

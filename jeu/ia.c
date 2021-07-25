@@ -80,12 +80,12 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (angle - parcour->p->angle < 180)
 			{
-				 sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle + 1);
+				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle + 1);
 				change_angle = 1;
 			}
 			else
 			{
-				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle - 1);
+				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle - 1);
 				change_angle = -1;
 			}
 
@@ -94,12 +94,12 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (parcour->p->angle - angle < 180)
 			{
-				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle - 1);
+				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle - 1);
 				change_angle = -1;
 			}
 			else
 			{
-				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, parcour->p->angle = 1);
+				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle = 1);
 				change_angle = 1;
 			}
 		}
@@ -108,7 +108,7 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (parcour2->p->sur_plancher == parcour->p)
 			{
-				sprintf (ordre + strlen(ordre), "%d 05 %d %d 01 %f %d 02 %f ", parcour2->p->id, parcour2->p->angle + change_angle, parcour2->p->id, parcour2->p->x + parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3), parcour2->p->id, parcour2->p->y - parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3));
+				sprintf (ordre + strlen(ordre), "%d 05 +%d %d 01 %f %d 02 %f ", parcour2->p->id, change_angle, parcour2->p->id, parcour2->p->x + parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3), parcour2->p->id, parcour2->p->y - parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3));
 			}
 		}
 		parcour->p->vitesse_dep -= 1;
@@ -130,7 +130,7 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 		int angle = findpath(parcour->p, array);
 		if (angle > 0)
 		{
-			sprintf (ordre + strlen(ordre), "%d 05 %d %d 01 +%f %d 02 -%f ", parcour->p->id, (parcour->p->angle + angle) / 2, parcour->p->id, parcour->p->vitesse_dep * sin(angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * cos(angle / 57.3));
+			sprintf (ordre + strlen(ordre), "%d 05  %d %d 01 +%f %d 02 -%f ", parcour->p->id, (parcour->p->angle + angle) / 2, parcour->p->id, parcour->p->vitesse_dep * sin(angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * cos(angle / 57.3));
 		}
 		else
 		{
@@ -158,8 +158,7 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 							{
 								if (exist_in_linked_item(parcour->p->i_list, "fleche") != NULL)
 								{
-									parcour->p->i_list = remove_from_inventory("fleche", parcour->p->i_list, 1); //TODO
-									sprintf (ordre + strlen(ordre), "%d 00 -5 %d 06 %d ", parcour2->p->id, parcour->p->id, parcour->p->vitesse_dom);
+									sprintf (ordre + strlen(ordre), "%d 00 -5 %d 06 %d %d 16 -1 fleche ", parcour2->p->id, parcour->p->id, parcour->p->vitesse_dom, parcour->p->id);
 								}
 							}
 							else
