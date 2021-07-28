@@ -6,8 +6,12 @@ char *rec_ground(int socket)
     recv(socket, map, 8, 0);
     int nb_char = atoi(map);
     free(map);
-    map = emalloc(nb_char + 1);
-    recv(socket, map, nb_char, 0);
+    map = calloc(nb_char + 1, sizeof(char));
+    int a = 0;
+    while (a < nb_char)
+    {
+        a += recv(socket, map +strlen(map), nb_char, 0);
+    }
     map[nb_char] = 0;
     max_x = 0;
     int i = 0;

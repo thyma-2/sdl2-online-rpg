@@ -26,14 +26,26 @@ void collision(struct linked_list *list, char *array)
 							{
 								float x = pp->p->x - pp->p->last_x;
 								float y = pp->p->y - pp->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
+                                                                if (p->p->vitesse_dep == 0)
+                                                                {
+                                                                    sprintf(ordre + strlen(ordre), "%d 00 -1 %d 01 -%f %d 02 -%f ",p->p->id, pp->p->id, x, pp->p->id, y);
+                                                                }
+                                                                else
+								    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
 							}
 							else if (pp->p->last_x == pp->p->x && pp->p->last_y == pp->p->y) // je percute qqe chose
 							{
 								float x = p->p->x - p->p->last_x;
 								float y = p->p->y - p->p->last_y;
-								sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
-							}
+                                                                if (pp->p->vitesse_dep == 0)
+                                                                {
+                                                                    sprintf(ordre + strlen(ordre), "%d 00 -1 %d 01 -%f %d 02 -%f ",pp->p->id, p->p->id, x, p->p->id, y);
+                                                                }
+                                                                else
+                                                                {
+								    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
+							        }
+                                                        }
 							else // on ce percute mutuellement 
 							{
 								float x = pp->p->x - pp->p->last_x;
