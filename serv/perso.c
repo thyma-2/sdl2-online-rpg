@@ -15,7 +15,6 @@ struct personnages *init_map(void)
 
 void parse_order(struct personnages *list, char *line)
 {
-    printf("%s\n", line);
     int i = 0;
     int j;
     char tmpC[50];
