@@ -75,7 +75,7 @@ void gui_event(struct personnages *perso, struct linked_list *list)
 	if (perso->ordrex != -1)
 	{
 		if (perso->x > perso->ordrex + - 50 && perso->x < perso->ordrex + 50 && perso->y > perso->ordrey - 50 && perso->y < perso->ordrey + 50)
-			perso->ordrex = -1;
+			sprintf (ordre + strlen(ordre), "%d 03 -1 ", perso->id);
 		SDL_RenderCopy(renderer, img->g->croix, NULL, &position);
 	}
 	position.x = 50;
@@ -579,6 +579,11 @@ void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *l
 		SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position8);
 		SDL_RenderCopy(renderer, img->g->textInput, NULL, &position2);
 		SDL_RenderCopy(renderer, img->g->textInput, NULL, &position4);
+		if (lettres->enter == 1)
+		{
+			lettres->enter = 0;
+			sprintf (ordre + strlen(ordre), "%d 10 %s ", perso->id, perso->nom_superieur);
+		}
 	}
 	blit_text(position2, m->add_enemi, 20);
 	blit_text(position4, m->rem_enemi, 20);
@@ -928,7 +933,7 @@ void talk(struct speak *speak_s, struct personnages *moi)
 	blit_text(position1, speak_s->speak, 30);
 	if (lettres->enter == 1)
 	{
-		moi->speak_timer = strlen(speak_s->speak) * 100;
+		moi->speak_timer = 250;
 		sprintf (ordre + strlen(ordre), "%d 20 [%s] ", moi->id, speak_s->speak);
 		speak_s->speak[0] = 0;
 		lettres->enter = 0;
