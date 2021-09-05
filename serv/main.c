@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 						send(client->socket, &boolrep, 1,MSG_NOSIGNAL);
 						send_background(client->socket, ground, size_ground);
 						send_map(client->socket);
-                        ingame_client = append_linked(ingame_client, client->socket, client->name);
+						ingame_client = append_linked(ingame_client, client->socket, client->name);
 						logged_client = remove_linked(logged_client, client->socket);
 					}
 				}

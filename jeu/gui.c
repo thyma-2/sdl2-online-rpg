@@ -536,6 +536,8 @@ void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *l
 {
 	char *e_list = malloc(200);
 	char txt1[] = "Ajouter un enemi\n\n\n\n\nRetirer un enemi\n\n\n\n\nChanger de suzerain";
+	char txt2[] = "Ce suzerain a deja 200 vassaux direct, vous ne pouvez pas le choisir";
+	char txt3[] = "Cette personne n'existe pas";
 	SDL_Rect position1;
 	SDL_Rect position2 = {50, 100, 558, 70};
 	SDL_Rect position4 = {50, 200, 558, 70};
@@ -593,13 +595,19 @@ void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *l
 				struct personnages *nouveau = find_perso_by_name(list, m->superieur);
 				if (nouveau != NULL)
 				{
-					nouveau = find_first_valid_leader(nouveau, list);
-					struct personnages *ancien = find_perso_by_name(list, perso->nom_superieur);
-					if (ancien == NULL)
-						sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 ", perso->id, m->superieur, nouveau->id);
+					if (nouveau->nb_vassaux <= 200)
+					{
+						struct personnages *ancien = find_perso_by_name(list, perso->nom_superieur);
+						if (ancien == NULL)
+							sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 ", perso->id, m->superieur, nouveau->id);
+						else
+							sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 %d 14 -1 ", perso->id, m->superieur, nouveau->id, ancien->id);
+					}
 					else
-						sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 %d 14 - 1", perso->id, m->superieur, nouveau->id, ancien->id);
+						blit_text(position9, txt2, 50);
 				}
+				else
+					blit_text(position9, txt3, 50);
 			}
 			lettres->enter = 0;
 		}

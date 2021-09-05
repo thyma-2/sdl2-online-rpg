@@ -12,7 +12,9 @@ void parse_order(char *line)
         if (p == NULL)
             return;
         p->a_bouger = 1;
-        i++;
+		while (line[i] != ' ')
+        	i++;
+		i++;
         int idaction = atoi(&line[i]);
         i += 3;
         switch(idaction)

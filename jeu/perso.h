@@ -31,7 +31,7 @@ struct personnages
     char titre[50];
     char religion[50];
     char region[50];
-	int nb_vassaux;
+    int nb_vassaux;
     struct linked_enemie *e_list;
     struct linked_item *i_list;
     char echange_player[50];
@@ -39,11 +39,11 @@ struct personnages
     int item2;
     char speak[90];
     int animation; // gestion frame
-	int animation_2; // ce qu'il est en train de faire
+    int animation_2; // ce qu'il est en train de faire
     ///////////////////////////////////////
-	char animation_time;
+    char animation_time;
     int speak_timer;
-	int faim_time; 
+    int faim_time; 
     struct personnages *sur_plancher;
     int max_pv;
     int vitesse_dom;
@@ -70,6 +70,7 @@ struct linked_list
 #include "stat.h"
 #include "parseur.h"
 #include "select_sprite.h"
+
 
 char exist_in_linked(struct linked_list *list, struct personnages *to_test);
 struct linked_list *append_in_linked(struct linked_list *list,struct personnages *p);
