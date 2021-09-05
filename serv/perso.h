@@ -5,7 +5,12 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include "main.h"
+#include "inventaire.h"
+#include "diplo.h"
 #define size_order 2000
+
+extern struct personnages *lits;
 
 struct personnages
 {
@@ -25,7 +30,7 @@ struct personnages
     char titre[50];
     char religion[50];
     char region[50];
-    char est_chef;
+	int nb_vassaux;
 	struct linked_enemie *e_list;
     struct linked_item *i_list;
     char echange_player[50];
@@ -34,19 +39,16 @@ struct personnages
     char speak[90];
     int animation;
 	int animation_2;
-    struct personnages *next;
     /////////////
+	struct personnages *next;
 	char a_bouger;
 };
 
-#include "inventaire.h"
-#include "diplo.h"
-
-void parse_new(struct personnages *list, char *line);
-void parse_order(struct personnages *list, char *line);
-struct personnages *append_perso(char *line, struct personnages *list);
-struct personnages *init_map(void);
-struct personnages *get_ptr_from_id(int id, struct personnages *list);
+void parse_new(struct personnages *p, char *line);
+void parse_order(char *line);
+struct personnages *append_perso(char *line);
+struct personnages *get_ptr_from_id(int id);
 int get_id(char *line, int *i);
-void append_enemi(char *name, struct personnages *p);
-struct personnages *remove_perso(struct personnages *list);
+void append_enemi(char *name);
+struct personnages *remove_perso(void);
+struct personnages *find_perso_by_name(char *name);

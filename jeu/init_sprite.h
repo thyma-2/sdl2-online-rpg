@@ -39,6 +39,17 @@ struct textures
 
 struct skin
 {
+	SDL_Texture *drapeauBlancFace_dos;
+	SDL_Texture *drapeauBlancFaceGauche;
+	SDL_Texture *drapeauBlancGauche;
+	SDL_Texture *drapeauBlancGaucheFace;
+	SDL_Texture *drapeauBlancGaucheDos;
+	SDL_Texture *drapeauBlancDosGauche;
+    SDL_Texture *drapeauBlancDosDroite;
+	SDL_Texture *drapeauBlancDroite;
+    SDL_Texture *drapeauBlancDroiteDos;
+    SDL_Texture *drapeauBlancDroiteFace;
+    SDL_Texture *drapeauBlancFaceDroite;
     SDL_Texture *hoFaDoRien;
     SDL_Texture *hoFaDoMa1;
     SDL_Texture *hoFaDoMa2;
@@ -274,6 +285,6 @@ struct skin *init_skin();
 struct lettres_img *init_lettre();
 struct gui_sprite *init_gui();
 
-struct img *img;
-SDL_Renderer *renderer;
-SDL_Window *window;
+extern struct img *img;
+extern SDL_Renderer *renderer;
+extern SDL_Window *window;

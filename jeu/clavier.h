@@ -1,6 +1,5 @@
+#pragma once
 #include "alloc.h"
-#ifndef CLAVIER
-#define CLAVIER
 #include <SDL2/SDL.h>
 
 void gestion_touche (void);
@@ -85,5 +84,5 @@ struct lettres
     char esc;
 	char esp;
 };
-struct lettres *lettres;
-#endif /*CLAVIER*/
+
+extern struct lettres *lettres;

@@ -11,6 +11,8 @@
 #include "arpa/inet.h"
 #define order_size 2000
 
+extern struct personnages *list;
+
 struct personnages
 {
     int id;
@@ -29,7 +31,7 @@ struct personnages
     char titre[50];
     char religion[50];
     char region[50];
-    char est_chef;
+	int nb_vassaux;
     struct linked_enemie *e_list;
     struct linked_item *i_list;
     char echange_player[50];
@@ -74,11 +76,11 @@ struct linked_list *append_in_linked(struct linked_list *list,struct personnages
 struct linked_list *recv_map(int socket, struct linked_list *list);
 struct linked_list *append_perso(struct linked_list *list,  char **line);
 void disp_perso_list(struct linked_list *list, struct personnages *moi);
-void *find_perso(struct linked_list *list ,char *name);
+//struct personnages *find_perso(struct linked_list *list ,char *name);
 void buble_sort_perso(struct linked_list *list, struct personnages *moi);
 void free_linked(struct linked_list *list, char free_content);
 struct linked_list *death(struct linked_list *list);
 struct linked_list *remove_from_linked_list(struct linked_list *list, struct personnages *to_rem);
-void *find_perso_by_name(struct linked_list *list ,char *name);
+struct personnages *find_perso_by_name(struct linked_list *list ,char *name);
 struct linked_list *clean_selected(struct linked_list *list);
 void fix_some_shit(struct linked_list *list);

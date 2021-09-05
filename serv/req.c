@@ -10,7 +10,7 @@ void send_background(int socket,char *map, size_t size_map)
 }
 
 
-char handle_req(int socket, struct personnages *list)
+char handle_req(int socket)
 {
 	char *buffer = calloc(20, 1);
 	if (recv(socket, buffer, 20, 0) > 0)
@@ -36,7 +36,7 @@ char handle_req(int socket, struct personnages *list)
 				}
 				buffer = pos_buf;
 				buffer[size] = 0;
-				parse_order(list, buffer);
+				parse_order(buffer);
 			}
 		}
 	}

@@ -57,7 +57,16 @@ void actualise_stat(struct personnages *p)
 		p->eau = '0';
 		p->plancher = 'n';
 	}
-	else if (strcmp(p->skin, "ship1") == 0)
+}
+
+void init_stat(struct personnages *p)
+{
+	p->sur_plancher = NULL;
+	p->speak_timer = 0;
+	p->faim_time = 0;
+	p->last_x = p->x;
+	p->last_y = p->y;
+	if (strcmp(p->skin, "ship1") == 0)
 	{
 		p->max_pv = 800;
 		p->vitesse_dom = 0;
@@ -66,7 +75,7 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 9999;
 		p->eau = '1';
-		p->plancher = 'y';
+		p->plancher = 10;
 	}
 	else if (strcmp(p->skin, "arbre1") == 0)
 	{
@@ -74,7 +83,7 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 999;
 		p->eau = '0';
-		p->plancher = 'n';
+		p->plancher = 0;
 	}
 	else if (strcmp(p->skin, "fruit") == 0)
 	{
@@ -82,7 +91,7 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 1;
 		p->eau = '0';
-		p->plancher = 'n';
+		p->plancher = 0;
 	}
 	else if (strcmp(p->skin, "chateau") == 0)
 	{
@@ -90,7 +99,7 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 24000;
 		p->eau = '0';
-		p->plancher = 'n';
+		p->plancher = 0;
 	}
 	else if (strcmp(p->skin, "tour") == 0)
 	{
@@ -98,17 +107,19 @@ void actualise_stat(struct personnages *p)
 		p->dom = 0;
 		p->poid = 10000;
 		p->eau = '0';
-		p->plancher = 'n';
+		p->plancher = 0;
 	}
-}
-
-void init_stat(struct personnages *p)
-{
-	actualise_stat(p);
-	p->sur_plancher = NULL;
-	p->speak_timer = 0;
-	p->faim_time = 0;
-	p->chemin = NULL;
-	p->last_x = p->x;
-	p->last_y = p->y;
+	else if (strcmp(p->skin, "flag_zone") == 0)
+	{
+		p->max_pv = 99999;
+		p->dom = 0;
+		p->poid = 10000;
+		p->eau = '0';
+		p->plancher = 127;
+	}
+	if (strcmp(p->skin, "archer") == 0 || strcmp(p->skin, "civil") == 0 || strcmp(p->skin, "fantassin") == 0)
+	{
+		p->chemin = malloc(sizeof(struct path) * max_x * max_y);
+		actualise_stat(p);
+	}
 }

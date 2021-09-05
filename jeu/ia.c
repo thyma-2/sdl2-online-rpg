@@ -10,14 +10,21 @@ void ia(struct linked_list *list, char *array)
 				ia_ship(list, parcour);
 			else if (strcmp(parcour->p->skin, "chateau") == 0 || strcmp(parcour->p->skin, "tour") == 0)
 				ia_build(list, parcour);
-			else if(strncmp(parcour->p->skin, "arbre", 5) == 0)
+			else if (strncmp(parcour->p->skin, "arbre", 5) == 0)
 				ia_arbre(list, parcour);
-			else if(strncmp(parcour->p->skin, "fruit", 5) == 0)
+			else if (strncmp(parcour->p->skin, "fruit", 5) == 0)
 				ia_fruit(parcour, array);
-			else
-				ia_man(list, parcour, array);
+			else if (strcmp(parcour->p->skin, "flag_zone") == 0)
+				ia_flag(parcour);
+			ia_man(list, parcour, array);
 		}
 	}
+}
+
+void ia_flag(struct linked_list *parcour)
+{
+	if (parcour->p->pv < 99999)
+		sprintf (ordre + strlen(ordre), "%d 0 %d ", parcour->p->id, parcour->p->pv * 2);
 }
 
 void ia_fruit(struct linked_list *parcour, char *ground)
@@ -80,12 +87,12 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (angle - parcour->p->angle < 180)
 			{
-				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle + 1);
+				sprintf (ordre + strlen(ordre), "%d 05 +1 ", parcour->p->id);
 				change_angle = 1;
 			}
 			else
 			{
-				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle - 1);
+				sprintf (ordre + strlen(ordre), "%d 05 -1 ", parcour->p->id);
 				change_angle = -1;
 			}
 
@@ -94,12 +101,12 @@ void ia_ship(struct linked_list *list, struct linked_list *parcour)
 		{
 			if (parcour->p->angle - angle < 180)
 			{
-				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle - 1);
+				sprintf (ordre + strlen(ordre), "%d 05 -1 ", parcour->p->id);
 				change_angle = -1;
 			}
 			else
 			{
-				sprintf (ordre + strlen(ordre), "%d 05  %d ", parcour->p->id, parcour->p->angle = 1);
+				sprintf (ordre + strlen(ordre), "%d 05 +1 ", parcour->p->id);
 				change_angle = 1;
 			}
 		}
@@ -130,15 +137,12 @@ void ia_man(struct linked_list *list, struct linked_list *parcour, char *array)
 		int angle = findpath(parcour->p, array);
 		if (angle > 0)
 		{
-			sprintf (ordre + strlen(ordre), "%d 05  %d %d 01 +%f %d 02 -%f ", parcour->p->id, (parcour->p->angle + angle) / 2, parcour->p->id, parcour->p->vitesse_dep * sin(angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * cos(angle / 57.3));
+			if (angle != parcour->p->angle)
+				sprintf (ordre + strlen(ordre), "%d 05 %d ", parcour->p->id, angle);
+			sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 -%f ", parcour->p->id, parcour->p->vitesse_dep * sin(parcour->p->angle / 57.3), parcour->p->id, parcour->p->vitesse_dep * cos(parcour->p->angle / 57.3));
 		}
-		else
-		{
-			if (angle < 0)
-				sprintf (ordre + strlen(ordre), "%d 03 %f ", parcour->p->id, parcour->p->ordrex);
-			free(parcour->p->chemin);
-			parcour->p->chemin = NULL;
-		}
+		else if (angle < 0)
+			sprintf (ordre + strlen(ordre), "%d 03 -1 ", parcour->p->id);
 	}
 	if (parcour->p->timer_dom > 0)
 		parcour->p->timer_dom -= 1;

@@ -12,4 +12,6 @@ struct sound
 };
 
 struct sound *init_sound(void);
-struct sound *sons;
+
+
+extern struct sound *sons;

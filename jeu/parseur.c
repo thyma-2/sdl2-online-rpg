@@ -181,8 +181,18 @@ int parse_order(struct personnages *list, char *line)
 		i++;
 	}
 	list->region[j] = 0;
-	list->est_chef = line[i + 1];
-	i += 3;
+	i ++;
+	j = 0;
+	while (line[i] != ' ')
+    {
+        tmpI[j] = line[i];
+        j++;
+        i++;
+    }
+    tmpI[j] = 0;
+    list->nb_vassaux = atoi(tmpI);
+    i++;
+    j = 0;
 	while (line[i] != ']')
 	{
 		i += 1;

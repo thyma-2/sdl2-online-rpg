@@ -1,7 +1,7 @@
-#ifndef MAP_OP
-#define MAP_OP
-
+#pragma once
 #include "perso.h"
 #include <stdio.h>
-void save_map(struct personnages *list);
-#endif /*MAP_OP*/
+#include "main.h"
+
+void save_map(void);
+struct personnages *init_map(void);

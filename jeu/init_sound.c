@@ -1,6 +1,6 @@
-extern struct sound *sons;
-
 #include "init_sound.h"
+
+struct sound *sons;
 
 struct sound *init_sound(void)
 {

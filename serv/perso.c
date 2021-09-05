@@ -1,26 +1,14 @@
 #define _GNU_SOURCE
 #include "perso.h"
 
-struct personnages *init_map(void)
-{
-    FILE *acount = fopen("map.txt", "r+");
-    char *line = NULL;
-    size_t len = 0;
-    struct personnages *list = NULL;
-    while (getline(&line, &len, acount) > 0)
-        list = append_perso(line, list);
-
-    return list;
-}
-
-void parse_order(struct personnages *list, char *line)
+void parse_order(char *line)
 {
     int i = 0;
     int j;
     char tmpC[50];
     while (line[i] != 0)
     {
-        struct personnages *p = get_ptr_from_id(get_id(line, &i), list);
+        struct personnages *p = get_ptr_from_id(get_id(line, &i));
         if (p == NULL)
             return;
         p->a_bouger = 1;
@@ -61,10 +49,7 @@ void parse_order(struct personnages *list, char *line)
                     p->x -= atoi(&line[i]);
                 }
                 else
-                {
-                    i++;
                     p->x = atof(&line[i]);
-                }
                 while(line[i] != ' ')
                     i++;
                 i++;
@@ -81,10 +66,7 @@ void parse_order(struct personnages *list, char *line)
                     p->y -= atoi(&line[i]);
                 }
                 else
-                {
-                    i++;
                     p->y = atof(&line[i]);
-                }
                 while(line[i] != ' ')
                     i++;
                 i++;
@@ -113,10 +95,7 @@ void parse_order(struct personnages *list, char *line)
                     p->angle -= atoi(&line[i]);
                 }
                 else
-                {
-                    i++;
                     p->angle = atoi(&line[i]);
-                }
                 while(line[i] != ' ')
                     i++;
                 i++;
@@ -188,9 +167,22 @@ void parse_order(struct personnages *list, char *line)
                 p->region[j] = 0;
                 i++;
                 break;
-            case 14:
-                p->est_chef = line[i];
-                i += 2;
+			case 14:
+				if (line[i] == '+')
+                {
+                    i++;
+                    p->nb_vassaux += atoi(&line[i]);
+                }
+                else if (line[i] == '-')
+                {
+                    i++;
+                    p->nb_vassaux -= atoi(&line[i]);
+                }
+                else
+                    p->nb_vassaux = atof(&line[i]);
+                while(line[i] != ' ')
+                    i++;
+                i++;
                 break;
             case 15:
                 if (line[i] == '+')
@@ -319,7 +311,7 @@ void parse_order(struct personnages *list, char *line)
     }
 }
 
-void parse_new(struct personnages *list, char *line)
+void parse_new(struct personnages *p, char *line)
 {
     int i = 0;
     int j = 0;
@@ -333,7 +325,7 @@ void parse_new(struct personnages *list, char *line)
         i++;
     }
     tmpI[j] = 0;
-    list->id = atoi(tmpI);
+    p->id = atoi(tmpI);
     i++;
     j = 0;
     while (line[i] != ' ')
@@ -345,14 +337,14 @@ void parse_new(struct personnages *list, char *line)
     tmpI[j] = 0;
     j = 0;
     i++;
-    list->pv = atoi(tmpI);
+    p->pv = atoi(tmpI);
     while (line[i] != ' ')
     {
-        list->nom_de_compte[j] = line[i];
+        p->nom_de_compte[j] = line[i];
         j++;
         i++;
     }
-    list->nom_de_compte[j] = 0;
+    p->nom_de_compte[j] = 0;
     i++;
     j = 0;
     while (line[i] != ' ')
@@ -363,7 +355,7 @@ void parse_new(struct personnages *list, char *line)
     }
     tmpF[j] = 0;
     j = 0;
-    list->x = atof(tmpF);
+    p->x = atof(tmpF);
     i++;
     while (line[i] != ' ')
     {
@@ -373,7 +365,7 @@ void parse_new(struct personnages *list, char *line)
     }
     tmpF[j] = 0;
     j = 0;
-    list->y = atof(tmpF);
+    p->y = atof(tmpF);
     i++;
     while (line[i] != ' ')
     {
@@ -383,7 +375,7 @@ void parse_new(struct personnages *list, char *line)
     }
     tmpF[j] = 0;
     j = 0;
-    list->ordrex = atof(tmpF);
+    p->ordrex = atof(tmpF);
     i++;
     while (line[i] != ' ')
     {
@@ -393,7 +385,7 @@ void parse_new(struct personnages *list, char *line)
     }
     tmpF[j] = 0;
     j = 0;
-    list->ordrey = atof(tmpF);
+    p->ordrey = atof(tmpF);
     i++;
     while (line[i] != ' ')
     {
@@ -404,7 +396,7 @@ void parse_new(struct personnages *list, char *line)
     tmpI[j] = 0;
     j = 0;
     i++;
-    list->angle = atoi(tmpI);
+    p->angle = atoi(tmpI);
     while (line[i] != ' ')
     {
         tmpI[j] = line[i];
@@ -414,7 +406,7 @@ void parse_new(struct personnages *list, char *line)
     tmpI[j] = 0;
     j = 0;
     i++;
-    list->timer_dom = atoi(tmpI);
+    p->timer_dom = atoi(tmpI);
     while (line[i] != ' ')
     {
         tmpI[j] = line[i];
@@ -424,61 +416,71 @@ void parse_new(struct personnages *list, char *line)
     tmpI[j] = 0;
     j = 0;
     i++;
-    list->faim = atoi(tmpI);
+    p->faim = atoi(tmpI);
     while (line[i] != ' ')
     {
-        list->skin[j] = line[i];
+        p->skin[j] = line[i];
         j++;
         i++;
     }
-    list->skin[j] = 0;
+    p->skin[j] = 0;
     j = 0;
     i++;
     while (line[i] != ' ')
     {
-        list->nom[j] = line[i];
+        p->nom[j] = line[i];
         j++;
         i++;
     }
-    list->nom[j] = 0;
+    p->nom[j] = 0;
     j = 0;
     i++;
     while (line[i] != ' ')
     {
-        list->nom_superieur[j] = line[i];
+        p->nom_superieur[j] = line[i];
         j++;
         i++;
     }
-    list->nom_superieur[j] = 0;
+    p->nom_superieur[j] = 0;
     j = 0;
     i++;
     while (line[i] != ' ')
     {
-        list->titre[j] = line[i];
+        p->titre[j] = line[i];
         j++;
         i++;
     }
-    list->titre[j] = 0;
+    p->titre[j] = 0;
     j = 0;
     i++;
     while (line[i] != ' ')
     {
-        list->religion[j] = line[i];
+        p->religion[j] = line[i];
         j++;
         i++;
     }
-    list->religion[j] = 0;
+    p->religion[j] = 0;
     j = 0;
     i++;
     while (line[i] != ' ')
     {
-        list->region[j] = line[i];
+        p->region[j] = line[i];
         j++;
         i++;
     }
-    list->region[j] = 0;
-    list->est_chef = line[i + 1];
-    i += 3;
+    p->region[j] = 0;
+    i ++;
+	j = 0;
+	while (line[i] != ' ')
+    {
+        tmpI[j] = line[i];
+        j++;
+        i++;
+    }
+    tmpI[j] = 0;
+    p->nb_vassaux = atoi(tmpI);
+    i++;
+    j = 0;
     while (line[i] != ']')
     {
         i += 1;
@@ -501,7 +503,7 @@ void parse_new(struct personnages *list, char *line)
                 j++;
             }
             tmpI[j] = 0;
-            list->e_list = append_enemie(tmpN, list->e_list, atoi(tmpI));
+            p->e_list = append_enemie(tmpN, p->e_list, atoi(tmpI));
         }
     }
     i += 2;
@@ -527,18 +529,18 @@ void parse_new(struct personnages *list, char *line)
                 j++;
             }
             tmpI[j] = 0;
-            list->i_list = append_in_inventory(tmpN, list->i_list, atoi(tmpI));
+            p->i_list = append_in_inventory(tmpN, p->i_list, atoi(tmpI));
         }
     }
     i += 2;
     j = 0;
     while (line[i] != ' ')
     {
-        list->echange_player[j] = line[i];
+        p->echange_player[j] = line[i];
         j++;
         i++;
     }
-    list->echange_player[j] = 0;
+    p->echange_player[j] = 0;
     i++;
     j = 0;
     while (line[i] != ' ')
@@ -550,7 +552,7 @@ void parse_new(struct personnages *list, char *line)
     tmpI[j] = 0;
     j = 0;
     i++;
-    list->item1 = atoi(tmpI);
+    p->item1 = atoi(tmpI);
     while (line[i] != ' ')
     {
         tmpI[j] = line[i];
@@ -558,17 +560,17 @@ void parse_new(struct personnages *list, char *line)
         j++;
     }
     tmpI[j] = 0;
-    list->item2 = atoi(tmpI);
+    p->item2 = atoi(tmpI);
     i++;
     j = 0;
     while (line[i] != ']')
     {
-        list->speak[j] = line[i];
+        p->speak[j] = line[i];
         i++;
         j++;
     }
-    list->speak[j] = ']';
-    list->speak[j + 1] = 0;
+    p->speak[j] = ']';
+    p->speak[j + 1] = 0;
     i += 2;
     j = 0;
     while (line[i] != ' ')
@@ -580,7 +582,7 @@ void parse_new(struct personnages *list, char *line)
     i++;
     tmpI[j] = 0;
     j = 0;
-    list->animation = atoi(tmpI);
+    p->animation = atoi(tmpI);
     while (line[i] != 0 && line[i] != '\n')
     {
         tmpI[j] = line[i];
@@ -590,11 +592,11 @@ void parse_new(struct personnages *list, char *line)
     i++;
     tmpI[j] = 0;
     j = 0;
-    list->animation_2 = atoi(tmpI);
+    p->animation_2 = atoi(tmpI);
 
 }
 
-struct personnages *append_perso(char *line, struct personnages *list)
+struct personnages *append_perso(char *line)
 {
     if (list == NULL)
     {
@@ -606,17 +608,15 @@ struct personnages *append_perso(char *line, struct personnages *list)
     }
     else
     {
-        if (list->next == NULL)
-        {
-            struct personnages *n = malloc(sizeof(struct personnages));
-            n->e_list = NULL;
-            n->i_list = NULL;
-            parse_new(n, line);
-            list->next = n;
-            n->next = NULL;
-        }
-        else
-            append_perso(line, list->next);
+		struct personnages *parcour = list;
+		while (parcour->next != NULL)
+			parcour = parcour->next;
+        struct personnages *n = malloc(sizeof(struct personnages));
+        n->e_list = NULL;
+        n->i_list = NULL;
+        parse_new(n, line);
+        parcour->next = n;
+        n->next = NULL;
     }
     return list;
 }
@@ -634,8 +634,7 @@ int get_id(char *line, int *i)
     return atoi(tmp);
 }
 
-
-struct personnages *get_ptr_from_id(int id, struct personnages *list)
+struct personnages *get_ptr_from_id(int id)
 {
     struct personnages *parcour = list;
     while (parcour != NULL)
@@ -647,40 +646,67 @@ struct personnages *get_ptr_from_id(int id, struct personnages *list)
     return NULL;
 }
 
-struct personnages *remove_perso(struct personnages *list)
+struct personnages *remove_perso(void)
 {
     struct personnages *ret = list;
+	struct personnages *parcour = list;
     struct personnages *prev;
-    if (list != NULL)
+    if (parcour != NULL)
     {
-        if (list->pv <= 0)
+        if (parcour->pv <= 0)
         {
-            list = list->next;
+			struct personnages *s = find_perso_by_name(parcour->nom_superieur);
+			if (s != NULL)
+			{
+				s->nb_vassaux -= 1;
+				s->a_bouger = 1;
+			}
+            parcour = parcour->next;
             free_linked_enemie(ret->e_list);
             free_linked_item(ret->i_list);
             free(ret);
-            ret = list;
+            ret = parcour;
         }
-        while (list->next != NULL)
+        while (parcour->next != NULL)
         {
-            prev = list;
-            list = list->next;
-            if (list->pv <= 0)
+            prev = parcour;
+            parcour = parcour->next;
+            if (parcour->pv <= 0)
             {
-                prev->next = list->next;
-                free_linked_enemie(list->e_list);
-                free_linked_item(list->i_list);
-                free(list);
-                list = prev;
+				struct personnages *s = find_perso_by_name(parcour->nom_superieur);
+            	if (s != NULL)
+            	{
+               		s->nb_vassaux -= 1;
+                	s->a_bouger = 1;
+            	}
+                prev->next = parcour->next;
+                free_linked_enemie(parcour->e_list);
+                free_linked_item(parcour->i_list);
+                free(parcour);
+                parcour = prev;
             }
         }
-        if (list->pv <= 0)
+        if (parcour->pv <= 0)
         {
+			struct personnages *s = find_perso_by_name(parcour->nom_superieur);
+            if (s != NULL)
+            {
+                s->nb_vassaux -= 1;
+                s->a_bouger = 1;
+            }
             prev->next = NULL;
-            free_linked_enemie(list->e_list);
-            free_linked_item(list->i_list);
-            free(list);
+            free_linked_enemie(parcour->e_list);
+            free_linked_item(parcour->i_list);
+            free(parcour);
         }
     }
     return ret;
+}
+
+struct personnages *find_perso_by_name(char *name)
+{
+    for (struct personnages *parcour = list; parcour != NULL; parcour = parcour->next)
+        if (strcmp(parcour->nom, name) == 0)
+            return parcour;
+    return NULL;
 }

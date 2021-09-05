@@ -3,23 +3,23 @@ extern struct lettres *lettres;
 void deplacement(struct personnages *moi)
 {
 	if (moi->faim < 0)
-        sprintf (ordre + strlen(ordre), "%d 00 -1 ", moi->id);
+		sprintf (ordre + strlen(ordre), "%d 00 -1 ", moi->id);
 
 	char att = 0;
 	char dep = 0;
 	char ram = 0;
 
 	if (lettres->r == 1)
-    {
-        if (moi->sur_plancher != NULL)
-        {
-            if (strcmp (moi->sur_plancher->skin, "ship1") == 0)
-            {
-                moi->sur_plancher->vitesse_dep += 1; //TODO
+	{
+		if (moi->sur_plancher != NULL)
+		{
+			if (strcmp (moi->sur_plancher->skin, "ship1") == 0)
+			{
+				moi->sur_plancher->vitesse_dep += 1; //TODO
 				ram = 1;
-            }
-        }
-    }
+			}
+		}
+	}
 	else
 	{
 		if (lettres->z == 1)

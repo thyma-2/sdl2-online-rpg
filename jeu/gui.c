@@ -159,7 +159,6 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 {
 	char txt[200] = "pv\nvitesse\nperiode d attaque\nporte\npoid\nfaim";
 	char txt2[200];
-	char tmp[20];
 	SDL_Rect position = {0, 550, 1200, 150};
 	SDL_RenderCopy(renderer, img->g->menu_bas, NULL, &position);
 	position.w = 4;
@@ -216,7 +215,7 @@ void display_selected(struct linked_list *selected, struct personnages *moi, str
 		txt[0] = 0;
 		txt2[0] = 0;
 		strcat(txt, "pv\nvitesse\nperiode d attaque\nportee\npoid\nfaim");
-		sprintf(tmp, "%d/%d\n%d\n%d\n%d\n%d\n%d", pv / i, pvm/i, vitesse_dep, vitesse_dom / i, portee, poid / i, faim);
+		sprintf(txt2, "%d/%d\n%d\n%d\n%d\n%d\n%d", pv / i, pvm/i, vitesse_dep, vitesse_dom / i, portee, poid / i, faim);
 		position.x += blit_text(position, txt, 200) + 20;
 		position.x += blit_text(position, txt2, 200);
 	}
@@ -404,8 +403,7 @@ void menu_action(struct menu *m, struct personnages *perso, struct linked_list *
 		if (lettres->enter == 1 && m->sel_action == 0)
 		{
 			lettres->enter = 0;
-			perso->sur_plancher->nom_superieur[0] = 0;
-			strcat(perso->sur_plancher->nom_superieur, perso->nom);
+			sprintf (ordre + strlen(ordre), "%d 10 %s ", perso->sur_plancher->id, perso->nom);
 		}
 	}
 	for (struct linked_list *l = list; l != NULL; l = l->next)
@@ -543,6 +541,7 @@ void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *l
 	SDL_Rect position4 = {50, 200, 558, 70};
 	SDL_Rect position5;
 	SDL_Rect position8 = {50, 300, 558, 70};
+	SDL_Rect position9 = {50, 390, 558, 70};
 	position1.x = 50;
 	position4.x = 50;
 	position5.x = 700;
@@ -575,19 +574,40 @@ void menu_diplo(struct menu *m, struct personnages *perso, struct linked_list *l
 	}
 	else
 	{
-		text_input(perso->nom_superieur, 50);
+		text_input(m->superieur, 50);
 		SDL_RenderCopy(renderer, img->g->selTextInput, NULL, &position8);
 		SDL_RenderCopy(renderer, img->g->textInput, NULL, &position2);
 		SDL_RenderCopy(renderer, img->g->textInput, NULL, &position4);
 		if (lettres->enter == 1)
 		{
+			if (strcmp(m->superieur, "none") == 0)
+			{
+				struct personnages *ancien = find_perso_by_name(list, perso->nom_superieur);
+				if (ancien == NULL)
+					sprintf (ordre + strlen(ordre), "%d 10 none ", perso->id);
+				else
+					sprintf (ordre + strlen(ordre), "%d 10 none %d 14 -1 ", perso->id, ancien->id);
+			}
+			else
+			{
+				struct personnages *nouveau = find_perso_by_name(list, m->superieur);
+				if (nouveau != NULL)
+				{
+					nouveau = find_first_valid_leader(nouveau, list);
+					struct personnages *ancien = find_perso_by_name(list, perso->nom_superieur);
+					if (ancien == NULL)
+						sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 ", perso->id, m->superieur, nouveau->id);
+					else
+						sprintf (ordre + strlen(ordre), "%d 10 %s %d 14 +1 %d 14 - 1", perso->id, m->superieur, nouveau->id, ancien->id);
+				}
+			}
 			lettres->enter = 0;
-			sprintf (ordre + strlen(ordre), "%d 10 %s ", perso->id, perso->nom_superieur);
 		}
 	}
 	blit_text(position2, m->add_enemi, 20);
 	blit_text(position4, m->rem_enemi, 20);
-	blit_text(position8, perso->nom_superieur, 20);
+	blit_text(position8, m->superieur, 20);
+	blit_text(position9, perso->nom_superieur, 20);
 	if (lettres->tab == 1)
 	{
 		lettres->tab = 0;

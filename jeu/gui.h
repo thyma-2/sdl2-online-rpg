@@ -30,6 +30,7 @@ struct menu
     char religion_on;
     char add_enemi[50];
     char rem_enemi[50];
+	char superieur[50];
     char sel_diplo;
     char sel_inventaire;
     char sel_action;

@@ -15,3 +15,4 @@ int max_rang(struct linked_enemie *l);
 void rec_append_enemie(char *nom, struct personnages *p, struct linked_list *l, int n);
 int get_rang(char *nom, struct linked_enemie *l);
 void rec_remove_enemie(char *nom, struct personnages *p, struct linked_list *l, int n);
+struct personnages *find_first_valid_leader(struct personnages *p, struct linked_list *list);

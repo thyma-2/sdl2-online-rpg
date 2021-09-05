@@ -35,8 +35,7 @@ int main(void)
 		SDL_Quit();
 		return -1;
 	}
-	struct linked_list *list = recv_map(socket, NULL);
-	boucle_jeu(socket, list, name);
+	boucle_jeu(socket, name);
 	free_malloc();
 	SDL_Quit();
 }
@@ -47,12 +46,13 @@ void free_malloc()
 	free(lettres);
 }
 
-void boucle_jeu(int socket, struct linked_list *list, char *name)
+void boucle_jeu(int socket, char *name)
 {
-	struct personnages *moi = find_perso_by_name(list, name);
 	char *ground = rec_ground(socket);
 	char *grille = create_array(ground);
 	free(ground);
+	struct linked_list *list = recv_map(socket, NULL);
+    struct personnages *moi = find_perso_by_name(list, name);
 	struct linked_list *selected = NULL;
 	//peux être faire une sous fonction pour init tout ca
 	struct menu *menu_s = malloc(sizeof(struct menu));

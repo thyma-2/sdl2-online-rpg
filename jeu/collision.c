@@ -22,30 +22,19 @@ void collision(struct linked_list *list, char *array)
 						}
 						else
 						{
-							if (p->p->last_x == p->p->x && p->p->last_y == p->p->y) // je me fait percuter
-							{
-								float x = pp->p->x - pp->p->last_x;
-								float y = pp->p->y - pp->p->last_y;
-                                                                if (p->p->vitesse_dep == 0)
-                                                                {
-                                                                    sprintf(ordre + strlen(ordre), "%d 00 -1 %d 01 -%f %d 02 -%f ",p->p->id, pp->p->id, x, pp->p->id, y);
-                                                                }
-                                                                else
-								    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", p->p->id, x * pp->p->poid / p->p->poid, p->p->id, y * pp->p->poid / p->p->poid, pp->p->id, x, pp->p->id, y);
-							}
-							else if (pp->p->last_x == pp->p->x && pp->p->last_y == pp->p->y) // je percute qqe chose
+							if (pp->p->last_x == pp->p->x && pp->p->last_y == pp->p->y) // je percute qqe chose
 							{
 								float x = p->p->x - p->p->last_x;
 								float y = p->p->y - p->p->last_y;
-                                                                if (pp->p->vitesse_dep == 0)
-                                                                {
-                                                                    sprintf(ordre + strlen(ordre), "%d 00 -1 %d 01 -%f %d 02 -%f ",pp->p->id, p->p->id, x, p->p->id, y);
-                                                                }
-                                                                else
-                                                                {
-								    sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
-							        }
-                                                        }
+								if (pp->p->vitesse_dep == 0)
+								{
+									sprintf(ordre + strlen(ordre), "%d 00 -1 %d 01 -%f %d 02 -%f ",pp->p->id, p->p->id, x, p->p->id, y);
+								}
+								else
+								{
+									sprintf (ordre + strlen(ordre), "%d 01 +%f %d 02 +%f %d 01 -%f %d 02 -%f ", pp->p->id, x * p->p->poid / pp->p->poid, pp->p->id, y * p->p->poid / pp->p->poid, p->p->id, x, p->p->id, y);
+								}
+							}
 							else // on ce percute mutuellement 
 							{
 								float x = pp->p->x - pp->p->last_x;
@@ -56,7 +45,7 @@ void collision(struct linked_list *list, char *array)
 							}
 						}
 					}
-					else if (eau == 1 && pp->p->eau != p->p->eau)
+					else if (pp->p->plancher > p->p->plancher)
 					{
 						p->p->sur_plancher = pp->p;
 						eau = 0;
@@ -65,7 +54,11 @@ void collision(struct linked_list *list, char *array)
 			}
 		}
 		if (bord == 1 || eau == 1)
-			sprintf (ordre + strlen(ordre), "%d 01  %f %d 02  %f ", p->p->id, p->p->last_x, p->p->id, p->p->last_y);
+		{
+			float x = (p->p->x - p->p->last_x) * 2.2;
+			float y = (p->p->y - p->p->last_y) * 2.2;
+			sprintf (ordre + strlen(ordre), "%d 01 -%f %d 02 -%f ", p->p->id, x, p->p->id, y);
+		}
 	}
 }
 
@@ -141,10 +134,16 @@ int coo_circle(struct personnages *perso, int *x, int *y)
 		return 6;
 	}
 	else if (strcmp(perso->skin, "arbre1") == 0)
- 	{
+	{
 		*x = perso->x - 15 * sin(perso->angle / 57.3);
 		*y = perso->y + 15 * cos(perso->angle / 57.3);
 		return 10;
+	}
+	else if (strcmp(perso->skin, "flag_zone") == 0)
+	{
+		*x = perso->x - 29 * sin(perso->angle / 57.3);
+		*y = perso->y + 29 * cos(perso->angle / 57.3);
+		return 20;
 	}
 	return -1;
 }

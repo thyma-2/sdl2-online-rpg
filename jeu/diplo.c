@@ -96,3 +96,42 @@ void rec_remove_enemie(char *nom, struct personnages *p, struct linked_list *l, 
 				rec_remove_enemie(nom, ll->p, l, n + 1);	    
 	}  
 }
+
+struct personnages *find_first_valid_leader(struct personnages *p, struct linked_list *list)
+{
+	struct personnages *stack[10000] = {0};
+	int i = 0;
+	if (p->nb_vassaux < 101)
+		return p;
+	for (struct linked_list *l = list; l != NULL; l = l->next)
+	{
+		if (strcmp(l->p->nom_superieur, p->nom) == 0)
+		{
+			if (l->p->nb_vassaux < 101)
+				return l->p;
+			else
+			{
+				stack[i] = l->p;
+				i++;
+			}
+		}
+	}
+	for (int j = 0; j < i; j++)
+	{
+		p = stack[j];
+		for (struct linked_list *l = list; l != NULL; l = l->next)
+    	{
+        	if (strcmp(l->p->nom_superieur, p->nom) == 0)
+        	{   
+            	if (l->p->nb_vassaux < 101)
+                	return l->p;
+            	else
+            	{   
+                	stack[i] = l->p;
+                	i++;
+            	}
+        	}
+    	}
+	}
+	return NULL; //n'arrive jamais normalement
+}

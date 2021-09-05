@@ -33,11 +33,6 @@ void commande(struct linked_list *selected, struct personnages *moi, struct form
 			{
 				sprintf (ordre + strlen(ordre), "%d 03 %f %d 04 %f ", a->p->id, (lettres->Mouse_pos_x - 600) * cos(moi->angle / 57.3) - (lettres->Mouse_pos_y - 550) * sin(moi->angle / 57.3) + moi->x + f->ecart_x * i, a->p->id, (lettres->Mouse_pos_x - 600) * sin(moi->angle / 57.3) + (lettres->Mouse_pos_y - 550) * cos(moi->angle / 57.3) + moi->y + f->ecart_y * j);
 				i++;
-				if (a->p->chemin != NULL)
-				{
-					free(a->p->chemin);
-					a->p->chemin = NULL;
-				}
 				if (i > f->n_par_lignes)
 				{
 					i = 0;

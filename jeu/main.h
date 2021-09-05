@@ -22,7 +22,7 @@
 #include "btree.h"
 
 void set_pos(SDL_Rect *pos, int x, int y);
-void boucle_jeu(int socket, struct linked_list *list, char *name);
+void boucle_jeu(int socket, char *name);
 char *log_menu(int socket);
 int menu_connection();
 int start_menu(int socket);

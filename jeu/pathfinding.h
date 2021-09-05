@@ -22,5 +22,6 @@ char *actualise_array(char *array, struct linked_list *list);
 int find_next(struct path *array);
 void generate_around(struct path *array, int src, struct personnages *p);
 int findpath(struct personnages *p, char *array);
-int max_x;
-int max_y;
+
+extern int max_x;
+extern int max_y;

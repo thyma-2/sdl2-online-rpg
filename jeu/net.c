@@ -1,5 +1,6 @@
 #include "net.h"
-extern char ordre[9999];
+
+char ordre[9999];
 
 int try_connect(char *ip, char *port) // Connecter
 {

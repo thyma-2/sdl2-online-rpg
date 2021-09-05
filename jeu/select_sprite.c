@@ -1,6 +1,6 @@
 #include "select_sprite.h"
 
-char plat_ou_volumineux(char *skin)
+char how_display(char *skin)
 {
 	if (strcmp(skin, "ship1") == 0 /*|| strcmp(skin, "tour") == 0*/)
 		return 1;
@@ -20,7 +20,6 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 		if (angle < 0)
 			angle += 360;
 	}
-
 	if (strcmp(perso->skin, "ship1") == 0)
 		return img->s->ship1haut;
 	if (strcmp(perso->skin, "chateau") == 0)
@@ -74,10 +73,34 @@ SDL_Texture *select_good_img(struct personnages *perso, struct personnages *moi)
 			return img->s->arbre1;
 	}
 	if (strncmp(perso->skin, "fruit", 5) == 0)
-	{
 		return img->s->fruit;
+	if (strcmp(perso->skin, "flag_zone") == 0)
+	{
+		if (angle < 15 || angle >= 345)
+            return img->s->drapeauBlancFace_dos;
+        else if (angle < 45 && angle >= 15)
+            return img->s->drapeauBlancDosDroite;
+        else if (angle < 75 && angle >= 45)
+            return img->s->drapeauBlancDroiteDos;
+        else if (angle < 105 && angle >= 75)
+            return img->s->drapeauBlancDroite;
+        else if (angle < 135 && angle >= 105)
+            return img->s->drapeauBlancDroiteFace;
+        else if (angle < 165 && angle >= 135)
+            return img->s->drapeauBlancFaceDroite;
+        else if (angle < 195 && angle >= 165)
+            return img->s->drapeauBlancFace_dos;
+        else if (angle < 225 && angle >= 195)
+            return img->s->drapeauBlancFaceGauche;
+        else if (angle < 255 && angle >= 225)
+            return img->s->drapeauBlancGaucheFace;
+        else if (angle < 285 && angle >= 255)
+            return img->s->drapeauBlancGauche;
+        else if (angle < 315 && angle >= 285)
+            return img->s->drapeauBlancGaucheDos;
+        else if (angle < 345 && angle >= 315)
+            return img->s->drapeauBlancDosGauche;
 	}
-
 	perso->animation_time += 1;
 	if (perso->animation_time > 8)
 	{

@@ -9,9 +9,7 @@ char *rec_ground(int socket)
     map = calloc(nb_char + 1, sizeof(char));
     int a = 0;
     while (a < nb_char)
-    {
         a += recv(socket, map +strlen(map), nb_char, 0);
-    }
     map[nb_char] = 0;
     max_x = 0;
     int i = 0;
@@ -19,9 +17,9 @@ char *rec_ground(int socket)
     {
         i += 1;
         if (i % 3 == 0)
-           max_x += 25;
+           max_x += 1;
     }
-    max_y = 25 * nb_char / (i + 1);
+    max_y = nb_char / (i + 1);
     return map;
 }
 

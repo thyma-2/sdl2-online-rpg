@@ -1,64 +1,7 @@
-#define _GNU_SOURCE
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include "perso.h"
-#include "net.h"
-#include "map_op.h"
-#include "req.h"
-#include "utile.h"
-#include "time.h"
+#include "main.h"
 
-#include "deschiffrement.h"
-int open_acount(char *test)
-{
-	if (test[0] == '\0' || test[0] == '\n')
-		return 0;
-	FILE *acount = fopen("acount.txt", "r");
-	char *line = NULL;
-	size_t len = 0;
-	char *s = test;
-	int count  = 0;
-	while (*s != ' ')
-	{
-		count++;
-		s = s + 1;
-	}
-	s = s + 1;
-	char *tmp = calloc(count + 1, sizeof(char));
-	strncat(tmp, test,count);
-	deschifrage(s, tmp);
-	free(tmp);
-	while (getline(&line, &len, acount) > 0)
-	{
-		if (strncmp(line, test, strlen(line) - 1) == 0)
-		{
-			fclose(acount);
-			return 1;
-		}
-	}
-	fclose(acount);
-	return 0;
-}
-
-void cut(char *str, char cutter)
-{
-	int i = 0;
-	while (str[i] != 0)
-	{
-		if (str[i] == cutter)
-		{
-			str[i] = 0;
-			return;
-		}
-		i++;
-	}
-}
+struct personnages *list = NULL;
+struct personnages *flag = NULL;
 
 int main(int argc, char **argv)
 {
@@ -81,21 +24,16 @@ int main(int argc, char **argv)
 	fseek(f, 0, SEEK_END);
 	size_t size_ground = ftell(f);
 	fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-	size_t sizeline = 0;
-	while (fgetc(f) != '\n')
-		sizeline++;
-	size_ground -= sizeline;
 	char *ground = malloc(size_ground);
-	char *spawn = malloc(sizeline);
-	fseek(f, 0, SEEK_SET);
-	fread(spawn, sizeline, 1, f);
-	fseek(f, sizeline + 1, SEEK_SET);
 	fread(ground, size_ground, 1, f);
 	fclose(f);
 	ground[size_ground] = 0;
-	spawn[sizeline] = 0;
 
-	struct personnages *list = init_map();
+	list = init_map();
+	flag = list;
+	while (strcmp(flag->skin, "flag_zone") != 0)
+		flag = flag->next;
+	list = croissance_pop(list);
 	struct linked_client *unlog_client = NULL;
 	struct linked_client *logged_client = NULL;
 	struct linked_client *ingame_client = NULL;
@@ -115,6 +53,7 @@ int main(int argc, char **argv)
 	char boolrep;
 	char buffer[103];
 	int save = 0;
+	char *order = calloc(10000, 1);
 	//debout boucle, on suppose que la carte est initialisée.
 	while (1 == 1)
 	{
@@ -167,13 +106,13 @@ int main(int argc, char **argv)
 				client->afk_timmer = 0;
 				if (buffer[0] == 'p')
 				{
-					if (have_char(list, client->name) == 1)
+					if (have_char(client->name) == 1)
 					{
 						boolrep = 'o';
 						send(client->socket, &boolrep, 1, MSG_NOSIGNAL);
-						send_map(client->socket, list);
-						ingame_client = append_linked(ingame_client, client->socket, client->name);
 						send_background(client->socket, ground, size_ground);
+						send_map(client->socket);
+						ingame_client = append_linked(ingame_client, client->socket, client->name);
 						logged_client = remove_linked(logged_client, client->socket);
 					}
 					else
@@ -184,32 +123,19 @@ int main(int argc, char **argv)
 				}
 				if (buffer[0] == 'c')
 				{
-					if (have_char(list, client->name) == 1)
+					if (have_char(client->name) == 1)
 					{
 						boolrep = 'n';
 						send(client->socket, &boolrep, 1,MSG_NOSIGNAL);
 					}
 					else
 					{
-						char *line = malloc(1000);
-						char tmp[20];
-						tmp[0] = 0;
-						int id = find_smalest_valid_id(list, 0);
-						sprintf (tmp, "%d", id); 
-						strcpy(line, tmp);
-						strcat(line, " 10 ");
-						strcat(line, client->name);
-						strcat(line, " ");
-						strcat(line, spawn);
-						strcat(line, " -1 0 0 0 1000000 civil ");
-						strcat(line, client->name);
-						strcat(line, " none none none region1 n [] [] none 0 0 [] 0 0 ");
-						append_perso(line, list);
+						create_new_char(client->name);
 						boolrep = 'o';
 						send(client->socket, &boolrep, 1,MSG_NOSIGNAL);
-						send_map(client->socket, list);
-						ingame_client = append_linked(ingame_client, client->socket, client->name);
 						send_background(client->socket, ground, size_ground);
+						send_map(client->socket);
+                        ingame_client = append_linked(ingame_client, client->socket, client->name);
 						logged_client = remove_linked(logged_client, client->socket);
 					}
 				}
@@ -230,7 +156,7 @@ int main(int argc, char **argv)
 		while (client != NULL)
 		{
 			next = next->next;
-			int afk = handle_req(client->socket, list);
+			int afk = handle_req(client->socket);
 			if (afk == 1)
 				client->afk_timmer += 1;
 			else
@@ -243,23 +169,21 @@ int main(int argc, char **argv)
 			client = next;
 		}
 		time = clock();
-		t2 = (float)(time / (CLOCKS_PER_SEC / 1000));
-		if (t2 - t > 25)
+		t2 = (float)(time / (CLOCKS_PER_SEC / 60));
+		if (t2 - t >= 1)
 		{
 			t = t2;
-			char *order = calloc(100000, 1);
-			int size = generate_order(list, order);
+			int size = generate_order(order);
 			for (struct linked_client *client = ingame_client; client != NULL; client=client->next)
 				send(client->socket, order, size + 20, MSG_NOSIGNAL);
-			list = remove_perso(list);
-			free(order);
+			list = remove_perso();
 		}
 		save++;
-		if (save > 1000000)
+		if (save > 10000000)
 		{
 			printf("\nSAVE\n");
 			save = 0;
-			save_map(list);
+			save_map();
 		}
 	}
 	return 0;

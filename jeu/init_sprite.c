@@ -1,13 +1,58 @@
-extern struct img *img;
 #include "init_sprite.h"
-extern SDL_Renderer *renderer;
-extern SDL_Window *window;
+
+struct img *img;
+SDL_Renderer *renderer;
+SDL_Window *window;
 
 
 struct skin *init_skin()
 {
     struct skin *to_return = malloc(sizeof(struct skin));
-    SDL_Surface *a = SDL_LoadBMP("img/homme/fantassin/dosRien.bmp");
+	SDL_Surface *a = SDL_LoadBMP("img/batiments/drapeau/face_dos.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+	to_return->drapeauBlancFace_dos = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/faceGauche.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancFaceGauche = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/gauche.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancGauche = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/gaucheFace.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancGaucheFace = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/gaucheDos.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancGaucheDos = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/dosGauche.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancDosGauche = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/dosDroite.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancDosDroite = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/droite.bmp");
+    SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+    a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancDroite = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/droiteDos.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancDroiteDos = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/droiteFace.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancDroiteFace = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/batiments/drapeau/faceDroite.bmp");
+	SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format, 255, 255, 255));
+	a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
+    to_return->drapeauBlancFaceDroite = SDL_CreateTextureFromSurface(renderer, a);
+	a = SDL_LoadBMP("img/homme/fantassin/dosRien.bmp");
     SDL_SetColorKey(a, SDL_SCANCODE_Y, SDL_MapRGB(a->format,255,255,255));
     a = SDL_ConvertSurfaceFormat(a, SDL_GetWindowPixelFormat(window), 0);
     to_return->hoFaDoRien = SDL_CreateTextureFromSurface(renderer, a);

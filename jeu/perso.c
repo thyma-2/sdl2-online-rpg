@@ -108,7 +108,7 @@ struct linked_list *recv_map(int socket, struct linked_list *list)
 	return list;
 }
 
-void *find_perso_by_name(struct linked_list *list ,char *name)
+struct personnages *find_perso_by_name(struct linked_list *list ,char *name)
 {
 	struct linked_list *parcour = list;
 	while (parcour != NULL)
@@ -140,7 +140,7 @@ void disp_perso_list(struct linked_list *list, struct personnages *moi)
 		{
 			affiche = select_good_img(parcour->p, moi);
 			SDL_QueryTexture(affiche, NULL, NULL, &position.w, &position.h);
-			char test = plat_ou_volumineux(parcour->p->skin);
+			char test = how_display(parcour->p->skin);
 			if (test == 1)
 			{
 				position.x = (parcour->p->x - moi->x) * cos(moi->angle / 57.3) + (parcour->p->y - moi->y) * sin(moi->angle / 57.3) + 600 - position.w / 2;
@@ -173,7 +173,7 @@ void buble_sort_perso(struct linked_list *list, struct personnages *moi)
 	{
 		for (struct linked_list *par2 = par; par2->next != NULL; par2 = par2->next)
 		{
-			if (((par2->p->y - moi->y) * (par2->p->y - moi->y) + (par2->p->x - moi->x) * (par2->p->x - moi->x) < (par2->next->p->y - moi->y) * (par2->next->p->y - moi->y) + (par2->next->p->x - moi->x) * (par2->next->p->x - moi->x) && plat_ou_volumineux(par2->p->skin) == 0) || plat_ou_volumineux(par2->next->p->skin) == 1)
+			if (((par2->p->y - moi->y) * (par2->p->y - moi->y) + (par2->p->x - moi->x) * (par2->p->x - moi->x) < (par2->next->p->y - moi->y) * (par2->next->p->y - moi->y) + (par2->next->p->x - moi->x) * (par2->next->p->x - moi->x) && how_display(par2->p->skin) == 0) || how_display(par2->next->p->skin) == 1)
 			{
 				struct personnages *tmp = par2->p;
 				par2->p = par2->next->p;
@@ -285,12 +285,12 @@ void fix_some_shit(struct linked_list *list)
 	{
 		//angle
 		if (list->p->angle < 1)
-			sprintf(ordre + strlen(ordre), "%d 05  360 ", list->p->id);
+			sprintf(ordre + strlen(ordre), "%d 05 360 ", list->p->id);
 		else if (list->p->angle > 360)
-			sprintf(ordre + strlen(ordre), "%d 05  1 ", list->p->id);
+			sprintf(ordre + strlen(ordre), "%d 05 1 ", list->p->id);
 		//faim
 		list->p->faim_time++;
-		if (list->p->faim_time > 1000)
+		if (list->p->faim_time > 1000 && list->p->faim > 0)
 		{
 			sprintf(ordre + strlen(ordre), "%d 07 %d ", list->p->id, list->p->faim - 1);
 			list->p->faim_time = 0;
