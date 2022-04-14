@@ -1,8 +1,8 @@
 #include "init_img.h"
 
-extern struct textures * textures;
-extern SDL_Renderer *renderer;
-extern SDL_Window *window;
+struct textures * textures;
+SDL_Renderer *renderer;
+SDL_Window *window;
 
 struct textures *init_textures()
 {

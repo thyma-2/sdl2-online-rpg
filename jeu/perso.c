@@ -187,7 +187,7 @@ struct linked_list *death(struct linked_list *list)
 {
 	struct linked_list *tmp = list;
 	struct linked_list *prev;
-	if (tmp != NULL && tmp->p->pv <= 0)
+	while (tmp != NULL && tmp->p->pv <= 0)
 	{
 		list = list->next;
 		free_linked_enemie(tmp->p->e_list);
@@ -195,21 +195,24 @@ struct linked_list *death(struct linked_list *list)
 		free(tmp->p->chemin);
 		free(tmp->p);
 		free(tmp);
-		return list;
+		tmp = list;
 	}
-	while (tmp != NULL && tmp->p->pv > 0)
+	while (tmp != NULL)
 	{
-		prev = tmp;
-		tmp = tmp->next;
-	}
-	if (tmp != NULL)
-	{
+		while (tmp != NULL && tmp->p->pv > 0)
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		if (tmp == NULL)
+			return list;
 		prev->next = tmp->next;
 		free_linked_enemie(tmp->p->e_list);
-		free_linked_item(tmp->p->i_list);
-		free(tmp->p->chemin);
-		free(tmp->p);
-		free(tmp);
+        free_linked_item(tmp->p->i_list);
+        free(tmp->p->chemin);
+        free(tmp->p);
+        free(tmp);
+		tmp = prev->next;
 	}
 	return list;
 }

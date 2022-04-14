@@ -32,6 +32,6 @@ struct textures
 
 
 struct textures *init_textures();
-struct textures *textures;
-SDL_Renderer *renderer;
-SDL_Window *window;
+extern struct textures *textures;
+extern SDL_Renderer *renderer;
+extern SDL_Window *window;

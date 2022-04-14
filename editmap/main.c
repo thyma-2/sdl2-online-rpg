@@ -1,46 +1,32 @@
 #include "main.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-	char path[200];
-	printf ("enter the path of the map : ");
-	fgets(path, 200, stdin);
-
-	path[strlen(path) - 1] = 0; 
-	FILE *f = fopen(path, "rb");
-	size_t size = 0;
-	char *source = NULL;
-	char *spawn = NULL;
+	if (argc != 2)
+	{
+		printf ("You need to call editor with first argument as path of the map file\n");
+		return 0;
+	}
+	FILE *f = fopen(argv[1], "rb");
+	char *source;
+	size_t size;
 	if (f == NULL)
 	{
 		printf ("This file do not exist\nEnter c if you want to create it : ");
 		if ('c' != getchar())
 			return 0;
 		source = malloc(30);
-		spawn = malloc(6);
 		strcpy(source, "he1he1he1\nhe1he1he1\nhe1he1he1");
-		strcpy(spawn, "25 25");
-		size=29;
+		size=20;
 	}
 	else
 	{
 		fseek(f, 0, SEEK_END);
 		size = ftell(f);
 		fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-
-    	size_t sizeline = 0;
-	    while (fgetc(f) != '\n')
-    	    sizeline++;
-	    size -= sizeline;
 		source = malloc(size);
-	    spawn = malloc(sizeline);
-		source = malloc(size);
-		fseek(f, 0, SEEK_SET);
-	    fread(spawn, sizeline, 1, f);
-	    fseek(f, sizeline + 1, SEEK_SET);
 	    fread(source, size, 1, f);
 	    fclose(f);
-		spawn[sizeline] = 0;
 		source[size] = 0;
 	}
 
@@ -264,17 +250,6 @@ int main(void)
 					}
 					else if (event.motion.y < 350)
 						fill(map, x, y, selcontent, sel);
-					else if (event.motion.y < 375)
-					{
-						char tmp1[10] = "\0";
-						char tmp2[10] = "\0";
-						sprintf (tmp1, "%d", posx);
-						sprintf (tmp2, "%d", posy);
-						spawn = realloc(spawn, strlen(tmp1) + 2 + strlen(tmp2));
-						strcpy(spawn, tmp1);
-						strcat(spawn, " ");
-						strcat(spawn, tmp2);
-					}
 				}
 			}
 			if (event.button.button == SDL_BUTTON_RIGHT)
@@ -284,7 +259,7 @@ int main(void)
 		{
 			SDL_Quit();
 			map[sel] = lastselcontent;
-			save(map, path, x, y, spawn);
+			save(map, argv[1], x, y);
 			exit(0);
 		}
 		if (sel > x * y)
@@ -328,11 +303,10 @@ char *moins_colonne(char *map, int x, int y)
 	return newmap;
 }
 
-void save(char *map, char *path, int x, int y, char *spawn)
+void save(char *map, char *path, int x, int y)
 {
-	char *retour = malloc((x * y) * 3 + y + strlen(spawn) + 1);
-	strcpy(retour, spawn);
-	strcat(retour, "\n");
+	char *retour = malloc((x * y) * 3 + y);
+	retour[0] = 0;
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)

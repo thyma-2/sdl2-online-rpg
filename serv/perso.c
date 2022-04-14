@@ -648,61 +648,42 @@ struct personnages *get_ptr_from_id(int id)
     return NULL;
 }
 
-struct personnages *remove_perso(void)
+void kill(struct personnages *p)
 {
-    struct personnages *ret = list;
-	struct personnages *parcour = list;
-    struct personnages *prev;
-    if (parcour != NULL)
+	free_linked_enemie(p->e_list);
+    free_linked_item(p->i_list);
+	struct personnages *s = find_perso_by_name(p->nom_superieur);
+    if (s != NULL)
     {
-        if (parcour->pv <= 0)
-        {
-			struct personnages *s = find_perso_by_name(parcour->nom_superieur);
-			if (s != NULL)
-			{
-				s->nb_vassaux -= 1;
-				s->a_bouger = 1;
-			}
-            parcour = parcour->next;
-            free_linked_enemie(ret->e_list);
-            free_linked_item(ret->i_list);
-            free(ret);
-            ret = parcour;
-        }
-        while (parcour->next != NULL)
-        {
-            prev = parcour;
-            parcour = parcour->next;
-            if (parcour->pv <= 0)
-            {
-				struct personnages *s = find_perso_by_name(parcour->nom_superieur);
-            	if (s != NULL)
-            	{
-               		s->nb_vassaux -= 1;
-                	s->a_bouger = 1;
-            	}
-                prev->next = parcour->next;
-                free_linked_enemie(parcour->e_list);
-                free_linked_item(parcour->i_list);
-                free(parcour);
-                parcour = prev;
-            }
-        }
-        if (parcour->pv <= 0)
-        {
-			struct personnages *s = find_perso_by_name(parcour->nom_superieur);
-            if (s != NULL)
-            {
-                s->nb_vassaux -= 1;
-                s->a_bouger = 1;
-            }
-            prev->next = NULL;
-            free_linked_enemie(parcour->e_list);
-            free_linked_item(parcour->i_list);
-            free(parcour);
-        }
+    	s->nb_vassaux -= 1;
+        s->a_bouger = 1;
     }
-    return ret;
+	free(p);
+}
+
+void remove_perso(void)
+{
+	struct personnages *tmp = list;
+    struct personnages *prev;
+    while (tmp != NULL && tmp->pv <= 0)
+    {
+		list = tmp->next;
+		kill(tmp);
+		tmp = list;
+    }
+	while (tmp != NULL)
+	{
+		while (tmp != NULL && tmp->pv > 0)
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
+		if (tmp == NULL)
+			return;
+		prev->next = tmp->next;
+		kill(tmp);
+		tmp = prev->next;
+	}
 }
 
 struct personnages *find_perso_by_name(char *name)

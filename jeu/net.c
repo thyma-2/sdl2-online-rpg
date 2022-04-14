@@ -62,7 +62,7 @@ void send_orders(int socket)
 	{
 		strcat(tmp, "ordre");
 		sprintf (tmp + 5, "%d", size_ordre);
-		send(socket, tmp, 20, MSG_NOSIGNAL);
+		//send(socket, tmp, 20, MSG_NOSIGNAL);
 		send(socket, ordre, size_ordre, MSG_NOSIGNAL);
 	}
 	ordre[0] = 0;

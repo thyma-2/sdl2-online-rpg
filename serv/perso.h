@@ -50,5 +50,5 @@ struct personnages *append_perso(char *line);
 struct personnages *get_ptr_from_id(int id);
 int get_id(char *line, int *i);
 void append_enemi(char *name);
-struct personnages *remove_perso(void);
+void remove_perso(void);
 struct personnages *find_perso_by_name(char *name);

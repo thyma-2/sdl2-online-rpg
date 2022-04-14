@@ -8,7 +8,7 @@ j:
 	gcc ${cflags} jeu/main.c $(jfiles) -o empireExpense -lSDL2 -lm -lSDL2_mixer
 
 s:
-	gcc $(cflags) serv/main.c $(sfiles) -lpthread -o serveur
+	gcc serv/main.c -g $(sfiles) -lpthread -o serveur
 
 static:
 	gcc ${cflags} jeu/main.c $(jfiles) -o empireExpense `sdl2-config --cflags --static-libs` `sdl2_mixer-config --cflags --static-libs` 

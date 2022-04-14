@@ -99,39 +99,30 @@ void rec_remove_enemie(char *nom, struct personnages *p, struct linked_list *l, 
 
 struct personnages *find_first_valid_leader(struct personnages *p, struct linked_list *list)
 {
-	struct personnages *stack[10000] = {0};
+	struct personnages *stack[10000] = {p};
 	int i = 0;
-	if (p->nb_vassaux < 101)
-		return p;
-	for (struct linked_list *l = list; l != NULL; l = l->next)
+	int j = 1;
+	int k = 1;
+	while (1 == 1)
 	{
-		if (strcmp(l->p->nom_superieur, p->nom) == 0)
+		for (int l = i; l < j; l++)
 		{
-			if (l->p->nb_vassaux < 101)
-				return l->p;
+			if (stack[l]->nb_vassaux < 101)
+				return stack[l];
 			else
 			{
-				stack[i] = l->p;
-				i++;
+				for (struct linked_list *li = list; li != NULL; li = li->next)
+				{
+					if (strcmp(li->p->nom_superieur,stack[l]->nom) == 0)
+					{
+						stack[k] = li->p;
+						k++;
+					}
+				}	
 			}
 		}
+		i = j;
+		j = k;
 	}
-	for (int j = 0; j < i; j++)
-	{
-		p = stack[j];
-		for (struct linked_list *l = list; l != NULL; l = l->next)
-    	{
-        	if (strcmp(l->p->nom_superieur, p->nom) == 0)
-        	{   
-            	if (l->p->nb_vassaux < 101)
-                	return l->p;
-            	else
-            	{   
-                	stack[i] = l->p;
-                	i++;
-            	}
-        	}
-    	}
-	}
-	return NULL; //n'arrive jamais normalement
+	return NULL;
 }
