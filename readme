@@ -1,9 +1,34 @@
-il faut la SDL pour compiler.
-pour pouvoir jouer sans la SDL il faut reussir à compiler avec la SDL en static
+Hello 
 
-PLAY:
-    make
-    ./serveur 8000
-    ./empireExpense
-    ip: 127.0.0.1
-    port: 8000
+This repo is an archive and will probably not be updated anymore.
+The concept of this project is an indie video game : a mix betwen a rts and mmorpg.
+If you interested i restarted a new one in 3D with opengl, contact me to participate.
+
+some explanation about files that seem useless : 
+
+ground.txt is the file where the ground is storred.
+map.txt is the file where all objects are storred.
+sons and img are the folder of used sound and images in games.
+acounts.txt is where the logs are registered.
+
+__compile__
+
+for now the game is only compilable for linux.
+dependencies: sdl2 library
+
+There is 3 executable that you can compile  : 
+server : make s
+game : make
+editmap : make e
+
+__execute__
+
+first the files ground.txt, map.txt and acounts.txt must be initialized.
+editmap executable is made to initialize ground.txt.
+acounts is by hand.
+map.txt also and may be hard to understand. I advise to use and modify the one already providen.
+
+once all the file are created (in the same folder that the server)
+run ./serveur [port]
+and with another terminal
+./empireExpense
