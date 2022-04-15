@@ -15,6 +15,7 @@ __compile__
 
 for now the game is only compilable for linux.
 dependencies: sdl2 library
+sudo apt install libsdl2-2.0-0 libsdl2-gfx-1.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 libsdl2-ttf-2.0-0 libsdl2-dev
 
 There is 3 executable that you can compile  : 
 server : make s
