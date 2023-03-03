@@ -14,130 +14,124 @@ void print_array(struct path *array)
 	printf ("\n\n--------------------\n\n");
 }
 
-char *create_array(char *ground)
+void create_array(char *ground_string)
 {
-	int s = (max_x * 3 + 1) * max_y;
-	char *array = malloc((max_x * max_y + 1));
-	array[max_x * max_y] = 0;
 	int i = 0;
-	int j = 0;
-	while (i < s)
-	{ 
-		if (ground[i] == 'e')
+	sscanf (ground_string, "%d %d", &max_x, &max_y);
+	while (ground_string[i] != '\n')
+		i++;
+	i++;
+	ground_texture = malloc(sizeof(SDL_Texture*)*max_x*max_y);
+	ground_altitude = malloc(sizeof(int)*max_x*max_y);
+	for (int j = 0; j < max_y*max_x; j++)
+	{
+		if (ground_string[i] == 'e')
 		{
-			if (ground[i + 1] == 'a')
+			if (ground_string[i + 1] == 'a')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 0;
-				else if (ground[i + 2] == '2')
-					array[j] = 1;
-				else if (ground[i + 2] == '3')
-					array[j] = 2;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->ea1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->ea2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->ea3;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 't')
+		else if (ground_string[i] == 't')
 		{
-			if (ground[i + 1] == 'e')
+			if (ground_string[i + 1] == 'e')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 3;
-				else if (ground[i + 2] == '2')
-					array[j] = 4;
-				else if (ground[i + 2] == '3')
-					array[j] = 5;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->te1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->te2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->te3;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 'h')
+		else if (ground_string[i] == 'h')
 		{
-			if (ground[i + 1] == 'e')
+			if (ground_string[i + 1] == 'e')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 6;
-				else if (ground[i + 2] == '2')
-					array[j] = 7;
-				else if (ground[i + 2] == '3')
-					array[j] = 8;
-				else if (ground[i + 2] == '4')
-					array[j] = 9;
-				else if (ground[i + 2] == '5')
-					array[j] = 10;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->he1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->he2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->he3;
+				else if (ground_string[i + 2] == '4')
+					ground_texture[j] = img->t->he4;
+				else if (ground_string[i + 2] == '5')
+					ground_texture[j] = img->t->he5;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 's')
+		else if (ground_string[i] == 's')
 		{
-			if (ground[i + 1] == 'a')
+			if (ground_string[i + 1] == 'a')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 11;
-				else if (ground[i + 2] == '2')
-					array[j] = 12;
-				else if (ground[i + 2] == '3')
-					array[j] = 13;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->sa1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->sa2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->sa3;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 'b')
+		else if (ground_string[i] == 'b')
 		{
-			if (ground[i + 1] == 'l')
+			if (ground_string[i + 1] == 'l')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 14;
-				else if (ground[i + 2] == '2')
-					array[j] = 15;
-				else if (ground[i + 2] == '3')
-					array[j] = 16;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->bl1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->bl2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->bl3;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 'n')
+		else if (ground_string[i] == 'n')
 		{
-			if (ground[i + 1] == 'e')
+			if (ground_string[i + 1] == 'e')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 17;
-				else if (ground[i + 2] == '2')
-					array[j] = 18;
-				else if (ground[i + 2] == '3')
-					array[j] = 19;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->ne1;
+				else if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->ne2;
+				else if (ground_string[i + 2] == '3')
+					ground_texture[j] = img->t->ne3;
 			}
-			i += 3;
+			i += 4;
 		}
-		else if (ground[i] == 'g')
+		else if (ground_string[i] == 'g')
 		{
-			if (ground[i + 1] == 'r')
+			if (ground_string[i + 1] == 'r')
 			{
-				if (ground[i + 2] == '1')
-					array[j] = 20;
-				if (ground[i + 2] == '2')
-					array[j] = 21;
+				if (ground_string[i + 2] == '1')
+					ground_texture[j] = img->t->gr1;
+				if (ground_string[i + 2] == '2')
+					ground_texture[j] = img->t->gr2;
 			}
-			i += 3;
-		}
-		else if (ground[i] == '\n')
-		{
+			i += 4;
+		};
+		ground_altitude[j] = atoi(ground_string + i);
+		while (ground_string[i] != ' ' && ground_string[i] != '\n')
+				i++;
 			i++;
-			j--;
-		}
-		else if (i + 1 != s)
-		{
-			printf("error while downloading the map\n");
-			exit(1);
-		}
-		j++;
-
 	}
-	return array;
+	i++;
 }
 
-char *actualise_array(char *array, struct linked_list *list)
+char *actualise_array(struct linked_list *list)
 {
 	int s = max_x * max_y + 1;
 	char *array_cp = malloc(s);
 	for (int i = 0; i < s; i++)
-		array_cp[i] = array[i];
+		array_cp[i] = 0;
 	for (struct linked_list *ll = list; ll != NULL; ll = ll->next)
 	{
 		if (strcmp(ll->p->skin, "arbre1") == 0)

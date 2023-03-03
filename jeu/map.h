@@ -1,7 +1,7 @@
+#pragma once
 #include "alloc.h"
+#include "map.h"
 
-#ifndef MAP
-#define MAP
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <stdlib.h>
@@ -11,9 +11,11 @@
 #include "net.h"
 #include "init_sprite.h"
 #include "pathfinding.h"
+//#include "main.h"
 
 char *rec_ground(int socket); 
-void display_ground(struct personnages *moi, char *ground);
+void display_ground(struct personnages *moi);
 
-#endif /*MAP*/
+extern SDL_Texture **ground_texture;
+extern int *ground_altitude;
 

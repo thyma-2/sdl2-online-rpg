@@ -69,21 +69,8 @@ int main(int argc, char **argv)
 	clock_t time = clock();
     float t = (float)(time / CLOCKS_PER_SEC);
     float t2;
-	FILE *f = fopen("ground.txt", "rb");
-	if (f == NULL)
-	{
-		fputs("connot open gmap.txt", stderr);
-		exit(0);
-	}
-
-	fseek(f, 0, SEEK_END);
-	size_t size_ground = ftell(f);
-	fseek(f, 0, SEEK_SET); 
-	char *ground = malloc(size_ground);
-	fread(ground, size_ground, 1, f);
-	fclose(f);
-	ground[size_ground] = 0;
-
+	char *ground;
+	size_t size_ground = load_file_as_string("ground.txt", &ground);
 	list = init_map();
 	flag = list;
 	while (strcmp(flag->skin, "flag_zone") != 0)

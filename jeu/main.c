@@ -49,7 +49,7 @@ void free_malloc()
 void boucle_jeu(int socket, char *name)
 {
 	char *ground = rec_ground(socket);
-	char *grille = create_array(ground);
+	create_array(ground);
 	free(ground);
 	struct linked_list *list = recv_map(socket, NULL);
     struct personnages *moi = find_perso_by_name(list, name);
@@ -84,7 +84,7 @@ void boucle_jeu(int socket, char *name)
 	while (lettres->exit != 1)
 	{
 		SDL_RenderClear(renderer);
-		display_ground(moi, grille);
+		display_ground(moi);
 		gestion_touche();
 		if (menu_s->on == 0 && speak_s->on == 0)
 		{
@@ -111,11 +111,11 @@ void boucle_jeu(int socket, char *name)
 			menu(menu_s, moi, list);
 		else
 			talk(speak_s, moi);
-		char *grille_cp = actualise_array(grille, list);
+		char *grille_cp = actualise_array(list);
 		ia(list, grille_cp);
 		free(grille_cp);
 		gui_event(moi, list);
-		collision(list, grille);
+		collision(list);
 		fix_some_shit(list);
 		send_orders(socket);
 		recv_order(socket, list);

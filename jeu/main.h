@@ -27,3 +27,4 @@ char *log_menu(int socket);
 int menu_connection();
 int start_menu(int socket);
 void free_malloc();
+

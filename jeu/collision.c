@@ -1,12 +1,12 @@
 #include "collision.h"
 
-void collision(struct linked_list *list, char *array)
+void collision(struct linked_list *list)
 {
 	for (struct linked_list *p = list; p != NULL; p = p->next)
 	{
 		p->p->sur_plancher = NULL;
 		char bord = check_bord(p->p); // collision avec les bords de la map
-		char eau = check_eau(p->p, array, p->p->eau); // collision avec l'eau
+		char eau = check_eau(p->p, p->p->eau); // collision avec l'eau
 		for (struct linked_list *pp = list; pp != NULL; pp = pp->next)
 		{
 			if (pp != p)
@@ -77,7 +77,7 @@ void coo_corner(struct personnages *perso, int *x1, int *y1, int *x2, int *y2, i
 	}
 }
 
-char check_eau(struct personnages *perso, char *array, char eau)
+char check_eau(struct personnages *perso, char eau)
 {
 	int x,y;
 	if (cercle_ou_rectangle(perso) == 1)
@@ -93,7 +93,8 @@ char check_eau(struct personnages *perso, char *array, char eau)
 	}
 	y = (y + 12.5) / 25;
 	x = (x + 12.5) / 25;
-	if (array[y * max_x + x] < 3)
+	SDL_Texture *t = ground_texture[y * max_x + x];
+	if (t == img->t->ea1 || t == img->t->ea2 || t == img->t->ea3)
 	{
 		if (eau == '0')
 			return 1;
